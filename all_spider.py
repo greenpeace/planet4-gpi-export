@@ -61,18 +61,18 @@ class AllSpider(scrapy.Spider):
 'http://www.greenpeace.org/international/en/publications/Campaign-reports/Genetic-engineering/Golden-Illusion/':{'Publication':{'Food':'Food,FixFood,GoldenRice'}},
 'http://www.greenpeace.org/international/en/publications/Campaign-reports/Agriculture/Bees-in-Decline/':{'Publication':{'Food':'Food,FixFood,Bees'}}}
         for url,typecattags in start_urls.items():
-            for type,cattags in typecattags.items():
+            for post_type,cattags in typecattags.items():
                 for categories,tags in cattags.items():
-                    if ( type=='Story' ):
+                    if ( post_type=='Story' ):
                         request = scrapy.Request(url, callback=self.parse_blog)
                         yield request
-                    elif ( type=='Publication' ):
+                    elif ( post_type=='Publication' ):
                         request = scrapy.Request(url, callback=self.parse_publication)
                         yield request
-                    elif ( type=='Press Release' ):
+                    elif ( post_type=='Press Release' ):
                         request = scrapy.Request(url, callback=self.parse_press)
                         yield request
-                    request.meta['categories'] = type+','+categories
+                    request.meta['categories'] = post_type+','+categories
                     request.meta['tags'] = tags
 
     def parse_blog(self, response):
