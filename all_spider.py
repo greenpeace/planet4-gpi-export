@@ -18,6 +18,7 @@ class AllSpider(scrapy.Spider):
     def start_requests(self):
         start_urls = {'http://www.greenpeace.org/international/en/press/releases/2017/Rainbow-Warrior-arrives-in-Cuba-to-document-the-islands-eco-food-system/':('Press Release','Food','Food,FixFood'),
 'http://www.greenpeace.org/international/en/news/Blogs/makingwaves/food-for-life-eat-less-meat-who/blog/54640/':('Story','Food','Food,FixFood,LessMeatMorePlants'),
+'http://www.greenpeace.org/international/en/publications/Campaign-reports/Genetic-engineering/Golden-Illusion/':('Publication','Food','Food,FixFood,GoldenRice'),
 'http://www.greenpeace.org/international/en/news/Blogs/makingwaves/food-for-life-I-know-who-grew-it/blog/52905/':('Story','Food','Food,FixFood'),}
         for url,data in start_urls.iteritems():
             post_type, categories, tags = data
