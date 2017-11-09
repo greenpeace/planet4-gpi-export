@@ -2,6 +2,7 @@ import scrapy
 import logging
 import locale
 import dateutil.parser
+import re
 
 locale.setlocale(locale.LC_ALL, '')
 
@@ -10,7 +11,7 @@ class AllSpider(scrapy.Spider):
 
     custom_settings = {
         'ROBOTSTXT_OBEY': 0,
-        'FEED_URI': 'all_gpi_T8.xml',
+        'FEED_URI': 'all_gpi_T21.xml',
         'FEED_FORMAT': 'xml',
         'FEED_EXPORT_ENCODING': 'utf-8',
     }
@@ -18,8 +19,7 @@ class AllSpider(scrapy.Spider):
     def start_requests(self):
         start_urls = {'http://www.greenpeace.org/international/en/press/releases/2017/Rainbow-Warrior-arrives-in-Cuba-to-document-the-islands-eco-food-system/':('Press Release','Food','Food,FixFood'),
 'http://www.greenpeace.org/international/en/news/Blogs/makingwaves/food-for-life-eat-less-meat-who/blog/54640/':('Story','Food','Food,FixFood,LessMeatMorePlants'),
-'http://www.greenpeace.org/international/en/publications/Campaign-reports/Genetic-engineering/Golden-Illusion/':('Publication','Food','Food,FixFood,GoldenRice'),
-'http://www.greenpeace.org/international/en/news/Blogs/makingwaves/food-for-life-I-know-who-grew-it/blog/52905/':('Story','Food','Food,FixFood'),}
+'http://www.greenpeace.org/international/en/publications/Campaign-reports/Genetic-engineering/Golden-Illusion/':('Publication','Food','Food,FixFood,GoldenRice')}
         for url,data in start_urls.iteritems():
             post_type, categories, tags = data
             if ( post_type=='Story' ):
@@ -28,15 +28,26 @@ class AllSpider(scrapy.Spider):
                 request = scrapy.Request(url, callback=self.parse_publication)
             elif ( post_type=='Press Release' ):
                 request = scrapy.Request(url, callback=self.parse_press)
-            yield request
             request.meta['categories'] = post_type+','+categories
             request.meta['tags'] = tags
+            yield request
+
 
 
     def parse_blog(self, response):
         
         def extract_with_css(query):
             return response.css(query).extract_first()
+            
+        pdfFiles=response.css('div.article a[href$=".pdf"]::attr(href)').extract()
+        pdf_files_generated = list()
+        for pdf_file in pdfFiles:
+            print pdf_file
+            if (pdf_file.startswith('/international')):
+                pdf_file = pdf_file.replace('/international','http://www.greenpeace.org/international',1)
+                print pdf_file
+            pdf_files_generated.append(pdf_file)
+            print pdf_files_generated
 
         yield {
             'type': 'Blog',
@@ -51,7 +62,7 @@ class AllSpider(scrapy.Spider):
             #'imagesB': response.xpath('//div[@class="news-list"]//div[@class="post-content"]//img[not(ancestor::a)]/@src').extract(), #don't import image if there's an a tag around it
             'imagesB': response.xpath('//div[@class="news-list"]//div[@class="post-content"]//img/@src').extract(),
             'imagesC': response.xpath('//div[@class="gallery"]//div[@class="img-nav"]//a/@rel').extract(), # Galleries (horrible html)
-            'pdfFiles': response.css('div.post-content a[href$=".pdf"]::attr(href)').extract(),
+            'pdfFiles': pdf_files_generated,
             'tags': response.meta['tags'],
             'url': response.url,
         }
@@ -60,7 +71,17 @@ class AllSpider(scrapy.Spider):
 
         def extract_with_css(query):
             return response.css(query).extract_first()
-
+            
+        pdfFiles=response.css('div.article a[href$=".pdf"]::attr(href)').extract()
+        pdf_files_generated = list()
+        for pdf_file in pdfFiles:
+            print pdf_file
+            if (pdf_file.startswith('/international')):
+                pdf_file = pdf_file.replace('/international','http://www.greenpeace.org/international',1)
+                print pdf_file
+            pdf_files_generated.append(pdf_file)
+            print pdf_files_generated
+            
         yield {
             'type': 'Press',
             'title': extract_with_css('div.article h1 span::text'),
@@ -76,7 +97,7 @@ class AllSpider(scrapy.Spider):
             #'imagesB': response.xpath('//div[@class="news-list"]//div[@class="post-content"]//img[not(ancestor::a)]/@src').extract(), #don't import image if there's an a tag around it
             'imagesB': response.xpath('//div[@class="news-list"]//div[@class="post-content"]//img/@src').extract(),
             'imagesC': response.xpath('//div[@class="gallery"]//div[@class="img-nav"]//a/@rel').extract(), # Galleries (horrible html)
-            'pdfFiles': response.css('div.post-content a[href$=".pdf"]::attr(href)').extract(),
+            'pdfFiles': pdf_files_generated,
             'tags': response.meta['tags'],
             'url': response.url,
         }
@@ -86,6 +107,16 @@ class AllSpider(scrapy.Spider):
 
         def extract_with_css(query):
             return response.css(query).extract_first()
+        
+        pdfFiles=response.css('div.article a[href$=".pdf"]::attr(href)').extract()
+        pdf_files_generated = list()
+        for pdf_file in pdfFiles:
+            print pdf_file
+            if (pdf_file.startswith('/international')):
+                pdf_file = pdf_file.replace('/international','http://www.greenpeace.org/international',1)
+                print pdf_file
+            pdf_files_generated.append(pdf_file)
+            print pdf_files_generated
 
         yield {
             'type': 'Publication',
@@ -100,7 +131,7 @@ class AllSpider(scrapy.Spider):
             #'imagesB': response.xpath('//div[@class="news-list"]//div[@class="post-content"]//img[not(ancestor::a)]/@src').extract(), #don't import image if there's an a tag around it
             'imagesB': response.xpath('//div[@class="news-list"]//div[@class="post-content"]//img/@src').extract(),
             'imagesC': response.xpath('//div[@class="gallery"]//div[@class="img-nav"]//a/@rel').extract(), # Galleries (horrible html)
-            'pdfFiles': response.css('div.article a[href$=".pdf"]::attr(href)').extract(),
+            'pdfFiles': pdf_files_generated,
             'tags': response.meta['tags'],
             'url': response.url,
         }
