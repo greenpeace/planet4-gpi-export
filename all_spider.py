@@ -367,6 +367,7 @@ class AllSpider(scrapy.Spider):
         if body_text:
             body_text = body_text.replace('src="//', 'src="https://').replace('src="/', 'src="http://www.greenpeace.org/').replace('href="/', 'href="http://www.greenpeace.org/')
             body_text = body_text.replace('<span class="btn-open">zoom</span>', '')
+            body_text = re.sub('<p dir="ltr">(.*)<\/p>', "\g<1>", body_text)
             if lead_text:
                 body_text = '<div>' + lead_text + '</div>' + body_text + response.xpath(' //*[@id="content"]/div[4]/div/div[2]/p').extract_first()
         
@@ -435,6 +436,7 @@ class AllSpider(scrapy.Spider):
         if body_text:
             body_text = body_text.replace('src="//', 'src="https://').replace('src="/', 'src="http://www.greenpeace.org/').replace('href="/', 'href="http://www.greenpeace.org/')
             body_text = body_text.replace('<span class="btn-open">zoom</span>', '')
+            body_text = re.sub('<p dir="ltr">(.*)<\/p>', "\g<1>", body_text)
 
         yield {
             'type': 'Story',
@@ -496,6 +498,7 @@ class AllSpider(scrapy.Spider):
         if body_text:
             body_text = body_text.replace('src="//', 'src="https://').replace('src="/', 'src="http://www.greenpeace.org/').replace('href="/', 'href="http://www.greenpeace.org/')
             body_text = body_text.replace('<span class="btn-open">zoom</span>', '')
+            body_text = re.sub('<p dir="ltr">(.*)<\/p>', "\g<1>", body_text)
             if lead_text:
                 body_text = '<div>' + lead_text + '</div>' + body_text + response.xpath(' //*[@id="content"]/div[4]/div/div[2]/p').extract_first()
             
@@ -573,6 +576,7 @@ class AllSpider(scrapy.Spider):
         if body_text:
             body_text = body_text.replace('src="//', 'src="https://').replace('src="/', 'src="http://www.greenpeace.org/').replace('href="/', 'href="http://www.greenpeace.org/')
             body_text = body_text.replace('<span class="btn-open">zoom</span>', '')
+            body_text = re.sub('<p dir="ltr">(.*)<\/p>', "\g<1>", body_text)
 
         yield {
             'type': 'Publication',
