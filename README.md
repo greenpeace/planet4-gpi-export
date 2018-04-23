@@ -23,6 +23,10 @@
 
     `pip install Scrapy`   
 
+1. Install dateparser
+
+    `pip install dateparser`   
+
 1. Initiate a scrapy project
 
    `scrapy startproject p3_gpi_export`
