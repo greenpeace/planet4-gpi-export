@@ -122,7 +122,7 @@ class AllSpider(scrapy.Spider):
             'imagesB': imagesB_generated,
             # 'imagesB': response.xpath('//div[@class="news-list"]//div[@class="post-content"]//img[not(ancestor::a)]/@src').extract(), #don't import image if there's an a tag around it
             'imagesC': response.xpath('//div[@class="gallery"]//div[@class="img-nav"]//a/@rel').extract(),
-        # Galleries (horrible html)
+            # Galleries (horrible html)
             'pdfFiles': pdf_files_generated,
             'tags': response.meta['tags'],
             'url': response.url,
@@ -197,7 +197,7 @@ class AllSpider(scrapy.Spider):
             'imagesEnlarge': imagesEnlarge_generated,
             'imagesB': imagesB_generated,
             'imagesC': response.xpath('//div[@class="gallery"]//div[@class="img-nav"]//a/@rel').extract(),
-        # Galleries (horrible html)
+            # Galleries (horrible html)
             'pdfFiles': pdf_files_generated,
             'tags': response.meta['tags'],
             'url': response.url,
@@ -239,6 +239,13 @@ class AllSpider(scrapy.Spider):
             p3_image_gallery = 'true'
 
         lead_text = response.xpath('//*[@id="content"]/div[4]/div/div[2]/div[1]/div/text()').extract()[0]
+        date_field = response.xpath('string(//*[@id="content"]/div[4]/div/div[2]/span)').extract()[0]
+        if (date_field.startswith('Feature story - ')):
+            date_field = date_field.replace('Feature story - ','',1)
+        if (date_field.startswith('Press release - ')):
+            date_field = date_field.replace('Press release - ','',1)
+        if date_field:
+            date_field = dateutil.parser.parse(date_field)
         body_text = response.xpath('//*[@id="content"]/div[4]/div/div[2]/div[2]').extract()[0]
         if body_text:
             body_text = body_text.replace('src="//', 'src="https://').replace('src="/', 'src="http://www.greenpeace.org/').replace('href="/', 'href="http://www.greenpeace.org/')
@@ -247,17 +254,18 @@ class AllSpider(scrapy.Spider):
             if lead_text:
                 body_text = '<div>' + lead_text + '</div>' + body_text + response.xpath(
                     ' //*[@id="content"]/div[4]/div/div[2]/p').extract_first()
+        subtitle = extract_with_css('div.article h2 span::text')
+        if (subtitle == 'None'):
+            subtitle = ''
 
         yield {
             'type': 'Press Release',
             'p3_image_gallery': p3_image_gallery,
             'title': extract_with_css('div.article h1 span::text'),
-            'subtitle': '',
+            'subtitle': subtitle,
             'author': 'Greenpeace International',
             # 'date': response.css('#content > div.happen-box.article > div > div.text > span').re_first(r' - \s*(.*)'),
-            'date': dateutil.parser.parse(
-                response.xpath('string(//*[@id="content"]/div[4]/div/div[2]/span)').extract()[0].replace(
-                    'Press release - ', '')),
+            'date': date_field,
             # 'lead': extract_with_css('div.news-list div.post-content *:first-child strong::text'),
             'lead': lead_text,
             'categories': response.meta['categories'],
@@ -267,7 +275,7 @@ class AllSpider(scrapy.Spider):
             # 'imagesB': response.xpath('//div[@class="news-list"]//div[@class="post-content"]//img[not(ancestor::a)]/@src').extract(), #don't import image if there's an a tag around it
             'imagesB': imagesB_generated,
             'imagesC': response.xpath('//div[@class="gallery"]//div[@class="img-nav"]//a/@rel').extract(),
-        # Galleries (horrible html)
+            # Galleries (horrible html)
             'pdfFiles': pdf_files_generated,
             'tags': response.meta['tags'],
             'url': response.url,
@@ -319,8 +327,6 @@ class AllSpider(scrapy.Spider):
             if lead_text:
                 body_text = '<div>' + lead_text + '</div>' + body_text
 
-        lead_text
-
         if body_text:
             body_text = body_text.replace('src="//', 'src="https://').replace('src="/', 'src="http://www.greenpeace.org/').replace('href="/', 'href="http://www.greenpeace.org/')
             body_text = body_text.replace('<span class="btn-open">zoom</span>', '')
@@ -341,7 +347,7 @@ class AllSpider(scrapy.Spider):
             # 'imagesB': response.xpath('//div[@class="news-list"]//div[@class="post-content"]//img[not(ancestor::a)]/@src').extract(), #don't import image if there's an a tag around it
             'imagesB': imagesB_generated,
             'imagesC': response.xpath('//div[@class="gallery"]//div[@class="img-nav"]//a/@rel').extract(),
-        # Galleries (horrible html)
+            # Galleries (horrible html)
             'pdfFiles': pdf_files_generated,
             'tags': response.meta['tags'],
             'url': response.url,
