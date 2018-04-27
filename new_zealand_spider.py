@@ -171,7 +171,6 @@ class AllSpider(scrapy.Spider):
         if image_gallery:
             p3_image_gallery = 'true'
 
-
         body_text = response.css('div.news-list div.post-content').extract_first()
         if body_text:
             body_text = body_text.replace('src="//', 'src="https://').replace('src="/', 'src="http://www.greenpeace.org/').replace('href="/', 'href="http://www.greenpeace.org/')
@@ -182,6 +181,11 @@ class AllSpider(scrapy.Spider):
         imagesD_generated = list()
         for image in images:
             imagesD_generated.append(image)
+
+        blockquotes = response.xpath('//*[@id="content"]//blockquote').extract()
+        blockquotes_generated = list()
+        for blockquote in blockquotes:
+            blockquotes_generated.append(blockquote)
 
         yield {
             'type': 'Story',
@@ -200,6 +204,7 @@ class AllSpider(scrapy.Spider):
             'imagesB': imagesB_generated,
             'imagesC': response.xpath('//div[@class="gallery"]//div[@class="img-nav"]//a/@rel').extract(), # Galleries (horrible html)
             'imagesD': imagesD_generated,
+            'blockquote': blockquotes_generated,
             'pdfFiles': pdf_files_generated,
             'tags': response.meta['tags'],
             'url': response.url,
