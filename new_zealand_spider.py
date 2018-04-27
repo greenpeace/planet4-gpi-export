@@ -13,7 +13,7 @@ class AllSpider(scrapy.Spider):
 
     custom_settings = {
         'ROBOTSTXT_OBEY': 0,
-        'FEED_URI': 'all_gpi_D13.xml',
+        'FEED_URI': 'gpnz_test_batch.xml',
         'FEED_FORMAT': 'xml',
         'FEED_EXPORT_ENCODING': 'utf-8',
     }
@@ -102,7 +102,7 @@ class AllSpider(scrapy.Spider):
             body_text = body_text.replace('<span class="btn-open">zoom</span>', '')
             body_text = re.sub('<p dir="ltr">(.*)<\/p>', "\g<1>", body_text)
             if lead_text:
-                body_text = '<div>' + lead_text + '</div>' + body_text + response.xpath(' //*[@id="content"]/div[4]/div/div[2]/p').extract_first()
+                body_text = '<div class="leader">' + lead_text + '</div>' + body_text + response.xpath(' //*[@id="content"]/div[4]/div/div[2]/p').extract_first()
 
         yield {
             'type': 'Story',
@@ -110,7 +110,7 @@ class AllSpider(scrapy.Spider):
             #'title': extract_with_css('#content > div.happen-box.article > h1::text'),
             'title': response.xpath('//*[@id="content"]/div[4]/h1/span/text()').extract()[0],
             'subtitle': extract_with_css('div.article h1 span::text'),
-            'author': 'Greenpeace International',
+            'author': 'Greenpeace New Zealand',
             'date': date_field,
             #'lead': extract_with_css('div.news-list div.post-content *:first-child strong::text'),
             'lead': lead_text,
@@ -178,11 +178,16 @@ class AllSpider(scrapy.Spider):
             body_text = body_text.replace('<span class="btn-open">zoom</span>', '')
             body_text = re.sub('<p dir="ltr">(.*)<\/p>', "\g<1>", body_text)
 
+        images=response.xpath('//*[@class="post-content"]/div/p/a//img[contains(@style, "float:")]').extract()   #img[@style="margin: 9px; float: left;"]
+        imagesD_generated = list()
+        for image in images:
+            imagesD_generated.append(image)
+
         yield {
             'type': 'Story',
             'p3_image_gallery': p3_image_gallery,
             'title': extract_with_css('div.news-list h1::text'),
-            'subtitle': '',
+            #'subtitle': '',
             'author': response.xpath('string(//div[@class="news-list"]/ul/li/*/*/span[@class="caption"]/span[@class="green1"]/strong)').extract()[0],
             #'author_username': author_username,
             'date': date_field,
@@ -194,6 +199,7 @@ class AllSpider(scrapy.Spider):
             'imagesEnlarge': imagesEnlarge_generated,
             'imagesB': imagesB_generated,
             'imagesC': response.xpath('//div[@class="gallery"]//div[@class="img-nav"]//a/@rel').extract(), # Galleries (horrible html)
+            'imagesD': imagesD_generated,
             'pdfFiles': pdf_files_generated,
             'tags': response.meta['tags'],
             'url': response.url,
@@ -242,14 +248,14 @@ class AllSpider(scrapy.Spider):
             body_text = body_text.replace('<span class="btn-open">zoom</span>', '')
             body_text = re.sub('<p dir="ltr">(.*)<\/p>', "\g<1>", body_text)
             if lead_text:
-                body_text = '<div>' + lead_text + '</div>' + body_text + response.xpath(' //*[@id="content"]/div[4]/div/div[2]/p').extract_first()
+                body_text = '<div class="leader">' + lead_text + '</div>' + body_text + response.xpath(' //*[@id="content"]/div[4]/div/div[2]/p').extract_first()
 
         yield {
             'type': 'Press Release',
             'p3_image_gallery': p3_image_gallery,
             'title': extract_with_css('div.article h1 span::text'),
-            'subtitle': '',
-            'author': 'Greenpeace International',
+            #'subtitle': '',
+            'author': 'Greenpeace New Zealand',
             #'date': response.css('#content > div.happen-box.article > div > div.text > span').re_first(r' - \s*(.*)'),
             'date': dateutil.parser.parse(response.xpath('string(//*[@id="content"]/div[4]/div/div[2]/span)').extract()[0].replace('Press release - ', '')),
             #'lead': extract_with_css('div.news-list div.post-content *:first-child strong::text'),
@@ -311,21 +317,28 @@ class AllSpider(scrapy.Spider):
             if attachment_field:
                 body_text = body_text + attachment_field
             if lead_text:
-                body_text = '<div>' + lead_text + '</div>' + body_text
-        
-        lead_text
-        
+                body_text = '<div class="leader">' + lead_text + '</div>' + body_text
+
         if body_text:
             body_text = body_text.replace('src="//', 'src="https://').replace('src="/', 'src="http://www.greenpeace.org/').replace('href="/', 'href="http://www.greenpeace.org/')
             body_text = body_text.replace('<span class="btn-open">zoom</span>', '')
             body_text = re.sub('<p dir="ltr">(.*)<\/p>', "\g<1>", body_text)
 
+        subtitle = extract_with_css('div.article h2 span::text')
+        if subtitle:
+            body_text = '<h2>' + subtitle + '</h2><br />' + body_text
+
+        images=response.xpath('//*[@id="content"]/div[4]/div/div[2]/div[2]//img[contains(@style, "float:")]').extract()   #img[@style="margin: 9px; float: left;"]
+        imagesD_generated = list()
+        for image in images:
+            imagesD_generated.append(image)
+
         yield {
             'type': 'Publication',
             'p3_image_gallery': p3_image_gallery,
             'title': extract_with_css('div.article h1 span::text'),
-            'subtitle': extract_with_css('div.article h2 span::text'),
-            'author': 'Greenpeace International',
+            #'subtitle': subtitle,
+            'author': 'Greenpeace New Zealand',
             'date': date_field,
             #'lead': extract_with_css('div.news-list div.post-content *:first-child strong::text'),
             'lead': extract_with_css('#content > div.happen-box.article > div > div.text > div.leader > div'),
@@ -335,6 +348,7 @@ class AllSpider(scrapy.Spider):
             #'imagesB': response.xpath('//div[@class="news-list"]//div[@class="post-content"]//img[not(ancestor::a)]/@src').extract(), #don't import image if there's an a tag around it
             'imagesB': imagesB_generated,
             'imagesC': response.xpath('//div[@class="gallery"]//div[@class="img-nav"]//a/@rel').extract(), # Galleries (horrible html)
+            'imagesD': imagesD_generated,
             'pdfFiles': pdf_files_generated,
             'tags': response.meta['tags'],
             'url': response.url,
