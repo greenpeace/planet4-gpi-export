@@ -151,7 +151,7 @@ class AllSpider(scrapy.Spider):
             body_text = body_text.replace('<span class="btn-open">zoom</span>', '')
             body_text = re.sub('<p dir="ltr">(.*)<\/p>', "\g<1>", body_text)
             if lead_text:
-                body_text = '<div style="color: #333; margin: 10px 0 12px; font-weight: 700;">' + lead_text + '</div>' + body_text + response.xpath(' //*[@id="content"]/div[4]/div/div[2]/p').extract_first()
+                body_text = '<div>' + lead_text + '</div>' + body_text + response.xpath(' //*[@id="content"]/div[4]/div/div[2]/p').extract_first()
 
         yield {
             'type': 'Story',
@@ -302,7 +302,7 @@ class AllSpider(scrapy.Spider):
             body_text = body_text.replace('<span class="btn-open">zoom</span>', '')
             body_text = re.sub('<p dir="ltr">(.*)<\/p>', "\g<1>", body_text)
             if lead_text:
-                body_text = '<div style="color: #333; margin: 10px 0 12px; font-weight: 700;">' + lead_text + '</div>' + body_text + response.xpath(' //*[@id="content"]/div[4]/div/div[2]/p').extract_first()
+                body_text = '<div>' + lead_text + '</div>' + body_text + response.xpath(' //*[@id="content"]/div[4]/div/div[2]/p').extract_first()
 
         yield {
             'type': 'Press Release',
@@ -371,7 +371,7 @@ class AllSpider(scrapy.Spider):
             if attachment_field:
                 body_text = body_text + attachment_field
             if lead_text:
-                body_text = '<div style="color: #333; margin: 10px 0 12px; font-weight: 700;">' + lead_text + '</div>' + body_text
+                body_text = '<div>' + lead_text + '</div>' + body_text
 
         if body_text:
             body_text = body_text.replace('src="//', 'src="https://').replace('src="/', 'src="http://www.greenpeace.org/').replace('href="/', 'href="http://www.greenpeace.org/')
