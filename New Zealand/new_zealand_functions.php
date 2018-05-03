@@ -114,7 +114,7 @@ function replace_attachment($text, $attachment) {
 	}, $basename);
 
 	$basename = str_replace(' ', '-', urldecode($basename));
-	$bodytag = str_replace($attachment, get_site_url(). "/wp-content/uploads/2018/04/". $basename , $text);
+	$bodytag = str_replace($attachment, get_site_url(). "/wp-content/uploads/2018/05/". $basename , $text);
 	return $bodytag;
 }
 

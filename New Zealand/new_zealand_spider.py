@@ -13,7 +13,7 @@ class AllSpider(scrapy.Spider):
 
     custom_settings = {
         'ROBOTSTXT_OBEY': 0,
-        'FEED_URI': 'gpnz_test_batch_2.xml',
+        'FEED_URI': 'gpnz_test_batch_v3.xml',
         'FEED_FORMAT': 'xml',
         'FEED_EXPORT_ENCODING': 'utf-8',
     }
@@ -38,7 +38,7 @@ class AllSpider(scrapy.Spider):
             'http://www.greenpeace.org/new-zealand/en/blog/fighting-spirit-at-flotilla-send-off/blog/33965/':('Story','Resist','Oil&Gas', '', 'Migrate'),
             'http://www.greenpeace.org/new-zealand/en/blog/brownlee-and-oil-relics-of-a-dying-age/blog/24866/':('Story','Resist','Oil&Gas', '', 'Migrate'),
             'http://www.greenpeace.org/new-zealand/en/blog/are-the-governments-deep-water-oil-plans-runn/blog/35784/':('Story','Resist','Oil&Gas', '', 'Migrate'),
-            'http://www.greenpeace.org/new-zealand/en/blog/police-protect-us-oil-giant-anadarkos-survey-/blog/37357/':('Story','Resist','Oil&Gas', '', 'Migrate'),
+            'http://www.greenpeace.org/new-zealand/en/blog/busting-the-oil-and-gas-industrys-alternative/blog/61405/':('Story','Resist','Oil&Gas', 'Climate', 'Migrate'),
             'http://www.greenpeace.org/new-zealand/en/blog/rena-oil-spill-an-unfortunate-lesson/blog/37226/':('Story','Resist','Oil&Gas', '', 'Migrate'),
             'http://www.greenpeace.org/new-zealand/en/blog/the-oil-is-less-obvious-but-the-problem-is-sp/blog/37351/':('Story','Resist','Oil&Gas', '', 'Migrate'),
             'http://www.greenpeace.org/new-zealand/en/blog/rena-oil-spill-could-make-deep-sea-oil-drilli/blog/37303/':('Story','Resist','Oil&Gas', '', 'Migrate'),
@@ -103,8 +103,8 @@ class AllSpider(scrapy.Spider):
             if ( action.lower()=='archive' ):
                 request.meta['status'] = 'draft'
             request.meta['categories'] = categories
-            request.meta['tags'] = tags1
-            request.meta['tags1'] = tags2
+            request.meta['tags1'] = tags1
+            request.meta['tags2'] = tags2
             request.meta['action'] = action
             yield request
 
@@ -151,7 +151,7 @@ class AllSpider(scrapy.Spider):
             body_text = body_text.replace('<span class="btn-open">zoom</span>', '')
             body_text = re.sub('<p dir="ltr">(.*)<\/p>', "\g<1>", body_text)
             if lead_text:
-                body_text = '<div>' + lead_text + '</div>' + body_text + response.xpath(' //*[@id="content"]/div[4]/div/div[2]/p').extract_first()
+                body_text = '<div class="leader">' + lead_text + '</div>' + body_text + response.xpath(' //*[@id="content"]/div[4]/div/div[2]/p').extract_first()
 
         yield {
             'type': 'Story',
@@ -170,7 +170,8 @@ class AllSpider(scrapy.Spider):
             #'imagesB': response.xpath('//div[@class="news-list"]//div[@class="post-content"]//img[not(ancestor::a)]/@src').extract(), #don't import image if there's an a tag around it
             'imagesC': response.xpath('//div[@class="gallery"]//div[@class="img-nav"]//a/@rel').extract(), # Galleries (horrible html)
             'pdfFiles': pdf_files_generated,
-            'tags': response.meta['tags'],
+            'tags1': response.meta['tags1'],
+            'tags2': response.meta['tags2'],
             'url': response.url,
         }
 
@@ -236,13 +237,19 @@ class AllSpider(scrapy.Spider):
         for blockquote in blockquotes:
             blockquotes_generated.append(blockquote)
 
+        author_username = response.xpath('string(//div[@class="news-list"]/ul/li/*/*/span[@class="caption"]/span[@class="green1"]/strong/a/@href)').extract_first()
+        if (author_username != 'None'):
+            Segments  = author_username.strip().split('/')
+            if ( ( len(Segments) == 4 ) and Segments[4] ):
+                author_username = Segments[4]
+
         yield {
             'type': 'Story',
             'p3_image_gallery': p3_image_gallery,
             'title': extract_with_css('div.news-list h1::text'),
             #'subtitle': '',
             'author': response.xpath('string(//div[@class="news-list"]/ul/li/*/*/span[@class="caption"]/span[@class="green1"]/strong)').extract()[0],
-            #'author_username': author_username,
+            'author_username': author_username,
             'date': date_field,
             #'lead': extract_with_css('div.news-list div.post-content *:first-child strong::text'),
             'lead': response.xpath('string(//div[@class="news-list"]/ul/li/div[@class="post-content"]/div//*[self::p or self::h3 or self::h2][1])').extract()[0],
@@ -255,7 +262,8 @@ class AllSpider(scrapy.Spider):
             'imagesD': imagesD_generated,
             'blockquote': blockquotes_generated,
             'pdfFiles': pdf_files_generated,
-            'tags': response.meta['tags'],
+            'tags1': response.meta['tags1'],
+            'tags2': response.meta['tags2'],
             'url': response.url,
             'status': response.meta['status'],
         }
@@ -302,7 +310,7 @@ class AllSpider(scrapy.Spider):
             body_text = body_text.replace('<span class="btn-open">zoom</span>', '')
             body_text = re.sub('<p dir="ltr">(.*)<\/p>', "\g<1>", body_text)
             if lead_text:
-                body_text = '<div>' + lead_text + '</div>' + body_text + response.xpath(' //*[@id="content"]/div[4]/div/div[2]/p').extract_first()
+                body_text = '<div class="leader">' + lead_text + '</div>' + body_text + response.xpath(' //*[@id="content"]/div[4]/div/div[2]/p').extract_first()
 
         yield {
             'type': 'Press Release',
@@ -322,7 +330,8 @@ class AllSpider(scrapy.Spider):
             'imagesB': imagesB_generated,
             'imagesC': response.xpath('//div[@class="gallery"]//div[@class="img-nav"]//a/@rel').extract(), # Galleries (horrible html)
             'pdfFiles': pdf_files_generated,
-            'tags': response.meta['tags'],
+            'tags1': response.meta['tags1'],
+            'tags2': response.meta['tags2'],
             'url': response.url,
         }
      
@@ -371,7 +380,7 @@ class AllSpider(scrapy.Spider):
             if attachment_field:
                 body_text = body_text + attachment_field
             if lead_text:
-                body_text = '<div>' + lead_text + '</div>' + body_text
+                body_text = '<div class="leader">' + lead_text + '</div>' + body_text
 
         if body_text:
             body_text = body_text.replace('src="//', 'src="https://').replace('src="/', 'src="http://www.greenpeace.org/').replace('href="/', 'href="http://www.greenpeace.org/')
@@ -404,6 +413,7 @@ class AllSpider(scrapy.Spider):
             'imagesC': response.xpath('//div[@class="gallery"]//div[@class="img-nav"]//a/@rel').extract(), # Galleries (horrible html)
             'imagesD': imagesD_generated,
             'pdfFiles': pdf_files_generated,
-            'tags': response.meta['tags'],
+            'tags1': response.meta['tags1'],
+            'tags2': response.meta['tags2'],
             'url': response.url,
         }
