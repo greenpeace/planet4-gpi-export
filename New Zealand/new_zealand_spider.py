@@ -13,7 +13,7 @@ class AllSpider(scrapy.Spider):
 
     custom_settings = {
         'ROBOTSTXT_OBEY': 0,
-        'FEED_URI': 'gpnz_production_v3_1.xml',
+        'FEED_URI': 'gpnz_staging_v4.xml',
         'FEED_FORMAT': 'xml',
         'FEED_EXPORT_ENCODING': 'utf-8',
     }
@@ -496,6 +496,44 @@ class AllSpider(scrapy.Spider):
             request.meta['action'] = action
             yield request
 
+        author_usernames = {
+            'Amanda-Larsson':       'alarsson',
+            'Andrew-Tobert':        'atobert@greenpeace.org',
+            'Bunny-McDiarmid':      'bunny.mcdiarmid',
+            'Cassady-Sharp':        'csharp',
+            'Francis-Park':         'fpark',
+            'Genevieve-Toop':       'gtoop',
+            'John-Dunford':         'jdunford',
+            'Karli-Thomas':         'kthomas',
+            'Kate-Simcock':         'ksimcock',
+            'Madeleine-Smith'       'madeleine.smith'
+            'Maya-McNicoll':        'mmcnicol@greenpeace.org',
+            'Mike-Smith':           'msmith',
+            'Nathan-Argent':        'nargent',
+            'Nick-Young':           'nyoung',
+            'Phil-Vine':            'pvine',
+            'Rachael-Shaw':         'rshaw',
+            'Rosalind-Atkinson':    'ratkinson',
+            'Sophie-Schroder':      'sschrode',
+            'Steve-Abel':           'sabel',
+            'Vanessa-Atkinson':     'vatkinson'
+        }
+
+        # Read in the file
+        with open( 'gpnz_staging_v4.xml', 'r' ) as file :
+            filedata = file.read()
+
+        # Replace with correct usernames.
+        for p3_author_username, p4_author_username in author_usernames.iteritems():
+            filedata = filedata.replace('<author_username>' + p3_author_username, '<author_username>' + p4_author_username)
+
+        # Remove dir="ltr" attributes from elements as requested.
+        filedata = filedata.replace('dir="ltr"', '')
+
+        # Write the file out again
+        with open('gpnz_staging_v4.xml', 'w') as file:
+            file.write(filedata)
+
     def parse_feature(self, response):
 
         def extract_with_css(query):
@@ -628,8 +666,14 @@ class AllSpider(scrapy.Spider):
         author_username = response.xpath('string(//div[@class="news-list"]/ul/li/*/*/span[@class="caption"]/span[@class="green1"]/strong/a/@href)').extract_first()
         if (author_username != 'None'):
             Segments  = author_username.strip().split('/')
-            if ( ( len(Segments) == 4 ) and Segments[4] ):
-                author_username = Segments[4]
+            try:                                            #if ( ( len(Segments) == 4 ) and Segments[4] ):
+                if ( Segments[4] ):
+                    author_username = Segments[4]
+            except IndexError:
+                author_username = ''
+
+        # Get the thumbnail of the post as requested.
+        thumbnail = response.xpath('string(head//link[@rel="image_src"]/@href)').extract_first()
 
         yield {
             'type': 'Story',
@@ -654,6 +698,7 @@ class AllSpider(scrapy.Spider):
             'tags2': response.meta['tags2'],
             'url': response.url,
             'status': response.meta['status'],
+            'thumbnail': thumbnail,
         }
 
     def parse_press(self, response):
@@ -699,6 +744,8 @@ class AllSpider(scrapy.Spider):
             body_text = re.sub('<p dir="ltr">(.*)<\/p>', "\g<1>", body_text)
             if lead_text:
                 body_text = '<div class="leader">' + lead_text + '</div>' + body_text + response.xpath(' //*[@id="content"]/div[4]/div/div[2]/p').extract_first()
+
+        thumbnail = response.xpath('string(head//link[@rel="image_src"]/@href)').extract_first()
 
         yield {
             'type': 'Press Release',
@@ -784,6 +831,8 @@ class AllSpider(scrapy.Spider):
         imagesD_generated = list()
         for image in images:
             imagesD_generated.append(image)
+
+        thumbnail = response.xpath('string(head//link[@rel="image_src"]/@href)').extract_first()
 
         yield {
             'type': 'Publication',
