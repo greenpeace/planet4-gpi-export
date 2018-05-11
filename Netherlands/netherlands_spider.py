@@ -113,6 +113,7 @@ class AllSpider(scrapy.Spider):
         date_field = response.xpath('//*[@id="content"]/div[4]/div/div[2]/span/text()').extract()[0]
         if (date_field.startswith('Nieuwsartikel - ')):
             date_field = date_field.replace('Nieuwsartikel - ','',1)
+        date_field = self.filter_month_name(date_field);
         if date_field:
             if (date_field.startswith('Feature story - ')):
                 date_field = date_field.replace('Feature story - ','',1)
@@ -187,6 +188,7 @@ class AllSpider(scrapy.Spider):
             print pdf_files_generated
 
         date_field = response.css('div.news-list .caption::text').re_first(r' - \s*(.*)')
+        date_field = self.filter_month_name(date_field);
         if date_field:
             date_field = dateutil.parser.parse(date_field)
 
@@ -295,8 +297,7 @@ class AllSpider(scrapy.Spider):
 
         thumbnail = response.xpath('string(head//link[@rel="image_src"]/@href)').extract_first()
         date_field = response.xpath('string(//*[@id="content"]/div[4]/div/div[2]/span)').re_first(r' - \s*(.*)')
-        if (date_field.startswith('mei')):
-            date_field = date_field.replace('mei','may',1)
+        date_field = self.filter_month_name(date_field);
         if date_field:
             date_field = dateutil.parser.parse(date_field)
 
@@ -353,6 +354,7 @@ class AllSpider(scrapy.Spider):
             print pdf_files_generated
 
         date_field = response.css('div.article div.text span.author::text').re_first(r' - \s*(.*)')
+        date_field = self.filter_month_name(date_field);
         if date_field:
             date_field = dateutil.parser.parse(date_field)
 
@@ -409,3 +411,25 @@ class AllSpider(scrapy.Spider):
             'tags2': response.meta['tags2'],
             'url': response.url,
         }
+
+    def filter_month_name(self, month_name):
+        month_nl_en = {
+            'januari': 'January',
+            'februari': 'February',
+            'maart': 'March',
+            'april': 'April',
+            'mei': 'May',
+            'juni': 'June',
+            'juli': 'July',
+            'augustus': 'August',
+            'september': 'September',
+            'oktober': 'October',
+            'november': 'November',
+            'december': 'December',
+        }
+
+        # Replace with dutch month name with english month name.
+        for nl_month, en_month in month_nl_en.iteritems():
+            month_name = month_name.replace(nl_month, en_month)
+
+        return month_name;
