@@ -96,7 +96,7 @@ class AllSpider(scrapy.Spider):
         imagesB_generated = list()
         for image_file in imagesB:
             if (image_file.startswith('/')):
-                image_file = image_file.replace('/','http://www.greenpeace.org/',1)
+                image_file = image_file.replace('/','http://www.greenpeace.nl/',1)
             imagesB_generated.append(image_file)
 
 
@@ -105,24 +105,20 @@ class AllSpider(scrapy.Spider):
         for pdf_file in pdfFiles:
             print pdf_file
             if (pdf_file.startswith('/')):
-                pdf_file = pdf_file.replace('/','http://www.greenpeace.org/',1)
+                pdf_file = pdf_file.replace('/','http://www.greenpeace.nl/',1)
                 print pdf_file
             pdf_files_generated.append(pdf_file)
             print pdf_files_generated
 
-        date_field = response.xpath('//*[@id="content"]/div[4]/div/div[2]/span/text()').extract()[0]
-        if (date_field.startswith('Nieuwsartikel - ')):
-            date_field = date_field.replace('Nieuwsartikel - ','',1)
+        date_field = response.xpath('//*[@id="content"]/div[4]/div/div[2]/span/text()').re_first(r' - \s*(.*)')
         date_field = self.filter_month_name(date_field);
         if date_field:
-            if (date_field.startswith('Feature story - ')):
-                date_field = date_field.replace('Feature story - ','',1)
             date_field = dateutil.parser.parse(date_field)
 
         lead_text = response.xpath('//*[@id="content"]/div[4]/div/div[2]/div[1]/div').extract()[0]
         body_text = response.xpath('//*[@id="content"]/div[4]/div/div[2]/div[2]').extract()[0]
         if body_text:
-            body_text = body_text.replace('src="//', 'src="https://').replace('src="/', 'src="http://www.greenpeace.org/').replace('href="/', 'href="http://www.greenpeace.org/')
+            body_text = body_text.replace('src="//', 'src="https://').replace('src="/', 'src="http://www.greenpeace.nl/').replace('href="/', 'href="http://www.greenpeace.nl/')
             body_text = body_text.replace('<span class="btn-open">zoom</span>', '')
             body_text = re.sub('<p dir="ltr">(.*)<\/p>', "\g<1>", body_text)
             if lead_text:
@@ -160,21 +156,21 @@ class AllSpider(scrapy.Spider):
         imagesA_generated = list()
         for image_file in imagesA:
             if (image_file.startswith('/')):
-                image_file = image_file.replace('/','http://www.greenpeace.org/',1)
+                image_file = image_file.replace('/','http://www.greenpeace.nl/',1)
             imagesA_generated.append(image_file)
 
         imagesB=response.xpath('//div[@class="news-list"]//div[@class="post-content"]//img/@src').extract()
         imagesB_generated = list()
         for image_file in imagesB:
             if (image_file.startswith('/')):
-                image_file = image_file.replace('/','http://www.greenpeace.org/',1)
+                image_file = image_file.replace('/','http://www.greenpeace.nl/',1)
             imagesB_generated.append(image_file)
 
-        imagesEnlarge=response.xpath('//div[@class="news-list"]//div[@class="post-content"]//a[@class="open-img BlogEnlargeImage"]/@href').extract()
+        imagesEnlarge=response.xpath('//div[@class="news-list"]//div[@class="post-content"]//a[@class="open-img EnlargeImage"]/@href').extract()
         imagesEnlarge_generated = list()
         for image_file in imagesEnlarge:
             if (image_file.startswith('/')):
-                image_file = image_file.replace('/','http://www.greenpeace.org/',1)
+                image_file = image_file.replace('/','http://www.greenpeace.nl/',1)
             imagesEnlarge_generated.append(image_file)
 
         pdfFiles=response.css('div.article a[href$=".pdf"]::attr(href)').extract()
@@ -182,7 +178,7 @@ class AllSpider(scrapy.Spider):
         for pdf_file in pdfFiles:
             print pdf_file
             if (pdf_file.startswith('/')):
-                pdf_file = pdf_file.replace('/','http://www.greenpeace.org/',1)
+                pdf_file = pdf_file.replace('/','http://www.greenpeace.nl/',1)
                 print pdf_file
             pdf_files_generated.append(pdf_file)
             print pdf_files_generated
@@ -199,7 +195,7 @@ class AllSpider(scrapy.Spider):
 
         body_text = response.css('div.news-list div.post-content').extract_first()
         if body_text:
-            body_text = body_text.replace('src="//', 'src="https://').replace('src="/', 'src="http://www.greenpeace.org/').replace('href="/', 'href="http://www.greenpeace.org/')
+            body_text = body_text.replace('src="//', 'src="https://').replace('src="/', 'src="http://www.greenpeace.nl/').replace('href="/', 'href="http://www.greenpeace.nl/')
             body_text = body_text.replace('<span class="btn-open">zoom</span>', '')
             body_text = re.sub('<p dir="ltr">(.*)<\/p>', "\g<1>", body_text)
 
@@ -260,14 +256,14 @@ class AllSpider(scrapy.Spider):
         imagesA_generated = list()
         for image_file in imagesA:
             if (image_file.startswith('/')):
-                image_file = image_file.replace('/','http://www.greenpeace.org/',1)
+                image_file = image_file.replace('/','http://www.greenpeace.nl/',1)
             imagesA_generated.append(image_file)
 
         imagesB=response.xpath('//div[@class="news-list"]//div[@class="post-content"]//img/@src').extract()
         imagesB_generated = list()
         for image_file in imagesB:
             if (image_file.startswith('/')):
-                image_file = image_file.replace('/','http://www.greenpeace.org/',1)
+                image_file = image_file.replace('/','http://www.greenpeace.nl/',1)
             imagesB_generated.append(image_file)
 
 
@@ -276,7 +272,7 @@ class AllSpider(scrapy.Spider):
         for pdf_file in pdfFiles:
             print pdf_file
             if (pdf_file.startswith('/')):
-                pdf_file = pdf_file.replace('/','http://www.greenpeace.org/',1)
+                pdf_file = pdf_file.replace('/','http://www.greenpeace.nl/',1)
                 print pdf_file
             pdf_files_generated.append(pdf_file)
             print pdf_files_generated
@@ -289,7 +285,7 @@ class AllSpider(scrapy.Spider):
         lead_text = response.xpath('//*[@id="content"]/div[4]/div/div[2]/div[1]/div/text()').extract()[0]
         body_text = response.xpath('//*[@id="content"]/div[4]/div/div[2]/div[2]').extract()[0]
         if body_text:
-            body_text = body_text.replace('src="//', 'src="https://').replace('src="/', 'src="http://www.greenpeace.org/').replace('href="/', 'href="http://www.greenpeace.org/')
+            body_text = body_text.replace('src="//', 'src="https://').replace('src="/', 'src="http://www.greenpeace.nl/').replace('href="/', 'href="http://www.greenpeace.nl/')
             body_text = body_text.replace('<span class="btn-open">zoom</span>', '')
             body_text = re.sub('<p dir="ltr">(.*)<\/p>', "\g<1>", body_text)
             if lead_text:
@@ -335,21 +331,21 @@ class AllSpider(scrapy.Spider):
         imagesA_generated = list()
         for image_file in imagesA:
             if (image_file.startswith('/')):
-                image_file = image_file.replace('/','http://www.greenpeace.org/',1)
+                image_file = image_file.replace('/','http://www.greenpeace.nl/',1)
             imagesA_generated.append(image_file)
 
         imagesB=response.xpath('//*[@id="content"]/div[4]/div/div[2]/div[2]//img/@src').extract()
         imagesB_generated = list()
         for image_file in imagesB:
             if (image_file.startswith('/')):
-                image_file = image_file.replace('/','http://www.greenpeace.org/',1)
+                image_file = image_file.replace('/','http://www.greenpeace.nl/',1)
             imagesB_generated.append(image_file)
         
         pdfFiles=response.css('div.article a[href$=".pdf"]::attr(href)').extract()
         pdf_files_generated = list()
         for pdf_file in pdfFiles:
             if (pdf_file.startswith('/')):
-                pdf_file = pdf_file.replace('/','http://www.greenpeace.org/',1)
+                pdf_file = pdf_file.replace('/','http://www.greenpeace.nl/',1)
             pdf_files_generated.append(pdf_file)
             print pdf_files_generated
 
@@ -374,7 +370,7 @@ class AllSpider(scrapy.Spider):
                 body_text = '<div class="leader">' + lead_text + '</div>' + body_text
 
         if body_text:
-            body_text = body_text.replace('src="//', 'src="https://').replace('src="/', 'src="http://www.greenpeace.org/').replace('href="/', 'href="http://www.greenpeace.org/')
+            body_text = body_text.replace('src="//', 'src="https://').replace('src="/', 'src="http://www.greenpeace.nl/').replace('href="/', 'href="http://www.greenpeace.nl/')
             body_text = body_text.replace('<span class="btn-open">zoom</span>', '')
             body_text = re.sub('<p dir="ltr">(.*)<\/p>', "\g<1>", body_text)
 
