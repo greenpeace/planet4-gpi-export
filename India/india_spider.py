@@ -15,7 +15,7 @@ class AllSpider(scrapy.Spider):
 
     custom_settings = {
         'ROBOTSTXT_OBEY': 0,
-        'FEED_URI': 'gpin_batch_v2_test.xml',
+        'FEED_URI': 'gpin_batch_v4.xml',
         'FEED_FORMAT': 'xml',
         'FEED_EXPORT_ENCODING': 'utf-8',
     }
@@ -146,7 +146,18 @@ class AllSpider(scrapy.Spider):
         if image_gallery:
             p3_image_gallery = 'true'
 
+        imagesA = response.xpath('//div[@class="news-list"]//div[@class="post-content"]//a[img]/@href').extract()
+        if len(imagesA) == 0:
+            imagesA = response.xpath('//div[@id="content"]//a[img]/@href').extract()
+        imagesA_generated = list()
+        for image_file in imagesA:
+            if (image_file.startswith('/')):
+                image_file = image_file.replace('/', 'http://www.greenpeace.org/', 1)
+            imagesA_generated.append(image_file)
+
         imagesB = response.xpath('//*[@id="content"]//img/@src').extract()
+        if len(imagesB) == 0:
+            imagesB = response.xpath('//div[@class="news-list"]//div[@class="post-content"]//img/@src').extract()
         imagesB_generated = list()
         for image_file in imagesB:
             if (image_file.startswith('/')):
@@ -198,7 +209,7 @@ class AllSpider(scrapy.Spider):
             'lead': lead_text,
             'categories': response.meta['categories'],
             'text': body_text,
-            'imagesA': response.xpath('//div[@class="news-list"]//div[@class="post-content"]//img/@src').extract(),
+            'imagesA': imagesA_generated,
             'imagesB': imagesB_generated,
             # 'imagesB': response.xpath('//div[@class="news-list"]//div[@class="post-content"]//img[not(ancestor::a)]/@src').extract(), #don't import image if there's an a tag around it
             'imagesC': response.xpath('//div[@class="gallery"]//div[@class="img-nav"]//a/@rel').extract(),
@@ -214,6 +225,8 @@ class AllSpider(scrapy.Spider):
             return response.css(query).extract_first()
 
         imagesA = response.xpath('//div[@class="news-list"]//div[@class="post-content"]//a[img]/@href').extract()
+        if len(imagesA) == 0:
+            imagesA = response.xpath('//div[@id="content"]//a[img]/@href').extract()
         imagesA_generated = list()
         for image_file in imagesA:
             if (image_file.startswith('/')):
@@ -221,6 +234,8 @@ class AllSpider(scrapy.Spider):
             imagesA_generated.append(image_file)
 
         imagesB = response.xpath('//div[@class="news-list"]//div[@class="post-content"]//img/@src').extract()
+        if len(imagesB) == 0:
+            imagesB = response.xpath('//div[@id="content"]//img/@src').extract()
         imagesB_generated = list()
         for image_file in imagesB:
             if (image_file.startswith('/')):
@@ -228,6 +243,8 @@ class AllSpider(scrapy.Spider):
             imagesB_generated.append(image_file)
 
         imagesEnlarge = response.xpath('//div[@class="news-list"]//div[@class="post-content"]//a[@class="open-img EnlargeImage"]/@href').extract()
+        if len(imagesEnlarge) == 0:
+            imagesEnlarge = response.xpath('//div[@id="content"]//a[@class="open-img EnlargeImage"]/@href').extract()
         imagesEnlarge_generated = list()
         for image_file in imagesEnlarge:
             if (image_file.startswith('/')):
@@ -294,6 +311,8 @@ class AllSpider(scrapy.Spider):
             return response.css(query).extract_first()
 
         imagesA = response.xpath('//div[@class="news-list"]//div[@class="post-content"]//a[img]/@href').extract()
+        if len(imagesA) == 0:
+            imagesA = response.xpath('//div[@id="content"]//a[img]/@href').extract()
         imagesA_generated = list()
         for image_file in imagesA:
             if (image_file.startswith('/')):
@@ -301,11 +320,22 @@ class AllSpider(scrapy.Spider):
             imagesA_generated.append(image_file)
 
         imagesB = response.xpath('//div[@class="news-list"]//div[@class="post-content"]//img/@src').extract()
+        if len(imagesB) == 0:
+            imagesB = response.xpath('//div[@id="content"]//img/@src').extract()
         imagesB_generated = list()
         for image_file in imagesB:
             if (image_file.startswith('/')):
                 image_file = image_file.replace('/', 'http://www.greenpeace.org/', 1)
             imagesB_generated.append(image_file)
+
+        imagesEnlarge = response.xpath('//div[@id="content"]//a[@class="open-img EnlargeImage"]/@href').extract()
+        imagesEnlarge_generated = list()
+        for image_file in imagesEnlarge:
+            if (image_file.startswith('/')):
+                image_file = image_file.replace('/', 'http://www.greenpeace.org/', 1)
+            imagesEnlarge_generated.append(image_file)
+        if len(imagesB_generated) == 0 and len(imagesEnlarge_generated):
+            imagesB_generated = imagesEnlarge_generated
 
         pdfFiles = response.css('div.article a[href$=".pdf"]::attr(href)').extract()
         pdf_files_generated = list()
@@ -358,6 +388,7 @@ class AllSpider(scrapy.Spider):
             # 'text':  response.css('div.news-list div.post-content').extract_first(),
             'text': body_text,
             'imagesA': imagesA_generated,
+            'imagesEnlarge': imagesEnlarge_generated,
             # 'imagesB': response.xpath('//div[@class="news-list"]//div[@class="post-content"]//img[not(ancestor::a)]/@src').extract(), #don't import image if there's an a tag around it
             'imagesB': imagesB_generated,
             'imagesC': response.xpath('//div[@class="gallery"]//div[@class="img-nav"]//a/@rel').extract(),
@@ -392,7 +423,6 @@ class AllSpider(scrapy.Spider):
             if (pdf_file.startswith('/')):
                 pdf_file = pdf_file.replace('/', 'http://www.greenpeace.org/', 1)
             pdf_files_generated.append(pdf_file)
-            print pdf_files_generated
 
         date_field = response.css('div.article div.text span.author::text').re_first(r' - \s*(.*)')
         if date_field:
