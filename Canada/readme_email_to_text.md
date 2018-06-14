@@ -11,17 +11,18 @@ The OCR API solution is split into 4 step for 100% accuracy.
 
 
 1) Filter all email images links
+
 Use below code to filter the all email image links.
 
 ```
-		#list images urls
+	#list images urls
         for image_file in imagesB_generated:
             if ("/emailimages/" in image_file):
                 data = [image_file]
                 self.csv_writer(data, "email_images_url_list.csv")
 ```
 
-Please add above snippet in all parse functions [Example](https://github.com/greenpeace/planet4-gpi-export/blob/ca_spider_v2/Canada/canada_spider.py#L460)
+Please add above snippet in all parse functions [Example](https://github.com/greenpeace/planet4-gpi-export/blob/master/Canada/canada_spider.py#L460)
 
 
 2) Consume OCR API using PHP script and save response in MySQL table
@@ -34,12 +35,14 @@ Import the tables from [here](https://github.com/greenpeace/planet4-gpi-export/b
 
 As per local MySQL database credentials, please update planet4-gpi-export/Canada/PHP_webservice/connection.php file.
 
-Now we have the list of links but there are so many of duplication entries
+Now we have the list of links but there are so many of duplicate entries.
+
 Filter those links and get the unique list of links.
 
 Copy the list of images in `email_img_to_text_function.php` file in `$url_list` array.
 
 3) Review and clean the email data (using script)
+
 browse the `review_parsed_email_id.php` file on local. here you can check and fix if you found any issue with parsed data by editing database table raws.
 
 
@@ -48,7 +51,7 @@ browse the `review_parsed_email_id.php` file on local. here you can check and fi
 Please replace/comment the code snippet added in step1 with below one -
 
 ```
-		# Filter email id image and replace it with email text.
+	# Filter email id image and replace it with email text.
         delete_images = list()
         for image_file in imagesB_generated:
             if ("/emailimages/" in image_file):
