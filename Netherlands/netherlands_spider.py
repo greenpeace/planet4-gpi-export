@@ -557,7 +557,7 @@ class AllSpider(scrapy.Spider):
         imagesA = response.xpath('//div[@id="content"]//a[img]/@href').extract()
         for image_file in imagesA:
             if (image_file.startswith('/')):
-                image_file = image_file.replace('/', 'http://www.greenpeace.org/', 1)
+                image_file = image_file.replace('/', 'http://www.greenpeace.nl/', 1)
             imagesA_generated.append(image_file)
 
         imagesB=response.xpath('//*[@id="content"]//img/@src').extract()
@@ -571,7 +571,7 @@ class AllSpider(scrapy.Spider):
         imagesEnlarge_generated = list()
         for image_file in imagesEnlarge:
             if (image_file.startswith('/')):
-                image_file = image_file.replace('/', 'http://www.greenpeace.org/', 1)
+                image_file = image_file.replace('/', 'http://www.greenpeace.nl/', 1)
             imagesEnlarge_generated.append(image_file)
         if len(imagesB_generated) == 0 and len(imagesEnlarge_generated):
             imagesB_generated = imagesEnlarge_generated
