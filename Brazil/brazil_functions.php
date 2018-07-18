@@ -121,6 +121,11 @@ function replace_attachment($text, $attachment) {
 		return strtolower($m[0]);
 	}, $basename);
 
+	// Validate file name, and remove first non alphanumeric char.
+	if ( !preg_match( "/^[a-zA-Z0-9]$/", substr( $basename, 0, 1 ) ) ) {
+		$basename = substr( $basename, 1);
+	}
+
 	$basename = str_replace(' ', '-', urldecode($basename));
 	$bodytag = str_replace($attachment, "https://storage.googleapis.com/planet4-brasil-stateless-release/2018/07/". $basename , $text);
 	return $bodytag;
