@@ -127,8 +127,116 @@ function replace_attachment($text, $attachment) {
         }
 
 	$basename = str_replace(' ', '-', urldecode($basename));
-	$bodytag = str_replace($attachment, "https://storage.googleapis.com/planet4-brasil-stateless-release/2018/07/". $basename , $text);
+	$bodytag = str_replace($attachment, "https://storage.googleapis.com/planet4-eu-unit-stateless-release/2018/07/". $basename , $text);
 	return $bodytag;
+}
+
+
+add_action('pmxi_saved_post','post_saved',10,1);
+
+/**
+ * To manage default the cache busting enabled issue, fetch attachement url from post content and update it using 'pmxi_saved_post' hook.
+ *
+ * @param $postid
+ */
+function post_saved( $postid ) {
+
+	$local_path = 'https://release.k8s.p4.greenpeace.org/eu-unit/wp-content/uploads/';
+	$gcs_path   = 'https://storage.googleapis.com/planet4-eu-unit-stateless-release/';
+
+	$attachments = get_attached_media( '', $postid );
+
+	$content_post = get_post( $postid );
+	$content = $content_post->post_content;
+	$content = apply_filters( 'the_content', $content );
+	$content = str_replace( ']]>', ']]&gt;', $content );
+
+	preg_match_all( '@src="([^"]+)"@' , $content, $match_img );
+
+	$img_files = array_pop( $match_img );
+
+	preg_match_all( '@href="([^"]+\.pdf|PDF)"@' , $content, $match_pdf );
+
+	$pdf_files = array_pop( $match_pdf );
+
+	foreach ( $img_files as $image_file ) {
+		$basename = basename( $image_file );
+
+		foreach ( $attachments as $attachment ) {
+
+			if ( preg_match( '/'.$basename.'$/i', $attachment->guid ) ) {
+
+				if (strpos($attachment->guid, $local_path) !== false) {
+
+					$gcs_file_name = str_replace($local_path, $gcs_path, $attachment->guid);
+
+					$random_str = explode('-', basename( $gcs_file_name ));
+					$first_str = $random_str[0];
+
+					if ( 2 !== substr_count( basename( $gcs_file_name ), $first_str ) ) {
+						//$gcs_file_name = $first_str . '-' . $gcs_file_name;
+						$gcs_file_name = str_replace( $first_str , $first_str.'-'.$first_str, $gcs_file_name );
+					}
+
+					wp_update_post(array('ID' => $attachment->ID, 'guid' => $gcs_file_name));
+
+					$content = str_replace( $image_file, $gcs_file_name, $content );
+				}
+				else
+				{
+					$content = str_replace( $image_file, $attachment->guid, $content );
+				}
+			}
+		}
+	}
+
+	foreach ( $pdf_files as $image_file ) {
+		$basename = basename( $image_file );
+
+		foreach ( $attachments as $attachment ) {
+
+			if ( preg_match( '/'.$basename.'$/i', $attachment->guid ) ) {
+
+				if (strpos($attachment->guid, $local_path) !== false) {
+
+					$gcs_file_name = str_replace($local_path, $gcs_path, $attachment->guid);
+
+					wp_update_post(array('ID' => $attachment->ID, 'guid' => $gcs_file_name));
+
+					$content = str_replace( $image_file, $gcs_file_name, $content );
+				}
+				else
+				{
+					$content = str_replace( $image_file, $attachment->guid, $content );
+				}
+			}
+		}
+	}
+
+	$updated_post = array();
+	$updated_post['ID'] = $postid;
+	$updated_post['post_content'] = $content;
+	wp_update_post( $updated_post );
+}
+
+
+add_action('pmxi_attachment_uploaded', 'fix_attachment_uploaded', 10, 3);
+
+/**
+ * To manage default the cache busting enabled issue, fetch attachement url and update it using 'pmxi_attachment_uploaded' hook.
+ *
+ * @param $postid
+ */
+
+function fix_attachment_uploaded($pid, $attid, $filepath){
+  $attachment = get_post($attid);
+
+  $local_path = 'https://release.k8s.p4.greenpeace.org/eu-unit/wp-content/uploads/';
+  $gcs_path   = 'https://storage.googleapis.com/planet4-eu-unit-stateless-release/';
+
+  if ( preg_match( '/^'.$local_path.'/i', $attachment->guid ) ) {
+		wp_update_post(array('ID' => $attid, 'guid' => str_replace($local_path, $gcs_path, $attachment->guid)));
+  }
 }
 
 ?>
