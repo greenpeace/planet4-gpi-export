@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for p3_gpeuunit_export project
+# Scrapy settings for p3_gpaf_export project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -9,14 +9,14 @@
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'p3_gpeuunit_export'
+BOT_NAME = 'p3_gpaf_export'
 
-SPIDER_MODULES = ['p3_gpeuunit_export.spiders']
-NEWSPIDER_MODULE = 'p3_gpeuunit_export.spiders'
+SPIDER_MODULES = ['p3_gpaf_export.spiders']
+NEWSPIDER_MODULE = 'p3_gpaf_export.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'p3_gpeuunit_export (+http://www.yourdomain.com)'
+#USER_AGENT = 'p3_gpaf_export (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -47,13 +47,13 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'p3_gpeuunit_export.middlewares.P3GpeuunitExportSpiderMiddleware': 543,
+#    'p3_gpaf_export.middlewares.P3GpafExportSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'p3_gpeuunit_export.middlewares.P3GpeuunitExportDownloaderMiddleware': 543,
+#    'p3_gpaf_export.middlewares.P3GpafExportDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -65,7 +65,7 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    'p3_gpeuunit_export.pipelines.P3GpeuunitExportPipeline': 300,
+#    'p3_gpaf_export.pipelines.P3GpafExportPipeline': 300,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -90,4 +90,4 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 LOG_STDOUT = True
-LOG_FILE = 'output-gpeuunit_v1_test.txt'
+LOG_FILE = 'output-gpden_staging_v1.txt'

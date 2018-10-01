@@ -75,7 +75,7 @@ function add_image_class( $text, $image ) {
  * @return mixed
  */
 function replace_all_attachments( $text, $pdf, $images1, $images2, $images3, $images4, $images5, $images6, $images7, $images8, $images9, $images10,
-	$images11, $images12, $images13, $images14, $images15, $images16, $images17, $images18, $images19, $images20, $images21, $images22, $images23, $images24 ) {
+	$images11, $images12, $images13, $images14, $images15, $images16, $images17, $images18, $images19, $images20, $images21, $images22, $images23, $images24, $images25, $images26 ) {
 
 	$text = replace_attachment($text, $pdf);
 	$text = replace_attachment($text, $images1);
@@ -102,18 +102,13 @@ function replace_all_attachments( $text, $pdf, $images1, $images2, $images3, $im
 	$text = replace_attachment($text, $images22);
 	$text = replace_attachment($text, $images23);
 	$text = replace_attachment($text, $images24);
+	$text = replace_attachment($text, $images25);
+	$text = replace_attachment($text, $images26);
+
 	return $text;
 
 }
 
-/**
- * Fix attachments url.
- *
- * @param $text
- * @param $attachment
- *
- * @return mixed
- */
 function replace_attachment($text, $attachment) {
 	$basename = basename($attachment);
 
@@ -121,28 +116,25 @@ function replace_attachment($text, $attachment) {
 		return strtolower($m[0]);
 	}, $basename);
 
-	// Validate file name, and remove first non alphanumeric char.
-	if ( !preg_match( "/^[a-zA-Z0-9]$/", substr( $basename, 0, 1 ) ) ) {
-          $basename = substr( $basename, 1);
-        }
-
 	$basename = str_replace(' ', '-', urldecode($basename));
-	$bodytag = str_replace($attachment, "https://storage.googleapis.com/planet4-eu-unit-stateless-release/2018/07/". $basename , $text);
+	$basename = str_replace('-----', '-', urldecode($basename));
+	$basename = str_replace('----', '-', urldecode($basename));
+	$basename = str_replace('---', '-', urldecode($basename));
+	$basename = str_replace('--', '-', urldecode($basename));
+
+	$basename = str_replace("'", "", urldecode($basename));
+	$basename = str_replace('%20', '-', urldecode($basename));
+
+	$bodytag = str_replace($attachment, "https://storage.googleapis.com/planet4-africa-stateless-release/2018/09/". $basename , $text);
 	return $bodytag;
 }
 
-
 add_action('pmxi_saved_post','post_saved',10,1);
 
-/**
- * To manage default the cache busting enabled issue, fetch attachement url from post content and update it using 'pmxi_saved_post' hook.
- *
- * @param $postid
- */
 function post_saved( $postid ) {
 
-	$local_path = 'https://release.k8s.p4.greenpeace.org/eu-unit/wp-content/uploads/';
-	$gcs_path   = 'https://storage.googleapis.com/planet4-eu-unit-stateless-release/';
+	$local_path = 'https://release.k8s.p4.greenpeace.org/africa/wp-content/uploads/';
+	$gcs_path   = 'https://storage.googleapis.com/planet4-africa-stateless-release/';
 
 	$attachments = get_attached_media( '', $postid );
 
@@ -166,6 +158,7 @@ function post_saved( $postid ) {
 
 			if ( preg_match( '/'.$basename.'$/i', $attachment->guid ) ) {
 
+				//if ( preg_match( '/^'.$local_path.'/i', $attachment->guid ) ) {
 				if (strpos($attachment->guid, $local_path) !== false) {
 
 					$gcs_file_name = str_replace($local_path, $gcs_path, $attachment->guid);
@@ -190,6 +183,7 @@ function post_saved( $postid ) {
 		}
 	}
 
+
 	foreach ( $pdf_files as $image_file ) {
 		$basename = basename( $image_file );
 
@@ -197,6 +191,7 @@ function post_saved( $postid ) {
 
 			if ( preg_match( '/'.$basename.'$/i', $attachment->guid ) ) {
 
+				//if ( preg_match( '/^'.$local_path.'/i', $attachment->guid ) ) {
 				if (strpos($attachment->guid, $local_path) !== false) {
 
 					$gcs_file_name = str_replace($local_path, $gcs_path, $attachment->guid);
@@ -220,19 +215,14 @@ function post_saved( $postid ) {
 }
 
 
-add_action('pmxi_attachment_uploaded', 'fix_attachment_uploaded', 10, 3);
 
-/**
- * To manage default the cache busting enabled issue, fetch attachement url and update it using 'pmxi_attachment_uploaded' hook.
- *
- * @param $postid
- */
+add_action('pmxi_attachment_uploaded', 'fix_attachment_uploaded', 10, 3);
 
 function fix_attachment_uploaded($pid, $attid, $filepath){
   $attachment = get_post($attid);
 
-  $local_path = 'https://release.k8s.p4.greenpeace.org/eu-unit/wp-content/uploads/';
-  $gcs_path   = 'https://storage.googleapis.com/planet4-eu-unit-stateless-release/';
+  $local_path = 'https://release.k8s.p4.greenpeace.org/africa/wp-content/uploads/';
+  $gcs_path   = 'https://storage.googleapis.com/planet4-africa-stateless-release/';
 
   if ( preg_match( '/^'.$local_path.'/i', $attachment->guid ) ) {
 		wp_update_post(array('ID' => $attid, 'guid' => str_replace($local_path, $gcs_path, $attachment->guid)));
