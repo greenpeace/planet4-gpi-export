@@ -282,14 +282,18 @@ class AllSpider(scrapy.Spider):
         if image_gallery:
             p3_image_gallery = 'true'
 
-        lead_text = response.xpath('//*[@id="content"]/div[4]/div/div[2]/div[1]/div/text()').extract()[0]
-        body_text = response.xpath('//*[@id="content"]/div[4]/div/div[2]/div[2]').extract()[0]
+        try:
+            lead_text = response.xpath('//*[@id="content"]/div[3]/div/div[2]/div[1]/div/text()').extract()[0]
+        except IndexError:
+            lead_text = ''
+
+        body_text = response.xpath('//*[@id="content"]/div[3]/div/div[2]/div[2]').extract()[0]
         if body_text:
             body_text = body_text.replace('src="//', 'src="https://').replace('src="/', 'src="http://www.greenpeace.org/').replace('href="/', 'href="http://www.greenpeace.org/')
             body_text = body_text.replace('<span class="btn-open">zoom</span>', '')
             body_text = re.sub('<p dir="ltr">(.*)<\/p>', "\g<1>", body_text)
             if lead_text:
-                body_text = '<div class="leader">' + lead_text + '</div>' + body_text + response.xpath(' //*[@id="content"]/div[4]/div/div[2]/p').extract_first()
+                body_text = '<div class="leader">' + lead_text + '</div>' + body_text + response.xpath(' //*[@id="content"]/div[3]/div/div[2]/p').extract_first()
 
         subtitle = extract_with_css('div.article h2 span::text')
         if subtitle:
@@ -343,7 +347,11 @@ class AllSpider(scrapy.Spider):
             # For English language POSTs
 
             # Check the POST transalation availability
-            map_url = response.xpath('//*[@class="language"]//option[2]/@value').extract()[0]
+            try:
+                map_url = response.xpath('//*[@class="language"]//option[2]/@value').extract()[0]
+            except IndexError:
+                map_url = ''
+
             if "/fr/" not in map_url:
                 map_url = ''
 
@@ -360,7 +368,11 @@ class AllSpider(scrapy.Spider):
             # For French language POSTs
 
             # Check the POST transalation if available
-            map_url = response.xpath('//*[@class="language"]//option[1]/@value').extract()[0]
+            try:
+                map_url = response.xpath('//*[@class="language"]//option[1]/@value').extract()[0]
+            except IndexError:
+                map_url = ''
+
             if "/en/" not in map_url:
                 map_url = ''
 
