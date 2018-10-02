@@ -53,20 +53,12 @@ class AllSpider(scrapy.Spider):
         'http://www.greenpeace.org/denmark/da/nyheder/2018/Dansk-Landbrugs-storste-ammoniakudslip/':('Story','LAND','Landbrug','','','article','Migrate'),
         'http://www.greenpeace.org/denmark/da/nyheder/2012/Dit-toj-er-fyldt-med-farlige-kemikalier/':('Story','MENNESKER','Forbrug','','','article','Migrate'),
         'http://www.greenpeace.org/denmark/da/press/rapporter-og-dokumenter/2018/Greenpeace-undersogelse-Kommunerne-halter-efter-befolkningen-pa-kod/':('Publication','LAND','Landbrug','Klimaforandringer','','article','Migrate'),
-        'http://www.greenpeace.org/denmark/da/press/rapporter-og-dokumenter/2018/Udspil-til-regeringen-Sadan-skal-dansk-landbrug-bidrage-til-et-mere-stabilt-klima/':('Publication','LAND','Landbrug','Klimaforandringer','','article','Migrate'),
+        ## - duplicate post
+        ##'http://www.greenpeace.org/denmark/da/press/rapporter-og-dokumenter/2018/Udspil-til-regeringen-Sadan-skal-dansk-landbrug-bidrage-til-et-mere-stabilt-klima/':('Publication','LAND','Landbrug','Klimaforandringer','','article','Migrate'),
         'http://www.greenpeace.org/denmark/da/press/pressemeddelelser/2017/Hjalpepakke-til-Marsk-forlanger-levetid-for-oliegas/':('Press Release','KLIMA','Klimaforandringer','','','article','Migrate'),
         'http://www.greenpeace.org/denmark/da/press/Afgorelse-faldet-i-historisk-klimaretssag/':('Press Release','KLIMA','Klimaforandringer','','','article','Migrate'),
         'http://www.greenpeace.org/denmark/da/press/pressemeddelelser/2017/Greenpeace-rapport-Sadan-skyller-stor-papirproducent-Nordens-urskov-ud-i-toilettet/':('Press Release','LAND','Skov','','','article','Migrate')
         }
-
-        # v2 En post.
-        ## - multilingual posts.
-        #### - duplicate post.
-        #start_urls = {}
-
-        # FR Post list.
-
-        #start_urls = {}
 
         for url,data in start_urls.iteritems():
             p4_post_type, categories, tags1, tags2, tags3, post_type, action = data
@@ -151,8 +143,11 @@ class AllSpider(scrapy.Spider):
 
         date_field = response.css('div.news-list .caption::text').re_first(r' - \s*(.*)')
         date_field = self.filter_month_name(date_field);
+        # Filter extra string part from date.
         date_field = date_field.replace(" at", "")
         date_field = date_field.replace(" à", "")
+        date_field = date_field.replace(" kl.", "")
+
         if date_field:
             date_field = dateutil.parser.parse(date_field)
 
@@ -313,8 +308,11 @@ class AllSpider(scrapy.Spider):
 
         date_field = response.css('div.article div.text span.author::text').re_first(r' - \s*(.*)')
         date_field = self.filter_month_name(date_field);
+        # Filter extra string part from date.
         date_field = date_field.replace(" at", "")
         date_field = date_field.replace(" à", "")
+        date_field = date_field.replace(" kl.", "")
+
         if date_field:
             date_field = dateutil.parser.parse(date_field)
 
@@ -442,6 +440,7 @@ class AllSpider(scrapy.Spider):
         return post_data
 
     def filter_month_name(self, month_name):
+        '''
         month_fr_en = {
             'janvier': 'January',
             'février': 'February',
@@ -456,9 +455,29 @@ class AllSpider(scrapy.Spider):
             'novembre': 'November',
             'décembre': 'December',
         }
+        '''
 
         # Replace the french month name with english month name.
-        for fr_month, en_month in month_fr_en.iteritems():
+        #for fr_month, en_month in month_fr_en.iteritems():
+        #    month_name = month_name.replace(fr_month, en_month)
+
+        month_da_en = {
+            'januar': 'January',
+            'februar': 'February',
+            'marts': 'March',
+            'april': 'April',
+            'maj': 'May',
+            'juni': 'June',
+            'juli': 'July',
+            'august': 'August',
+            'september': 'September',
+            'oktober': 'October',
+            'november': 'November',
+            'december': 'December',
+        }
+
+        # Replace the danish month name with english month name.
+        for fr_month, en_month in month_da_en.iteritems():
             month_name = month_name.replace(fr_month, en_month)
 
         return month_name;
