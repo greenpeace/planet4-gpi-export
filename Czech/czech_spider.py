@@ -136,6 +136,7 @@ class AllSpider(scrapy.Spider):
         date_field = date_field.replace(" at", "")
         date_field = date_field.replace(" à", "")
         date_field = date_field.replace(" kl.", "")
+        date_field = date_field.replace(" v", "")
 
         if date_field:
             date_field = dateutil.parser.parse(date_field)
@@ -302,6 +303,7 @@ class AllSpider(scrapy.Spider):
         date_field = date_field.replace(" at", "")
         date_field = date_field.replace(" à", "")
         date_field = date_field.replace(" kl.", "")
+        date_field = date_field.replace(" v", "")
 
         if date_field:
             date_field = dateutil.parser.parse(date_field)
@@ -451,7 +453,7 @@ class AllSpider(scrapy.Spider):
         #for fr_month, en_month in month_fr_en.iteritems():
         #    month_name = month_name.replace(fr_month, en_month)
 
-        month_da_en = {
+        month_cz_en = {
             'ledna': 'January',
             'Únor': 'February', #pending
             'března': 'March',
@@ -466,9 +468,9 @@ class AllSpider(scrapy.Spider):
             'prosinec': 'December', #pending
         }
 
-        # Replace the danish month name with english month name.
-        #for fr_month, en_month in month_da_en.iteritems():
-            #month_name = month_name.replace(fr_month, en_month)
+        # Replace the Czech month name with english month name.
+        for cz_month, en_month in month_cz_en.iteritems():
+            month_name = month_name.replace(cz_month, en_month)
 
         return month_name;
 
