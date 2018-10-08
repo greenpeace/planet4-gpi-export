@@ -33,6 +33,7 @@ class AllSpider(scrapy.Spider):
     # v1
         start_urls = {
         #'http://www.greenpeace.org/hungary/hu/sajtokozpont/250-ezer-evig-kene-tarolnunk-Paks-II-atomhulladekat/':('Press Release','Klíma & Energia','Atomenergia','','','article','Migrate'),
+        'http://www.greenpeace.org/hungary/hu/sajtokozpont/Szaz-evig-is-kiserthet-meg-a-fukusimai-katasztrofa/':('Press Release','Klíma & Energia','Atomenergia','Egészség','','article','Migrate'),
         'http://www.greenpeace.org/hungary/hu/sajtokozpont/240-Greenpeace-aktivista-figyelmeztet-Europa-uj-veszelyzonaba-lepett/':('Press Release','Klíma & Energia','Atomenergia','','','article','Migrate'),
         'http://www.greenpeace.org/hungary/hu/sajtokozpont/217-civil-szervezet-szolitotta-fel-az-unios-minisztereket-hogy-vessenek-veget-a-tengerek-tulhalaszatanak/':('Press Release','Természet & Környezet','Élővilág','Víz','','article','Migrate'),
         'http://www.greenpeace.org/hungary/hu/sajtokozpont/170412_civil_allasfoglalas/':('Press Release','Ember & Társadalom','Béke','','','article','Migrate'),
@@ -282,17 +283,17 @@ class AllSpider(scrapy.Spider):
             p3_image_gallery = 'true'
 
         try:
-            lead_text = response.xpath('//*[@id="content"]/div[3]/div/div[2]/div[1]/div/text()').extract()[0]
+            lead_text = response.xpath('//*[@id="content"]/div[4]/div/div[2]/div[1]/div/text()').extract()[0]
         except IndexError:
             lead_text = ''
 
-        body_text = response.xpath('//*[@id="content"]/div[3]/div/div[2]/div[2]').extract()[0]
+        body_text = response.xpath('//*[@id="content"]/div[4]/div/div[2]/div[2]').extract()[0]
         if body_text:
             body_text = body_text.replace('src="//', 'src="https://').replace('src="/', 'src="http://www.greenpeace.org/').replace('href="/', 'href="http://www.greenpeace.org/')
             body_text = body_text.replace('<span class="btn-open">zoom</span>', '')
             body_text = re.sub('<p dir="ltr">(.*)<\/p>', "\g<1>", body_text)
             if lead_text:
-                body_text = '<div class="leader">' + lead_text + '</div>' + body_text + response.xpath(' //*[@id="content"]/div[3]/div/div[2]/p').extract_first()
+                body_text = '<div class="leader">' + lead_text + '</div>' + body_text + response.xpath(' //*[@id="content"]/div[4]/div/div[2]/p').extract_first()
 
         subtitle = extract_with_css('div.article h2 span::text')
         if subtitle:
