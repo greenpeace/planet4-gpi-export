@@ -42,7 +42,7 @@ class AllSpider(scrapy.Spider):
         'http://www.greenpeace.org/czech/cz/Multimedia1/Publikace/Toxicke-uhli-zdravotni-naklady-slabych-emisnich-limitu-EU/':('Publikace','Příroda','Ovzduší','','','article','Migrate'),
         'http://www.greenpeace.org/czech/cz/Multimedia1/Publikace/V-plamenech/':('Publikace','Příroda','Lesy&Pralesy','','','article','Migrate'),
         'http://www.greenpeace.org/czech/cz/Multimedia1/Publikace/Vyrocni-zprava-2017/':('Publikace','Greenpeace','O nás','','','article','Migrate'),
-        'http://www.greenpeace.org/czech/cz/news/moratorium-indonesie-nestaci/':('Tisková zpráva','Příroda','Lesy&Pralesy','','','article','Migrate'),
+        #'http://www.greenpeace.org/czech/cz/news/moratorium-indonesie-nestaci/':('Tisková zpráva','Příroda','Lesy&Pralesy','','','article','Migrate'),
         'http://www.greenpeace.org/czech/cz/news/Za-klimatickou-spravedlnost-a-ciste-ovzdusi-bez-vyjimek/':('Článek','Energetická revoluce','KonecDobyFosilní','AktivníSpolečnost','','article','Migrate'),
         'http://www.greenpeace.org/czech/cz/press/-Pes-70-tisic-lidi-se-pidalo-k-vyzv-za-omezeni-jednorazovych-plast-v-tchto-dnech-pii-supermarketm/':('Tisková zpráva','Náš svět','PlastJePast','Neplýtváme','','article','Migrate'),
         'http://www.greenpeace.org/czech/cz/press/antarktida-expedice/':('Tisková zpráva','Příroda','Oceány','','','article','Migrate'),
@@ -279,7 +279,7 @@ class AllSpider(scrapy.Spider):
             p3_image_gallery = 'true'
 
         try:
-            lead_text = response.xpath('//*[@id="content"]/div[3]/div/div[2]/div[1]/div/text()').extract()[0]
+            lead_text = response.xpath('//*[@id="content"]/div[4]/div/div[2]/div[1]/div/text()').extract()[0]
         except IndexError:
             lead_text = ''
 
@@ -289,7 +289,7 @@ class AllSpider(scrapy.Spider):
             body_text = body_text.replace('<span class="btn-open">zoom</span>', '')
             body_text = re.sub('<p dir="ltr">(.*)<\/p>', "\g<1>", body_text)
             if lead_text:
-                body_text = '<div class="leader">' + lead_text + '</div>' + body_text + response.xpath(' //*[@id="content"]/div[3]/div/div[2]/p').extract_first()
+                body_text = '<div class="leader">' + lead_text + '</div>' + body_text + response.xpath(' //*[@id="content"]/div[4]/div/div[2]/p').extract_first()
 
         subtitle = extract_with_css('div.article h2 span::text')
         if subtitle:
