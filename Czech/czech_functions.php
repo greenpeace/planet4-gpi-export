@@ -151,7 +151,7 @@ function post_saved( $postid ) {
 
 	$pdf_files = array_pop( $match_pdf );
 
-	foreach ( $img_files as $image_file ) {
+	/*foreach ( $img_files as $image_file ) {
 		$basename = basename( $image_file );
 
 		foreach ( $attachments as $attachment ) {
@@ -181,6 +181,36 @@ function post_saved( $postid ) {
 				}
 			}
 		}
+	}*/
+
+	foreach ( $img_files as $image_file ) {
+		$basename = basename( $image_file );
+
+		$attachement_obj = get_attachment_url_by_name( $basename );
+		if ( $attachement_obj ) {
+			$attachement_path = $attachement_obj[0]->guid;
+
+			if (strpos($attachement_path, $local_path) !== false) {
+
+				$gcs_file_name = str_replace($local_path, $gcs_path, $attachement_path);
+
+				$random_str = explode('-', basename( $gcs_file_name ));
+				$first_str = $random_str[0];
+
+				if ( 2 !== substr_count( basename( $gcs_file_name ), $first_str ) ) {
+					//$gcs_file_name = $first_str . '-' . $gcs_file_name;
+					$gcs_file_name = str_replace( $first_str , $first_str.'-'.$first_str, $gcs_file_name );
+				}
+
+				wp_update_post(array('ID' => $attachement_obj->ID, 'guid' => $gcs_file_name));
+
+				$content = str_replace( $image_file, $gcs_file_name, $content );
+			} else {
+				$content = str_replace( $image_file, $attachement_path, $content );
+			}
+		} else {
+			echo "<BR>>>>>>> Attachement not found error...".$basename;
+		}
 	}
 
 
@@ -199,9 +229,7 @@ function post_saved( $postid ) {
 					wp_update_post(array('ID' => $attachment->ID, 'guid' => $gcs_file_name));
 
 					$content = str_replace( $image_file, $gcs_file_name, $content );
-				}
-				else
-				{
+				} else {
 					$content = str_replace( $image_file, $attachment->guid, $content );
 				}
 			}
@@ -229,4 +257,21 @@ function fix_attachment_uploaded($pid, $attid, $filepath){
   }
 }
 
+
+function get_attachment_url_by_name( $name ) {
+    global $wpdb;
+
+    $name = strtolower($name);
+
+    $attachments = $wpdb->get_results( "SELECT guid FROM $wpdb->posts WHERE guid like '%$name' AND post_type = 'attachment' ", OBJECT );
+
+    if ( $attachments ) {
+
+		return $attachments;
+
+    } else {
+
+        return '';
+    }
+}
 ?>

@@ -21,7 +21,7 @@ class AllSpider(scrapy.Spider):
 
     custom_settings = {
         'ROBOTSTXT_OBEY': 0,
-        'FEED_URI': 'gpcz_staging_v1.xml',
+        'FEED_URI': 'gpcz_staging_v2.xml',
         'FEED_FORMAT': 'xml',
         'FEED_EXPORT_ENCODING': 'utf-8',
     }
@@ -30,23 +30,87 @@ class AllSpider(scrapy.Spider):
     __connector_csv_log_file = "connector_csv_log_v2"
 
     def start_requests(self):
-    # v1
+        # v1
         start_urls = {
-        'http://www.greenpeace.org/czech/cz/blogy/Zmena-klimatu-a-energetika/blackout-nehrozi/blog/61832/':('Článek','Energetická revoluce','ObnovitelnéZdroje','KonecDobyFosilní','','news-list','Migrate'),
-        'http://www.greenpeace.org/czech/cz/blogy/Zmena-klimatu-a-energetika/chvaletice-reakce-infocz/blog/61542/':('Článek','Energetická revoluce','AktivníSpolečnost','KonecDobyFosilní','','news-list','Migrate'),
-        'http://www.greenpeace.org/czech/cz/blogy/Zmena-klimatu-a-energetika/kolik-stoji-vedro/blog/61831/':('Článek','Příroda','ZměnaKlimatu','KonecDobyFosilní','','news-list','Migrate'),
-        'http://www.greenpeace.org/czech/cz/blogy/Zmena-klimatu-a-energetika/teplo-nebo-cisty-vzduch-oboji/blog/61545/':('Článek','Náš svět','Ovzduší','KonecDobyFosilní','','news-list','Migrate'),
-        'http://www.greenpeace.org/czech/cz/Multimedia1/Publikace/Energeticka-revoluce-pro-CR/':('Publikace','Energetická revoluce','ObnovitelnéZdroje','','','article','Migrate'),
-        'http://www.greenpeace.org/czech/cz/Multimedia1/Publikace/Hodnoceni-nadnarodnich-spolecnosti/':('Publikace','Příroda','Lesy&Pralesy','','','article','Migrate'),
-        'http://www.greenpeace.org/czech/cz/Multimedia1/Publikace/jak-se-oblekat-na-vylety/':('Publikace','Příroda','BezChemie','','','article','Migrate'),
-        'http://www.greenpeace.org/czech/cz/Multimedia1/Publikace/Toxicke-uhli-zdravotni-naklady-slabych-emisnich-limitu-EU/':('Publikace','Příroda','Ovzduší','','','article','Migrate'),
-        'http://www.greenpeace.org/czech/cz/Multimedia1/Publikace/V-plamenech/':('Publikace','Příroda','Lesy&Pralesy','','','article','Migrate'),
-        'http://www.greenpeace.org/czech/cz/Multimedia1/Publikace/Vyrocni-zprava-2017/':('Publikace','Greenpeace','O nás','','','article','Migrate'),
-        #'http://www.greenpeace.org/czech/cz/news/moratorium-indonesie-nestaci/':('Tisková zpráva','Příroda','Lesy&Pralesy','','','article','Migrate'),
-        'http://www.greenpeace.org/czech/cz/news/Za-klimatickou-spravedlnost-a-ciste-ovzdusi-bez-vyjimek/':('Článek','Energetická revoluce','KonecDobyFosilní','AktivníSpolečnost','','article','Migrate'),
-        'http://www.greenpeace.org/czech/cz/press/-Pes-70-tisic-lidi-se-pidalo-k-vyzv-za-omezeni-jednorazovych-plast-v-tchto-dnech-pii-supermarketm/':('Tisková zpráva','Náš svět','PlastJePast','Neplýtváme','','article','Migrate'),
-        'http://www.greenpeace.org/czech/cz/press/antarktida-expedice/':('Tisková zpráva','Příroda','Oceány','','','article','Migrate'),
-        'http://www.greenpeace.org/czech/cz/press/antarktida-kril-report/':('Tisková zpráva','Příroda','Oceány','','','article','Migrate')
+            'http://www.greenpeace.org/czech/cz/blogy/Zmena-klimatu-a-energetika/blackout-nehrozi/blog/61832/':('Článek','Energetická revoluce','ObnovitelnéZdroje','KonecDobyFosilní','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Zmena-klimatu-a-energetika/chvaletice-reakce-infocz/blog/61542/':('Článek','Energetická revoluce','AktivníSpolečnost','KonecDobyFosilní','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Zmena-klimatu-a-energetika/kolik-stoji-vedro/blog/61831/':('Článek','Příroda','ZměnaKlimatu','KonecDobyFosilní','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Zmena-klimatu-a-energetika/teplo-nebo-cisty-vzduch-oboji/blog/61545/':('Článek','Náš svět','Ovzduší','KonecDobyFosilní','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/Multimedia1/Publikace/Energeticka-revoluce-pro-CR/':('Publikace','Energetická revoluce','ObnovitelnéZdroje','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/Multimedia1/Publikace/Hodnoceni-nadnarodnich-spolecnosti/':('Publikace','Příroda','Lesy&Pralesy','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/Multimedia1/Publikace/jak-se-oblekat-na-vylety/':('Publikace','Příroda','BezChemie','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/Multimedia1/Publikace/Toxicke-uhli-zdravotni-naklady-slabych-emisnich-limitu-EU/':('Publikace','Příroda','Ovzduší','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/Multimedia1/Publikace/V-plamenech/':('Publikace','Příroda','Lesy&Pralesy','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/Multimedia1/Publikace/Vyrocni-zprava-2017/':('Publikace','Greenpeace','O nás','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/news/moratorium-indonesie-nestaci/':('Tisková zpráva','Příroda','Lesy&Pralesy','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/news/Za-klimatickou-spravedlnost-a-ciste-ovzdusi-bez-vyjimek/':('Článek','Energetická revoluce','KonecDobyFosilní','AktivníSpolečnost','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/-Pes-70-tisic-lidi-se-pidalo-k-vyzv-za-omezeni-jednorazovych-plast-v-tchto-dnech-pii-supermarketm/':('Tisková zpráva','Náš svět','PlastJePast','Neplýtváme','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/antarktida-expedice/':('Tisková zpráva','Příroda','Oceány','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/antarktida-kril-report/':('Tisková zpráva','Příroda','Oceány','','','article','Migrate')
+        }
+
+        # v2
+        start_urls = {
+            'http://www.greenpeace.org/czech/cz/blogy/Zmena-klimatu-a-energetika/blackout-nehrozi/blog/61832/':('Článek','Energetická revoluce','ObnovitelnéZdroje','KonecDobyFosilní','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Zmena-klimatu-a-energetika/chvaletice-reakce-infocz/blog/61542/':('Článek','Energetická revoluce','AktivníSpolečnost','KonecDobyFosilní','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Zmena-klimatu-a-energetika/kolik-stoji-vedro/blog/61831/':('Článek','Příroda','ZměnaKlimatu','KonecDobyFosilní','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Zmena-klimatu-a-energetika/teplo-nebo-cisty-vzduch-oboji/blog/61545/':('Článek','Náš svět','Ovzduší','KonecDobyFosilní','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/Multimedia1/Publikace/Energeticka-revoluce-pro-CR/':('Publikace','Energetická revoluce','ObnovitelnéZdroje','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/Multimedia1/Publikace/Hodnoceni-nadnarodnich-spolecnosti/':('Publikace','Příroda','Lesy&Pralesy','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/Multimedia1/Publikace/jak-se-oblekat-na-vylety/':('Publikace','Příroda','BezChemie','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/Multimedia1/Publikace/Toxicke-uhli-zdravotni-naklady-slabych-emisnich-limitu-EU/':('Publikace','Příroda','Ovzduší','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/Multimedia1/Publikace/V-plamenech/':('Publikace','Příroda','Lesy&Pralesy','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/Multimedia1/Publikace/Vyrocni-zprava-2017/':('Publikace','Greenpeace','O nás','','','article','Migrate'),
+            # data issue for below post during import.
+            #'http://www.greenpeace.org/czech/cz/news/moratorium-indonesie-nestaci/':('Tisková zpráva','Příroda','Lesy&Pralesy','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/news/Za-klimatickou-spravedlnost-a-ciste-ovzdusi-bez-vyjimek/':('Článek','Energetická revoluce','KonecDobyFosilní','AktivníSpolečnost','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/-Pes-70-tisic-lidi-se-pidalo-k-vyzv-za-omezeni-jednorazovych-plast-v-tchto-dnech-pii-supermarketm/':('Tisková zpráva','Náš svět','PlastJePast','Neplýtváme','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/antarktida-expedice/':('Tisková zpráva','Příroda','Oceány','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/antarktida-kril-report/':('Tisková zpráva','Příroda','Oceány','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Dalsi-temata/antarktida-historie/blog/61537/':('Článek','Příroda','Oceány','','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Dalsi-temata/ekovyzva-2018-ohlednuti/blog/61512/':('Článek','Náš svět','Neplýtváme','BezChemie','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Dalsi-temata/hasicky-indonesie/blog/61220/':('Článek','Příroda','Lesy&Pralesy','','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Dalsi-temata/jak-byt-vegetarianem/blog/56410/':('Článek','Příroda','ZměnaKlimatu','','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Dalsi-temata/mikroplasty-kosmetika/blog/60009/':('Článek','Náš svět','PlastJePast','Oceány','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Dalsi-temata/plast-je-past-akce-v-brne/blog/61818/':('Článek','Náš svět','PlastJePast','AktivníSpolečnost','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Dalsi-temata/rajky-v-ohrozeni/blog/61884/':('Článek','Příroda','Lesy&Pralesy','','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Dalsi-temata/zakony-na-plasty/blog/61001/':('Článek','Náš svět','PlastJePast','','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Oceany/antarktida-chranene-oblasti-morskeho-dna/blog/61736/':('Článek','Příroda','Oceány','','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Oceany/co-jsou-mikroplasty-a-pro-je-musme-omezit/blog/61839/':('Článek','Náš svět','PlastJePast','','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Oceany/krunyrovka-krilova-magazin/blog/61538/':('Článek','Příroda','Oceány','','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Oceany/myty-o-oze-vitr/blog/61540/':('Článek','Energetická revoluce','ObnovitelnéZdroje','KonecDobyFosilní','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Oceany/plast-strategie-EU/blog/61084/':('Článek','Náš svět','PlastJePast','','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Oceany/plast-z-obleceni/blog/61862/':('Článek','Náš svět','PlastJePast','','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Oceany/plasty-a-role-korporaci/blog/61408/':('Článek','Náš svět','PlastJePast','','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Oceany/plasty-vraci-uder/blog/61543/':('Článek','Příroda','PlastJePast','','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Oceany/rozhovor-john-hocevar/blog/61539/':('Článek','Příroda','Oceány','','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Oceany/top-5-tucnaku/blog/61063/':('Článek','Příroda','Oceány','','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/blogy/Oceany/zaloba-bref-referendum/blog/61030/':('Článek','Příroda','Ovzduší','KonecDobyFosilní','','news-list','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/antarktida-ponor/':('Tisková zpráva','Příroda','Oceány','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/CSOB-konec-investic-uhli/':('Tisková zpráva','Energetická revoluce','KonecDobyFosilní','ZměnaKlimatu','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/Emise-z-Chvaletic/':('Tisková zpráva','Příroda','Ovzduší','KonecDobyFosilní','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/EU-smernice-plastove-znecisteni/':('Tisková zpráva','Náš svět','PlastJePast','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/Evropsky-parlament-podpoil-obanskou-energetiku/':('Tisková zpráva','Energetická revoluce','ObnovitelnéZdroje','ZměnaKlimatu','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/Evropsky-soudni-dvur-Belovez-rozhodnuti/':('Tisková zpráva','Příroda','Lesy&Pralesy','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/GLYFOSAT-EVROPSKE-STATY-ODHLASOVALY-PRODLOUZENI-O-DALSICH-PET-LET-BEZ-OMEZENI/':('Tisková zpráva','Náš svět','BezChemie','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/Greenpeace-odebira-vzorky-vody-z-Vltavy-Bude-v-nich-hledat-mikroplasty/':('Tisková zpráva','Náš svět','PlastJePast','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/Greenpeace-vyzyva-k-omezeni-ivoine-vyroby-Produkce-a-spoteba-masa-se-musi-sniit-na-polovinu/':('Tisková zpráva','Příroda','ZměnaKlimatu','Neplýtváme','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/kril-oznameni/':('Tisková zpráva','Příroda','Oceány','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/Lide-protestovali-proti-nadbytecnym-plastum/':('Tisková zpráva','Náš svět','PlastJePast','Neplýtváme','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/Na-zdi-na-praskem-ikov-se-uhnizdi-ptaci-z-raje-Streetart-upozoruje-na-kaceni-prales/':('Tisková zpráva','Příroda','Lesy&Pralesy','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/norsky-sod-verdikt/':('Tisková zpráva','Příroda','Oceány','KonecDobyFosilní','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/obvineni-uhradili-skodu-chvaletice/':('Tisková zpráva','Energetická revoluce','KonecDobyFosilní','AktivníSpolečnost','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/pocerady-zaloba-priznani/':('Tisková zpráva','Energetická revoluce','KonecDobyFosilní','Ovzduší','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/reakce-obvineni-Chvaletice/':('Tisková zpráva','Energetická revoluce','KonecDobyFosilní','KonecDobyFosilní','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/Rezignaci-na-zvyeni-poplatk-z-tby-by-vlada-poruila-svj-program-Ve-prospch-uhlobaron/':('Tisková zpráva','Energetická revoluce','KonecDobyFosilní','Neplýtváme','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/skola-solarni-panely-horni-jiretin/':('Tisková zpráva','Energetická revoluce','ObnovitelnéZdroje','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/Soud-bude-znovu-eit-tbu-ropy-v-Arktid-Ekologicke-organizace-se-odvolaly/':('Tisková zpráva','Příroda','Oceány','KonecDobyFosilní','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/uhli-a-rtut-studie/':('Tisková zpráva','Náš svět','BezChemie','Ovzduší','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/utlum-uhli-politicke-strany/':('Tisková zpráva','Energetická revoluce','KonecDobyFosilní','ObnovitelnéZdroje','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/Vetsina-poslancu-dala-prednost-uhelne-lobby-vyjimky-bref/':('Tisková zpráva','Náš svět','Ovzduší','KonecDobyFosilní','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/Vyetovani-Greenpeacu-ukazuje-e-kaceni-prales-se-pesouva-na-Papuu---/':('Tisková zpráva','Příroda','Lesy&Pralesy','','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/vzrostl-vyvoz-elektriny/':('Tisková zpráva','Energetická revoluce','KonecDobyFosilní','Ovzduší','','article','Migrate'),
+            'http://www.greenpeace.org/czech/cz/press/zastupce-souhlasi-s-vysi-skody/':('Tisková zpráva','Energetická revoluce','KonecDobyFosilní','AktivníSpolečnost','','article','Migrate'),
         }
 
         for url,data in start_urls.iteritems():
@@ -178,7 +242,6 @@ class AllSpider(scrapy.Spider):
 
         unique_map_id = int(time.time() + random.randint(0, 999))
 
-        """
         # Filter email id image and replace it with email text.
         delete_images = list()
         for image_file in imagesB_generated:
@@ -196,14 +259,13 @@ class AllSpider(scrapy.Spider):
                 # Remove the email images from Post body and replace it with email text.
                 body_text = re.sub(
                     '<img[a-zA-Z0-9="\s\_]*src=\"' + image_file + '\"[a-zA-Z0-9="\s]*>',
-                    emailid, body_text)
+                    '<a href="mailto:' + emailid.strip() + '" target="_blank">' + emailid.strip() + '</a>', body_text)
 
         # Remove the email images from list.
         for image_file in delete_images:
             imagesB_generated.remove(image_file)
 
-
-     \
+        """
         #list images urls
         for image_file in imagesB_generated:
             if ("/emailimages/" in image_file):
@@ -308,7 +370,6 @@ class AllSpider(scrapy.Spider):
         if date_field:
             date_field = dateutil.parser.parse(date_field)
 
-        '''
         # Filter email id image and replace it with email text.
         delete_images = list()
         for image_file in imagesB_generated:
@@ -325,12 +386,12 @@ class AllSpider(scrapy.Spider):
                 # Remove the email images from Post body and replace it with email text.
                 body_text = re.sub(
                     '<img[a-zA-Z0-9="\s\_]*src=\"'+image_file+'\"[a-zA-Z0-9="\s]*>',
-                    emailid, body_text)
+                    '<a href="mailto:' + emailid.strip() + '" target="_blank">' + emailid.strip() + '</a>', body_text)
 
         # Remove the email images from list.
         for image_file in delete_images:
             imagesB_generated.remove(image_file)
-        '''
+
         """
         #list images urls
         for image_file in imagesB_generated:
@@ -342,7 +403,8 @@ class AllSpider(scrapy.Spider):
 
         # Post data mapping logic start.
         unique_map_id = int(time.time() + random.randint(0, 999))
-
+        map_url = ''
+        """
         if "/en/" in response.url:
             # For English language POSTs
 
@@ -395,6 +457,7 @@ class AllSpider(scrapy.Spider):
                                     response.meta['post_type'], response.meta['action']]
                             self.csv_writer(data, "Language_mapping_fr_list.csv")
         # Post data mapping logic ends.
+        """
 
         yield {
             'type': response.meta['p4_post_type'],
@@ -455,16 +518,20 @@ class AllSpider(scrapy.Spider):
 
         month_cz_en = {
             'ledna': 'January',
-            'Únor': 'February', #pending
+            #'Únor': 'February', #pending
+            'února':'February',
             'března': 'March',
-            'duben': 'April', #pending
+            #'duben': 'April', #pending
+            'dubna':'April',
             'května': 'May',
             'června': 'June',
-            'červenec': 'July', #pending
+            #'červenec': 'July', #pending
+            'července':'July',
             'srpna': 'August',
             'září': 'September',
             'říjen': 'October', #pending
-            'listopad': 'November', #pending
+            #'listopad': 'November', #pending
+            'listopadu': 'November',  # pending
             'prosinec': 'December', #pending
         }
 
