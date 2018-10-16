@@ -125,7 +125,9 @@ function replace_attachment($text, $attachment) {
 	$basename = str_replace("'", "", urldecode($basename));
 	$basename = str_replace('%20', '-', urldecode($basename));
 
-	$bodytag = str_replace($attachment, "https://storage.googleapis.com/planet4-africa-stateless-release/2018/09/". $basename , $text);
+	$basename = strtolower($basename);
+
+	$bodytag = str_replace($attachment, "https://storage.googleapis.com/planet4-luxembourg-stateless-release/2018/10/". $basename , $text);
 	return $bodytag;
 }
 
@@ -133,8 +135,8 @@ add_action('pmxi_saved_post','post_saved',10,1);
 
 function post_saved( $postid ) {
 
-	$local_path = 'https://release.k8s.p4.greenpeace.org/africa/wp-content/uploads/';
-	$gcs_path   = 'https://storage.googleapis.com/planet4-africa-stateless-release/';
+	$local_path = 'https://release.k8s.p4.greenpeace.org/luxembourg/wp-content/uploads/';
+	$gcs_path   = 'https://storage.googleapis.com/planet4-luxembourg-stateless-release/';
 
 	$attachments = get_attached_media( '', $postid );
 
@@ -221,8 +223,8 @@ add_action('pmxi_attachment_uploaded', 'fix_attachment_uploaded', 10, 3);
 function fix_attachment_uploaded($pid, $attid, $filepath){
   $attachment = get_post($attid);
 
-  $local_path = 'https://release.k8s.p4.greenpeace.org/africa/wp-content/uploads/';
-  $gcs_path   = 'https://storage.googleapis.com/planet4-africa-stateless-release/';
+  $local_path = 'https://release.k8s.p4.greenpeace.org/luxembourg/wp-content/uploads/';
+  $gcs_path   = 'https://storage.googleapis.com/planet4-luxembourg-stateless-release/';
 
   if ( preg_match( '/^'.$local_path.'/i', $attachment->guid ) ) {
 		wp_update_post(array('ID' => $attid, 'guid' => str_replace($local_path, $gcs_path, $attachment->guid)));

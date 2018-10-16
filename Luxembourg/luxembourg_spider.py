@@ -21,7 +21,7 @@ class AllSpider(scrapy.Spider):
 
     custom_settings = {
         'ROBOTSTXT_OBEY': 0,
-        'FEED_URI': 'gplux_staging_v1_EN.xml',
+        'FEED_URI': 'gplux_staging_v3_GE_final.xml',
         'FEED_FORMAT': 'xml',
         'FEED_EXPORT_ENCODING': 'utf-8',
     }
@@ -46,17 +46,120 @@ class AllSpider(scrapy.Spider):
             'http://www.greenpeace.org/luxembourg/fr/news/Victoire--lUE-interdit-trois-pesticides-tueurs-dabeilles/':('Actualités','Nature','Biodiversité','','','article','Migrate'),
         }
 
-        # v1 GR
-        #start_urls = {}
-
-        # v2 En post.
+        # v2 FR post.
         ## - multilingual posts.
         #### - duplicate post.
-        #start_urls = {}
+        start_urls = {
+            'http://www.greenpeace.org/luxembourg/fr/news/Mode-detox--ou-en-est-le-secteur-textile-/':('Actualités','Société','','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Echange-de-vues-constructif-sur-la-politique-dinvestissement-des-fonds-publics-entre-le-gouvernement-et-Votum-Klima/':('Actualités','Climat','EnergiesFossiles','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Diesel--les-constructeurs-automobiles-continuent-denfumer-nos-villes/':('Actualités','Climat','EnergiesFossiles','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Des-grimpeurs-bloquent-un-navire-petrolier-sur-le-pont-de-Vancouver/':('Actualités','Climat','EnergiesFossiles','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/5-manieres-daffronter-les-compagnies-pipelinieres/':('Actualités','Climat','EnergiesFossiles','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Recif-de-lAmazone--une-nouvelle-etape-decisive/':('Actualités','Nature','Biodiversité','Océans','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Recif-de-lAmazone--deferlante-de-bonnes-nouvelles/':('Actualités','Nature','EnergiesFossiles','Océans','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Victoire--lUE-interdit-trois-pesticides-tueurs-dabeilles/':('Actualités','Nature','Biodiversité','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Recif-de-lAmazone--decouverte-genante-pour-Total/':('Actualités','Nature','EnergiesFossiles','Océans','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Recif-de-lAmazone--Neptune-se-fache/':('Actualités','Nature','EnergiesFossiles','Océans','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Total-nous-sommes-la-/':('Actualités','Nature','EnergiesFossiles','Océans','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Recif-de-lAmazone--Total-recidive-Nous-aussi/':('Actualités','Nature','EnergiesFossiles','Océans','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Ausgebohrt/':('Actualités','Nature','EnergiesFossiles','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Antarctique--touche-pas-a-mon-krill/':('Actualités','Nature','Biodiversité','Océans','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Creer-des-reserves-marines/':('Actualités','Nature','Biodiversité','Océans','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Journee-mondiale-des-manchots--les-stars-de-lAntarctique/':('Actualités','Nature','Océans','Biodiversité','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Les-plastiques-nont-rien-a-faire-en-Antarctique/':('Actualités','Nature','Océans','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Forets--bientot-une-decision-cruciale-de-lUnion-Europeenne-/':('Actualités','Nature','Biodiversité','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Les-premieres-images-des-fonds-marins-de-locean-Antarctique/':('Actualités','Nature','Océans','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Quest-ce-que-la-CCAMLR-/':('Actualités','Nature','Océans','Biodiversité','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Expedition--cap-sur-locean-Antarctique/':('Actualités','Nature','Océans','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Javier-Bardem-vous-emmene-en-Antarctique/':('Actualités','Nature','Océans','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Antarctique--un-peu-de-repit-pour-les-krills/':('Actualités','Nature','Océans','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/A-Million-Acts-of-Blue/':('Actualités','Nature','Pollution','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Tchernobyl--le-risque-nucleaire-toujours-dactualite/':('Actualités','Énergie','Nucléaire','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Remise-officielle-du-rapport-dexperts-a-Mayence/':('Communiqués de presse','Énergie','Nucléaire','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Denoncer-le-risque-nucleaire--ils-lont-fait-pour-nous/':('Actualités','Énergie','Nucléaire','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Fukushima--des-meres-a-lONU-a-Geneve/':('Actualités','Énergie','Nucléaire','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/A-Fukushima-limpossible-retour-des-personnes-evacuees/':('Actualités','Énergie','Nucléaire','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Nos-militants-condamnes--nous-faisons-appel/':('Actualités','Énergie','Nucléaire','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Engagez-vous-pour-un-Europe-vert/':('Actualités','Énergie','EnergieSolaire','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Les-militants-de-Greenpeace-attaques-en-justice--a-quand-le-proces-des-centrales-dEDF-/':('Actualités','Énergie','Nucléaire','Militants','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Les-5-raisons-pour-lesquelles-Fessenheim-doit-fermer-rapidement/':('Actualités','Énergie','Nucléaire','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Le-Parlement-europeen-vote-pour-augmenter-lobjectif-des-energies-renouvelables/':('Actualités','Énergie','EnergieSolaire','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Proces-de-des-militant-e-s-Greenpeace--pas-de-victoire-pour-EDF/':('Actualités','Énergie','Nucléaire','Militants','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Quand-Superman-se-plante/':('Actualités','Énergie','Nucléaire','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Action-Superman-survole-la-centrale-nucleaire-du-Bugey-et-sy-crashe/':('Actualités','Énergie','Nucléaire','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Action-bis-repetita--apres-Superman-un-second-survol-et-crash-au-Bugey/':('Actualités','Énergie','Nucléaire','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Coince-en-1957/':('Actualités','Énergie','Nucléaire','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Une-Grande-Region-sans-nucleaire---Maintenant-/':('Actualités','Énergie','Nucléaire','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Lopposition-contre-TTIP-CETA-et-Co-se-poursuit/':('Communiqués de presse','Société','CommerceEquitable','Luxembourg','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Lancement-de-lInitiative-pour-un-devoir-de-vigilance-des-entreprises-transnationales-au-Luxembourg/':('Communiqués de presse','Société','Luxembourg','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Recif-de-lAmazone--Greenpeace-et-ANV-COP21-interrompent-lAG-de-Total/':('Communiqués de presse','Nature','EnergiesFossiles','Militants','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Meng-Landwirtschaft-Revendications-2018/':('Communiqués de presse','Nature','AgricultureDurable','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Javier-Bardem-plonge-en-sous-marin-en-Antarctique-avec-Greenpeace-pour-demander-la-creation-dun-sanctuaire-marin/':('Communiqués de presse','Nature','Océans','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/DES-MANCHOTS-A-LUXEMBOURG/':('Communiqués de presse','Nature','Océans','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Des-industriels-de-la-peche-au-krill-appellent-a-la-creation-dun-sanctuaire-marin-en-Antarctique/':('Communiqués de presse','Nature','Océans','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Proces-a-Privas/':('Communiqués de presse','Énergie','Nucléaire','Militants','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Des-militants-environnementaux-accueillent-Emmanuel-Macron-a-Aix-la-Chapelle-avec-des-banderoles-anti-nucleaire/':('Communiqués de presse','Énergie','Nucléaire','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Lere-des-Energiebierger-commence-aujourdhui/':('Communiqués de presse','Énergie','EnergieSolaire','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Greenpeace--interdit-de-sejour--a-la-centrale-nucleaire-de-Cattenom/':('Communiqués de presse','Énergie','Nucléaire','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Greenpeace-France-porte-plainte-contre-la-deputee-Perrine-Goulet-pour-incitation-au-meurtre/':('Communiqués de presse','Énergie','Militants','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Tribune--la-place-des-militant-es-de-Greenpeace-nest-pas-en-prison/':('Communiqués de presse','Énergie','Nucléaire','Militants','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Des-militants-de-la-lutte-contre-le-rechauffement-climatique-appellent-les-ministres-de-lenergie-de-lUE-a-agir-pour-une-revolution-solaire-de-nos-toits/':('Communiqués de presse','Énergie','EnergieSolaire','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Reaction-de-Greenpeace-France-au-delibere-rendu-par-le-tribunal-de-Thionville-concernant-laction-a-la-centrale-nucleaire-de-Cattenom/':('Communiqués de presse','Énergie','Nucléaire','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Greenpeace-France-devant-la-justice--a-quand-le-proces-des-centrales-dEDF-/':('Communiqués de presse','Énergie','Nucléaire','Militants','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Promouvoir-le-developpement-des-energies-renouvelables-/':('Communiqués de presse','Énergie','EnergieSolaire','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/LUE-balaye-les-obstacles-a-la-revolution-solaire-mais-lobjectif-pour-les-energies-renouvelables-est-loin-detre-suffisant/':('Communiqués de presse','Énergie','EnergieSolaire','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Proces-des-militants-de-Greenpeace-France/':('Communiqués de presse','Énergie','Nucléaire','Militants','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Un-rapport-de-Greenpeace-leve-le-voile-sur-lindustrie-peu-connue-de-la-peche-au-krill-en-Antarctique/':('Communiqués de presse','Nature','Biodiversité','Océans','','article','Migrate'),
+        }
 
-        # FR Post list.
 
-        #start_urls = {}
+        # GR Post list.
+        start_urls = {
+            'http://www.greenpeace.org/luxembourg/fr/news/Die-Opposition-gegen-TTIP-CETA-und-Co-geht-weiter/':('Aktualität','Gesellschaft','FairerHandel','Luxemburg','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Diese-sechs-Tiere-halten-Weltrekorde/':('Aktualität','Klima','','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Es-gab-eine-Zeit-in-der-Manner-dachten-Frauen-sollten-nicht-in-die-Antarktis-gehen-Wow---haben-wir-denen-gezeigt-dass-sie-falsch-lagen/':('Aktualität','Klima','Biodiversität','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Die-Angriffe-von-Energy-Transfer-Partners-auf-Menschenrechte-Redefreiheit-und-Umwelt-sind-zu-weit-gegangen/':('Aktualität','Klima','FossileEnergien','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Die-Leitung-Bitte-Kappen/':('Aktualität','Klima','FossileEnergien','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Braucht-kein-Mensch/':('Aktualität','Natur','Biodiversität','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/World-Penguin-Day-5-Grunde-warum-man-Pinguine-einfach-lieben-muss/':('Aktualität','Natur','Ozeane','Biodiversität','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/5-seltsame-Dinge-uber-die-Antarktis/':('Aktualität','Natur','Ozeane','FossileEnergien','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Schneeweiss-und-doch-schmutzig/':('Aktualität','Natur','Ozeane','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/In-fremden-Welten/':('Aktualität','Natur','Ozeane','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Ins-Gewissen-geredet/':('Aktualität','Natur','Ozeane','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Gentechnik-beim-Namen-nennen/':('Aktualität','Natur','NachhaltigeLandwirtschaft','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Aufstand-der-Frauen/':('Aktualität','Energie','Nuklear','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Methode-VogelstrauB/':('Aktualität','Energie','Nuklear','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Engagieren-Sie-sich-fur-ein-grunes-Europa/':('Aktualität','Energie','Solarenergie','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Sicherheit-ist-gutes-Recht/':('Aktualität','Energie','Nuklear','Ehrenamtliche','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Aktion-Superman-fliegt-uber-das-Atomkraftwerk-von-Bugey-und-zerschellt-darauf/':('Aktualität','Energie','Nuklear','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/AKW-Hinkley-Point-EuGH-weist-Klage-Osterreichs-und-Luxemburgs-ab/':('Aktualität','Energie','Nuklear','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Tschernobyl-Verstrahlt-fur-Tausende-Jahre/':('Aktualität','Energie','Nuklear','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Eine-ganz-grosse-Null/':('Aktualität','Gesellschaft','','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Meng-Landwirtschaft-Wahlforderungen-2018/':('Presseerklärungen','Natur','NachhaltigeLandwirtschaft','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Start-der-Initiative-fur-eine-Sorgfaltspflicht-der-transnationalen-Wirtschaftsunternehmen-in-Luxemburg/':('Presseerklärungen','Gesellschaft','Luxemburg','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Luxemburg-zukunftsfahig-machen/':('Presseerklärungen','Klima','NachhaltigeLandwirtschaft','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/Votum-Klima-begruBt-die-neuen-Zugpferde-der-EU-Klimapolitik/':('Presseerklärungen','Klima','Klimaschutz','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Ein-Land-macht-Schluss-mit-Ol/':('Presseerklärungen','Klima','FossileEnergien','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Aus-dem-Rhythmus/':('Presseerklärungen','Klima','Klimaschutz','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Konstruktiver-Meinungsaustausch-zwischen-RegierungsvertreterInnen-und-Votum-Klima-zur-Investitionspolitik-der-staatlichen-Fonds/':('Presseerklärungen','Klima','FossileEnergien','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Auftakt-der-Verhandlungen-gegen-47-Carbon-Majors-vor-der-philippinischen-Menschenrechtskommission/':('Presseerklärungen','Klima','FossileEnergien','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Geprufte-Sinnlosigkeit/':('Presseerklärungen','Klima','FossileEnergien','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Der-Ausschuss-des-Europaischen-Parlaments-beschrankt-umstrittene-Subventionen-fur-Kohle-Gas-und-Kernkraftwerke/':('Presseerklärungen','Klima','FossileEnergien','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Irland-beschlieBt-Divestment-aus-fossilen-Energien-Wann-folgt-endlich-Luxemburg/':('Presseerklärungen','Klima','FossileEnergien','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Gemeinsame-Aktion-fur-den-Erhalt-der-Bienenbestande/':('Presseerklärungen','Natur','Biodiversität','NachhaltigeLandwirtschaft','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Oscar-Preistrager-Javier-Bardem-fordert-antarktisches-Meeresschutzgebiet/':('Presseerklärungen','Natur','Ozeane','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Stellungnahme-zum-Wortlu-Artikel-Lugen-fur-die-gute-Sache-vom-17-Mai-2018/':('Presseerklärungen','Energie','Nuklear','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Reaktion-von-Greenpeace-Frankreich-zum-Urteil-des-Bezirksgerichts-Thionville-zur-Aktion-im-Kernkraftwerk-Cattenom/':('Presseerklärungen','Energie','Nuklear','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Greenpeace-Frankreich-vor-Gericht-Wann-wird-der-Prozess-gegen-die-EDF-Kraftwerke-stattfinden/':('Presseerklärungen','Energie','Nuklear','Militants','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Den-Ausbau-der-erneuerbaren-Energien-fordern/':('Presseerklärungen','Energie','Solarenergie','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Schlechter-Gewinner/':('Presseerklärungen','Energie','Nuklear','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Neue-Energieburger-braucht-das-Land/':('Presseerklärungen','Energie','Solarenergie','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Schwimmendes-Atomproblem/':('Presseerklärungen','Energie','Nuklear','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Offizielle-Ubergabe-des-Greenpeace-Experten-Berichts-an-Umweltministerin-Ulrike-Hofken-RLP-in-Mainz/':('Presseerklärungen','Energie','Nuklear','','','article','Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Ruckkehr-ins-Ungewisse/': ('Actualités', 'Énergie', 'Nucléaire', '', '', 'article', 'Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/Verbrechen-Klimazerstorung/': ('Actualités', 'Climat', 'Nucléaire', '', '', 'article', 'Migrate'),
+            'http://www.greenpeace.org/luxembourg/fr/news/BIG-BSSSINESS/': ('Actualités', 'Nature', 'Biodiversité', '', '', 'article', 'Migrate'),
+        }
 
         for url,data in start_urls.iteritems():
             p4_post_type, categories, tags1, tags2, tags3, post_type, action = data
@@ -200,7 +303,7 @@ class AllSpider(scrapy.Spider):
                 # Remove the email images from Post body and replace it with email text.
                 body_text = re.sub(
                     '<img[a-zA-Z0-9="\s\_]*src=\"' + image_file + '\"[a-zA-Z0-9="\s]*>',
-                    emailid, body_text)
+                    '<a href="mailto:' + emailid.strip() + '" target="_blank">' + emailid.strip() + '</a>', body_text)
 
         # Remove the email images from list.
         for image_file in delete_images:
@@ -308,7 +411,7 @@ class AllSpider(scrapy.Spider):
         if date_field:
             date_field = dateutil.parser.parse(date_field)
 
-        '''
+
         # Filter email id image and replace it with email text.
         delete_images = list()
         for image_file in imagesB_generated:
@@ -325,12 +428,12 @@ class AllSpider(scrapy.Spider):
                 # Remove the email images from Post body and replace it with email text.
                 body_text = re.sub(
                     '<img[a-zA-Z0-9="\s\_]*src=\"'+image_file+'\"[a-zA-Z0-9="\s]*>',
-                    emailid, body_text)
+                    '<a href="mailto:' + emailid.strip() + '" target="_blank">' + emailid.strip() + '</a>', body_text)
 
         # Remove the email images from list.
         for image_file in delete_images:
             imagesB_generated.remove(image_file)
-        '''
+
         """
         #list images urls
         for image_file in imagesB_generated:
@@ -401,7 +504,7 @@ class AllSpider(scrapy.Spider):
             'p3_image_gallery': p3_image_gallery,
             'title': extract_with_css('div.article h1 span::text'),
             #'subtitle': '',
-            'author': 'Greenpeace Africa',
+            'author': 'Greenpeace Luxembourg',
             'author_username': 'greenpeace',
             #'date': response.css('#content > div.happen-box.article > div > div.text > span').re_first(r' - \s*(.*)'),
             'date': date_field,
