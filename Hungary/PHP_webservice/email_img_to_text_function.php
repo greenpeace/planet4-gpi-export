@@ -6,11 +6,8 @@
 require_once "connection.php";
 
 $url_list = array(
-	"http://www.greenpeace.org/canada/Templates/Planet3/Styles/Images/emailimages/0644d173c2da766215d59d6dfa12235b.png",
-	"http://www.greenpeace.org/canada/Templates/Planet3/Styles/Images/emailimages/80662b91a798b50187128ba5b2a38592.png",
-	"http://www.greenpeace.org/canada/Templates/Planet3/Styles/Images/emailimages/0bd642b86e6cbec0e34a37113881cda8.png",
-	"http://www.greenpeace.org/canada/Templates/Planet3/Styles/Images/emailimages/c899bfb5de219c052742d9fedb8dbf40.png",
-	"http://www.greenpeace.org/canada/Templates/Planet3/Styles/Images/emailimages/70922fadd7b51f6f5e14170ba0db062f.png",
+	"https://www.greenpeace.org/hungary/Global/hungary/kepek/43196556620_25ca5e1223_z.jpg",
+	"https://www.greenpeace.org/hungary/PageFiles/762795/37031050990_53306b49bd_k.jpg",
 );
 
 foreach ( $url_list as $url) {

@@ -21,7 +21,7 @@ class AllSpider(scrapy.Spider):
 
     custom_settings = {
         'ROBOTSTXT_OBEY': 0,
-        'FEED_URI': 'gphun_staging_v1.xml',
+        'FEED_URI': 'gphu_staging_v2.xml',
         'FEED_FORMAT': 'xml',
         'FEED_EXPORT_ENCODING': 'utf-8',
     }
@@ -188,7 +188,7 @@ class AllSpider(scrapy.Spider):
         for image_file in imagesB_generated:
             if ("/emailimages/" in image_file):
                 # PHP webservice script url.
-                api_url = "http://localhosttest/ocr_webservice/email_img_to_text.php"
+                api_url = "http://127.0.0.1/ocr-api-test/email_img_to_text.php"
                 end_point_url = api_url + "?url=" + image_file
                 emailid = urllib2.urlopen(end_point_url).read(1000)
                 # Search replace the \n, <BR>, spaces from email id.
@@ -220,8 +220,8 @@ class AllSpider(scrapy.Spider):
             'p3_image_gallery': p3_image_gallery,
             'title': extract_with_css('div.news-list h1::text'),
             #'subtitle': '',
-            'author': response.xpath('string(//div[@class="news-list"]/ul/li/*/*/span[@class="caption"]/span[@class="green1"]/strong)').extract()[0],
-            'author_username': author_username,
+            'author': 'Greenpeace Magyarország',
+            'author_username': 'greenpeacehu',
             'date': date_field,
             #'lead': extract_with_css('div.news-list div.post-content *:first-child strong::text'),
             'lead': response.xpath('string(//div[@class="news-list"]/ul/li/div[@class="post-content"]/div//*[self::p or self::h3 or self::h2][1])').extract()[0],
@@ -316,7 +316,7 @@ class AllSpider(scrapy.Spider):
         delete_images = list()
         for image_file in imagesB_generated:
             if ("/emailimages/" in image_file):
-                api_url = "http://localhosttest/ocr_webservice/email_img_to_text.php"
+                api_url = "http://127.0.0.1/ocr-api-test/email_img_to_text.php"
                 end_point_url = api_url+"?url="+image_file
                 emailid = urllib2.urlopen(end_point_url).read(1000)
                 # Search replace the \n, <BR>, spaces from email id.
@@ -405,7 +405,7 @@ class AllSpider(scrapy.Spider):
             'title': extract_with_css('div.article h1 span::text'),
             #'subtitle': '',
             'author': 'Greenpeace Magyarország',
-            'author_username': 'greenpeace',
+            'author_username': 'greenpeacehu',
             #'date': response.css('#content > div.happen-box.article > div > div.text > span').re_first(r' - \s*(.*)'),
             'date': date_field,
             #'lead': extract_with_css('div.news-list div.post-content *:first-child strong::text'),
