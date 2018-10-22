@@ -186,6 +186,7 @@ class AllSpider(scrapy.Spider):
         # Filter email id image and replace it with email text.
         delete_images = list()
         for image_file in imagesB_generated:
+            #f1=open('/tmp/debug.txt', 'a+')
             if ("/emailimages/" in image_file):
                 # PHP webservice script url.
                 api_url = "http://127.0.0.1/ocr-api-test/email_img_to_text.php"
@@ -196,11 +197,17 @@ class AllSpider(scrapy.Spider):
                 emailid = emailid.replace('<br>', '')
                 emailid = emailid.replace('<BR>', '')
                 emailid = emailid.replace(' ', '')
+                emailid = emailid.replace('qreenpeace', 'greenpeace')
+                emailid = emailid.replace('aqreenpeace', '@greenpeace')
+                emailid = emailid.replace('@qreenpeace', '@greenpeace')
+                emailid = emailid.replace('agreenpeace', '@greenpeace')
+                #f1.write(emailid)
                 delete_images.append(image_file)
                 # Remove the email images from Post body and replace it with email text.
                 body_text = re.sub(
                     '<img[a-zA-Z0-9="\s\_]*src=\"' + image_file + '\"[a-zA-Z0-9="\s]*>',
                     emailid, body_text)
+            #f1.close()
 
         # Remove the email images from list.
         for image_file in delete_images:
@@ -311,10 +318,10 @@ class AllSpider(scrapy.Spider):
         if date_field:
             date_field = dateutil.parser.parse(date_field)
 
-        '''
         # Filter email id image and replace it with email text.
         delete_images = list()
         for image_file in imagesB_generated:
+            #f1=open('/tmp/debug.txt', 'a+')
             if ("/emailimages/" in image_file):
                 api_url = "http://127.0.0.1/ocr-api-test/email_img_to_text.php"
                 end_point_url = api_url+"?url="+image_file
@@ -324,16 +331,22 @@ class AllSpider(scrapy.Spider):
                 emailid = emailid.replace('<br>', '')
                 emailid = emailid.replace('<BR>', '')
                 emailid = emailid.replace(' ', '')
+                emailid = emailid.replace('qreenpeace', 'greenpeace')
+                emailid = emailid.replace('aqreenpeace', '@greenpeace')
+                emailid = emailid.replace('@qreenpeace', '@greenpeace')
+                emailid = emailid.replace('agreenpeace', '@greenpeace')
+                #f1.write(emailid)
                 delete_images.append(image_file)
                 # Remove the email images from Post body and replace it with email text.
                 body_text = re.sub(
                     '<img[a-zA-Z0-9="\s\_]*src=\"'+image_file+'\"[a-zA-Z0-9="\s]*>',
                     emailid, body_text)
+            #f1.close()
 
         # Remove the email images from list.
         for image_file in delete_images:
             imagesB_generated.remove(image_file)
-        '''
+
         """
         #list images urls
         for image_file in imagesB_generated:

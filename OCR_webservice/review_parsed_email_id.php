@@ -23,5 +23,4 @@ if ($result->num_rows > 0) {
 	}
 }
 
-?>
-
+echo '<br /><a href="index.php">Back</a>';
