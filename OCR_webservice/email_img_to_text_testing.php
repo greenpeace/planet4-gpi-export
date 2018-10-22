@@ -26,30 +26,35 @@ function process_request( $img_url ) {
 	global $conn;
 
 	if ( $img_url ) {
-		$email_text = api_call( $img_url );
+		$sql    = "SELECT email_text FROM email_img_to_text WHERE email_img_url = '" . $img_url . "'";
+		$result = $conn->query( $sql );
 
-		if ( $email_text ) {
-			$email_text = str_replace( ' ', '', $email_text );
-			$email_text = str_replace( 'qreenpeace', 'greenpeace', $email_text );
-			$email_text = str_replace( 'aqreenpeace', '@greenpeace', $email_text );
-			$email_text = str_replace( '@qreenpeace', '@greenpeace', $email_text );
-			$email_text = str_replace( 'agreenpeace', '@greenpeace', $email_text );
-		}
+		if ( 0 === $result->num_rows ) {
+			$email_text = api_call( $img_url );
 
-		// Validate the email id.
-		if ( $email_text && ! filter_var( $email_text, FILTER_VALIDATE_EMAIL ) ) {
-			$email_parts = explode( '.', $email_text );
-			$email_parts[ count( $email_parts ) - 1 ] = 'org';
-			$email_text = implode( '.', $email_parts );
-		}
-		echo $email_text . '<br />';
+			if ( $email_text ) {
+				$email_text = str_replace( ' ', '', $email_text );
+				$email_text = str_replace( 'qreenpeace', 'greenpeace', $email_text );
+				$email_text = str_replace( 'aqreenpeace', '@greenpeace', $email_text );
+				$email_text = str_replace( '@qreenpeace', '@greenpeace', $email_text );
+				$email_text = str_replace( 'agreenpeace', '@greenpeace', $email_text );
+			}
 
-		// Insert it into DB.
-		if ( 'org' !== $email_text ) {
-			$sql  = "INSERT INTO email_img_to_text (email_img_url, email_text) VALUES (?, ?)";
-			$stmt = $conn->prepare( $sql );
-			$stmt->bind_param( 'ss', $img_url, $email_text );
-			$stmt->execute();
+			// Validate the email id.
+			if ( $email_text && ! filter_var( $email_text, FILTER_VALIDATE_EMAIL ) ) {
+				$email_parts                              = explode( '.', $email_text );
+				$email_parts[ count( $email_parts ) - 1 ] = 'org';
+				$email_text                               = implode( '.', $email_parts );
+			}
+			echo $email_text . '<br />';
+
+			// Insert it into DB.
+			if ( 'org' !== $email_text ) {
+				$sql  = "INSERT INTO email_img_to_text (email_img_url, email_text) VALUES (?, ?)";
+				$stmt = $conn->prepare( $sql );
+				$stmt->bind_param( 'ss', $img_url, $email_text );
+				$stmt->execute();
+			}
 		}
 	}
 }

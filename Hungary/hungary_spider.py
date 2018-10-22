@@ -30,7 +30,7 @@ class AllSpider(scrapy.Spider):
     __connector_csv_log_file = "connector_csv_log_v2"
 
     def start_requests(self):
-    # v1
+        # v1
         start_urls = {
             #'http://www.greenpeace.org/hungary/hu/sajtokozpont/250-ezer-evig-kene-tarolnunk-Paks-II-atomhulladekat/':('Press Release','Klíma & Energia','Atomenergia','','','article','Migrate'),
             'http://www.greenpeace.org/hungary/hu/sajtokozpont/Szaz-evig-is-kiserthet-meg-a-fukusimai-katasztrofa/':('Press Release','Klíma & Energia','Atomenergia','Egészség','','article','Migrate'),
@@ -64,7 +64,7 @@ class AllSpider(scrapy.Spider):
             'http://www.greenpeace.org/hungary/hu/sajtokozpont/vegyszerkorlatozas-kell-a-mehek-erdekeben/':('Press Release','Természet & Környezet','Méhek','Szennyezés','Élővilág','article','Migrate'),
             'http://www.greenpeace.org/hungary/hu/sajtokozpont/Vegre-megsznhet-a-meregkeveres-az-almasfuziti-vorosiszap-tarozon/':('Press Release','Természet & Környezet','Szennyezés','','','article','Migrate'),
             'http://www.greenpeace.org/hungary/hu/sajtokozpont/Vedelmet-kaptak-a-mehek-az-EU-betiltotta-harom-mehgyilkos-vegyszer-unios-hasznalatat/':('Press Release','Természet & Környezet','Méhek','Szennyezés','Élővilág','article','Migrate'),
-            'http://www.greenpeace.org/hungary/hu/sajtokozpont/Uszo-Csernobil-ellen-tiltakoznak-Greenpeace-aktivistak-Dania-partjainal/':('Press Release','Klíma & Energia','Atomenergia','','','article','Migrate'),
+            #'http://www.greenpeace.org/hungary/hu/sajtokozpont/Uszo-Csernobil-ellen-tiltakoznak-Greenpeace-aktivistak-Dania-partjainal/':('Press Release','Klíma & Energia','Atomenergia','','','article','Migrate'),
             'http://www.greenpeace.org/hungary/hu/sajtokozpont/Unokaink-is-fizetni-fogjak-a-paksi-bvitest/':('Press Release','Klíma & Energia','Atomenergia','','','article','Migrate'),
             'http://www.greenpeace.org/hungary/hu/sajtokozpont/Ujra-uton-a-Greenpeace/':('Press Release','Természet & Környezet','ÖkológiaiGazdálkodás','','','article','Migrate'),
             'http://www.greenpeace.org/hungary/hu/sajtokozpont/Ujra-felelotlen-dontes-szuletett-a-Romai-partrol-55-ezer-ember-biztonsaga-es-Budapest-egyik-utolso-termeszetkozeli-Duna-partja-a-tet/':('Press Release','Természet & Környezet','Zöldterület','Egészség','Élővilág','article','Migrate'),
@@ -73,7 +73,19 @@ class AllSpider(scrapy.Spider):
             'http://www.greenpeace.org/hungary/hu/sajtokozpont/Ujabb-jogi-szakvelemeny-a-Greenpeace-mellett-Almasfuzit-ugyeben/':('Press Release','Természet & Környezet','Szennyezés','','','article','Migrate'),
             'http://www.greenpeace.org/hungary/hu/sajtokozpont/Uj-GM-noveny-termeszteset-engedelyezne-az-Europai-Bizottsag--a-biztonsagra-vonatkozo-vizsgalatok-sulyos-hianyossagai-ellenere/':('Press Release','Természet & Környezet','Egészség','ÖkológiaiGazdálkodás','','article','Migrate'),
             'http://www.greenpeace.org/hungary/hu/sajtokozpont/Tovabbra-is-rengeteg-vegyszer-van-a-ruhakban---meg-a-boltok-levegje-is-szennyezett/':('Press Release','Természet & Környezet','Szennyezés','Egészség','Fogyasztás','article','Migrate'),
-            'http://www.greenpeace.org/hungary/hu/sajtokozpont/Tovabbra-is-folyik-a-fertz-szennyezes-a-Szamosba/':('Press Release','Természet & Környezet','Szennyezés','Egészség','Élővilág','article','Migrate')
+            'http://www.greenpeace.org/hungary/hu/sajtokozpont/Tovabbra-is-folyik-a-fertz-szennyezes-a-Szamosba/':('Press Release','Természet & Környezet','Szennyezés','Egészség','Élővilág','article','Migrate'),
+            'http://www.greenpeace.org/hungary/hu/sajtokozpont/Tovabb-huzodik-Kishantos-ugye/':('Press Release','Ember & Társadalom','Béke','ÖkológiaiGazdálkodás','','article','Migrate'),
+            'http://www.greenpeace.org/hungary/hu/sajtokozpont/Tobbsegi-tamogatast-kapott-a-mehgyilkos-vegyszerek-korlatozasarol-szolo-europai-bizottsagi-javaslat/':('Press Release','Természet & Környezet','Méhek','ÖkológiaiGazdálkodás','Élővilág','article','Migrate'),
+            'http://www.greenpeace.org/hungary/hu/sajtokozpont/Tobb-mint-otvenezer-magyar-koveteli-az-eldobhato-manyag-szatyrok-betiltasat/':('Press Release','Természet & Környezet','StopMűanyag','Szennyezés','Fogyasztás','article','Migrate'),
+            'http://www.greenpeace.org/hungary/hu/sajtokozpont/Tizenegy-Nobel-bekedijas-ir-Putyin-elnoknek-a-Greenpeace-ugy-kapcsan/':('Press Release','Természet & Környezet','Béke','Sarkvidék','Klímavédelem','article','Migrate'),
+            'http://www.greenpeace.org/hungary/hu/sajtokozpont/Tiszta-Adriat-/':('Press Release','Természet & Környezet','Víz','Fosszilis','','article','Migrate'),
+            'http://www.greenpeace.org/hungary/hu/sajtokozpont/Tiltott-anyaggal-tiltott-modszerrel-irtjak-a-ragcsalokat-itthon/':('Press Release','Természet & Környezet','Élővilág','Szennyezés','Egészség','article','Migrate'),
+            'http://www.greenpeace.org/hungary/hu/sajtokozpont/Termeshozamrekord-mehgyilkos-vegyszerek-nelkul/':('Press Release','Ember & Társadalom','ÖkológiaiGazdálkodás','Méhek','Egészség','article','Migrate'),
+            'http://www.greenpeace.org/hungary/hu/sajtokozpont/Termesatlagrekordok-mehgyilkos-vegyszerek-hasznalata-nelkul/':('Press Release','Ember & Társadalom','ÖkológiaiGazdálkodás','Méhek','Egészség','article','Migrate'),
+            'http://www.greenpeace.org/hungary/hu/sajtokozpont/Szuksegtelenul-roviditik-eletunket-a-szenes-ermvek/':('Press Release','Klíma & Energia','Fosszilis','Egészség','','article','Migrate'),
+            'http://www.greenpeace.org/hungary/hu/sajtokozpont/Szuksegtelen-es-elkapkodott-az-uj-atomerm/':('Press Release','Klíma & Energia','Atomenergia','','','article','Migrate'),
+            'http://www.greenpeace.org/hungary/hu/sajtokozpont/Sztarokkal-indit-kampanyt-a-Greenpeace-az-Eszaki-sark-megmenteseert/':('Press Release','Klíma & Energia','Sarkvidék','Klímavédelem','Fosszilis','article','Migrate'),
+            'http://www.greenpeace.org/hungary/hu/sajtokozpont/Szabadon-engedi-Oroszorszag-a-Greenpeace-hajojat/':('Press Release','Ember & Társadalom','Béke','Sarkvidék','Klímavédelem','article','Migrate')
         }
 
         for url,data in start_urls.iteritems():
