@@ -339,6 +339,7 @@ class AllSpider(scrapy.Spider):
         if subtitle:
             body_text = '<h2>' + subtitle + '</h2><br />' + body_text
 
+        # Get the thumbnail of the post as requested.
         thumbnail = response.xpath('string(head//link[@rel="image_src"]/@href)').extract_first()
 
         date_field = response.css('div.article div.text span.author::text').re_first(r' - \s*(.*)')
@@ -470,6 +471,7 @@ class AllSpider(scrapy.Spider):
             'map_url': map_url,
             'unique_map_id': unique_map_id,
             'url': response.url,
+            'thumbnail': thumbnail,
         }
 
     def filter_post_content(self, post_data):
