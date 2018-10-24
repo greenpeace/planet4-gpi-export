@@ -30,8 +30,9 @@ class AllSpider(scrapy.Spider):
     __connector_csv_log_file = "connector_csv_log_v2"
 
     def start_requests(self):
-        # v1
         start_urls = {
+        #v1
+            #part1
             #'http://www.greenpeace.org/hungary/hu/sajtokozpont/250-ezer-evig-kene-tarolnunk-Paks-II-atomhulladekat/':('Press Release','Klíma & Energia','Atomenergia','','','article','Migrate'),
             'http://www.greenpeace.org/hungary/hu/sajtokozpont/Szaz-evig-is-kiserthet-meg-a-fukusimai-katasztrofa/':('Press Release','Klíma & Energia','Atomenergia','Egészség','','article','Migrate'),
             'http://www.greenpeace.org/hungary/hu/sajtokozpont/240-Greenpeace-aktivista-figyelmeztet-Europa-uj-veszelyzonaba-lepett/':('Press Release','Klíma & Energia','Atomenergia','','','article','Migrate'),
@@ -85,7 +86,7 @@ class AllSpider(scrapy.Spider):
             'http://www.greenpeace.org/hungary/hu/sajtokozpont/Szuksegtelenul-roviditik-eletunket-a-szenes-ermvek/':('Press Release','Klíma & Energia','Fosszilis','Egészség','','article','Migrate'),
             'http://www.greenpeace.org/hungary/hu/sajtokozpont/Szuksegtelen-es-elkapkodott-az-uj-atomerm/':('Press Release','Klíma & Energia','Atomenergia','','','article','Migrate'),
             'http://www.greenpeace.org/hungary/hu/sajtokozpont/Sztarokkal-indit-kampanyt-a-Greenpeace-az-Eszaki-sark-megmenteseert/':('Press Release','Klíma & Energia','Sarkvidék','Klímavédelem','Fosszilis','article','Migrate'),
-            'http://www.greenpeace.org/hungary/hu/sajtokozpont/Szabadon-engedi-Oroszorszag-a-Greenpeace-hajojat/':('Press Release','Ember & Társadalom','Béke','Sarkvidék','Klímavédelem','article','Migrate')
+            'http://www.greenpeace.org/hungary/hu/sajtokozpont/Szabadon-engedi-Oroszorszag-a-Greenpeace-hajojat/':('Press Release','Ember & Társadalom','Béke','Sarkvidék','Klímavédelem','article','Migrate'),
         }
 
         for url,data in start_urls.iteritems():
@@ -483,33 +484,13 @@ class AllSpider(scrapy.Spider):
         return post_data
 
     def filter_month_name(self, month_name):
-        '''
-        month_fr_en = {
-            'janvier': 'January',
-            'février': 'February',
-            'mars': 'March',
-            'avril': 'April',
-            'mai': 'May',
-            'juin': 'June',
-            'juillet': 'July',
-            'août': 'August',
-            'septembre': 'September',
-            'octobre': 'October',
-            'novembre': 'November',
-            'décembre': 'December',
-        }
-        '''
 
-        # Replace the french month name with english month name.
-        #for fr_month, en_month in month_fr_en.iteritems():
-        #    month_name = month_name.replace(fr_month, en_month)
-
-        month_da_en = {
+        month_hu_en = {
             'január': 'January',
             'február': 'February',
             'március': 'March',
             'április': 'April',
-            'Lehet': 'May',
+            'május': 'May',
             'június': 'June',
             'július': 'July',
             'augusztus': 'August',
@@ -519,9 +500,9 @@ class AllSpider(scrapy.Spider):
             'december': 'December',
         }
 
-        # Replace the danish month name with english month name.
-        for fr_month, en_month in month_da_en.iteritems():
-            month_name = month_name.replace(fr_month, en_month)
+        # Replace the hungarian month name with english month name.
+        for hu_month, en_month in month_hu_en.iteritems():
+            month_name = month_name.replace(hu_month, en_month)
 
         return month_name;
 

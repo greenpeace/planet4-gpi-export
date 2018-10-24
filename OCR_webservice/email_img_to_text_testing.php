@@ -29,7 +29,13 @@ function process_request( $img_url ) {
 		$sql    = "SELECT email_text FROM email_img_to_text WHERE email_img_url = '" . $img_url . "'";
 		$result = $conn->query( $sql );
 
-		if ( 0 === $result->num_rows ) {
+		if ($result->num_rows > 0) {
+			// output data of each row.
+			while($row = $result->fetch_assoc()) {
+				$email_text = $row["email_text"];
+				break;
+			}
+		} else {
 			$email_text = api_call( $img_url );
 
 			if ( $email_text ) {
@@ -46,7 +52,6 @@ function process_request( $img_url ) {
 				$email_parts[ count( $email_parts ) - 1 ] = 'org';
 				$email_text                               = implode( '.', $email_parts );
 			}
-			echo $email_text . '<br />';
 
 			// Insert it into DB.
 			if ( 'org' !== $email_text ) {
@@ -56,6 +61,7 @@ function process_request( $img_url ) {
 				$stmt->execute();
 			}
 		}
+		echo $email_text . '<br />';
 	}
 }
 
