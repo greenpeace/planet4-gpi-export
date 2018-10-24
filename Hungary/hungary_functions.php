@@ -125,7 +125,7 @@ function replace_attachment($text, $attachment) {
 	$basename = str_replace("'", "", urldecode($basename));
 	$basename = str_replace('%20', '-', urldecode($basename));
 
-	$bodytag = str_replace($attachment, get_site_url(). "/wp-content/uploads/2018/10/". $basename , $text);
+	$bodytag = str_replace($attachment, "https://storage.googleapis.com/planet4-hungary-stateless/2018/10/". $basename , $text);
 	return $bodytag;
 }
 
@@ -134,7 +134,7 @@ add_action('pmxi_saved_post','post_saved',10,1);
 function post_saved( $postid ) {
 
 	$local_path = get_site_url(). '/wp-content/uploads/';
-	$gcs_path   = 'https://storage.googleapis.com/planet4-hungary-stateless-develop/';
+	$gcs_path   = 'https://storage.googleapis.com/planet4-hungary-stateless/';
 
 	$attachments = get_attached_media( '', $postid );
 
@@ -200,20 +200,16 @@ function post_saved( $postid ) {
 	wp_update_post( $updated_post );
 }
 
-
-
 add_action('pmxi_attachment_uploaded', 'fix_attachment_uploaded', 10, 3);
 
-function fix_attachment_uploaded( $pid, $attid, $filepath ) {
-	$attachment = get_post( $attid );
-	$local_path = get_site_url() . '/wp-content/uploads/';
-	$gcs_path   = 'https://storage.googleapis.com/planet4-hungary-stateless-develop/';
+function fix_attachment_uploaded($pid, $attid, $filepath){
+	$attachment = get_post($attid);
+
+	$local_path = get_site_url(). '/wp-content/uploads/';
+	$gcs_path   = 'https://storage.googleapis.com/planet4-hungary-stateless/';
 
 	if ( preg_match( '/^'.$local_path.'/i', $attachment->guid ) ) {
-		wp_update_post( [
-			'ID'   => $attid,
-			'guid' => str_replace( $local_path, $gcs_path, $attachment->guid )
-		] );
+		wp_update_post(array('ID' => $attid, 'guid' => str_replace($local_path, $gcs_path, $attachment->guid)));
 	}
 }
 
