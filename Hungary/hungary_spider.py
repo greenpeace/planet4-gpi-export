@@ -32,7 +32,7 @@ class AllSpider(scrapy.Spider):
     def start_requests(self):
         start_urls = {
             #total_posts: 375
-            #bad_posts:   21
+            #bad_posts:   20
             #part1
             #'http://www.greenpeace.org/hungary/hu/sajtokozpont/250-ezer-evig-kene-tarolnunk-Paks-II-atomhulladekat/':('Sajtóközlemény','Klíma & Energia','Atomenergia','','','article','Migrate'),
             'http://www.greenpeace.org/hungary/hu/sajtokozpont/Szaz-evig-is-kiserthet-meg-a-fukusimai-katasztrofa/':('Sajtóközlemény','Klíma & Energia','Atomenergia','Egészség','','article','Migrate'),
