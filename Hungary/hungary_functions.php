@@ -75,7 +75,7 @@ function add_image_class( $text, $image ) {
  * @return mixed
  */
 function replace_all_attachments( $text, $pdf, $images1, $images2, $images3, $images4, $images5, $images6, $images7, $images8, $images9, $images10,
-	$images11, $images12, $images13, $images14, $images15, $images16, $images17, $images18, $images19, $images20, $images21, $images22, $images23, $images24, $images25, $images26 ) {
+	$images11, $images12, $images13, $images14, $images15, $images16, $images17, $images18, $images19, $images20, $images21, $images22, $images23, $images24 ) {
 
 	$text = replace_attachment($text, $pdf);
 	$text = replace_attachment($text, $images1);
@@ -102,8 +102,6 @@ function replace_all_attachments( $text, $pdf, $images1, $images2, $images3, $im
 	$text = replace_attachment($text, $images22);
 	$text = replace_attachment($text, $images23);
 	$text = replace_attachment($text, $images24);
-	$text = replace_attachment($text, $images25);
-	$text = replace_attachment($text, $images26);
 
 	return $text;
 
@@ -125,7 +123,7 @@ function replace_attachment($text, $attachment) {
 	$basename = str_replace("'", "", urldecode($basename));
 	$basename = str_replace('%20', '-', urldecode($basename));
 
-	$bodytag = str_replace($attachment, "https://storage.googleapis.com/planet4-africa-stateless-release/2018/09/". $basename , $text);
+	$bodytag = str_replace($attachment, "https://storage.googleapis.com/planet4-hungary-stateless/2018/10/". $basename , $text);
 	return $bodytag;
 }
 
@@ -133,8 +131,8 @@ add_action('pmxi_saved_post','post_saved',10,1);
 
 function post_saved( $postid ) {
 
-	$local_path = 'https://release.k8s.p4.greenpeace.org/africa/wp-content/uploads/';
-	$gcs_path   = 'https://storage.googleapis.com/planet4-africa-stateless-release/';
+	$local_path = get_site_url(). '/wp-content/uploads/';
+	$gcs_path   = 'https://storage.googleapis.com/planet4-hungary-stateless/';
 
 	$attachments = get_attached_media( '', $postid );
 
@@ -151,58 +149,56 @@ function post_saved( $postid ) {
 
 	$pdf_files = array_pop( $match_pdf );
 
-	foreach ( $img_files as $image_file ) {
-		$basename = basename( $image_file );
+	if ( $img_files ) {
+		foreach ( $img_files as $img_file ) {
+			$basename = basename( $img_file );
+			$basename = rawurldecode( $basename );
+			$basename = str_replace(' ', '-', $basename );      // The guid has the space chars replaced with dash.
 
-		foreach ( $attachments as $attachment ) {
+			foreach ( $attachments as $attachment ) {
+				if ( preg_match( '/'.$basename.'$/i', $attachment->guid ) ) {
+					if ( strpos( $attachment->guid, $local_path ) !== false ) {
+						$gcs_file_name = str_replace( $local_path, $gcs_path, $attachment->guid );
+						$random_str    = explode( '-', basename( $gcs_file_name ) );
+						$first_str     = $random_str[0];
 
-			if ( preg_match( '/'.$basename.'$/i', $attachment->guid ) ) {
+						if ( 2 !== substr_count( basename( $gcs_file_name ), $first_str ) ) {
+							//$gcs_file_name = $first_str . '-' . $gcs_file_name;
+							$gcs_file_name = str_replace( $first_str, $first_str . '-' . $first_str, $gcs_file_name );
+						}
+						wp_update_post( [
+							'ID'   => $attachment->ID,
+							'guid' => $gcs_file_name
+						] );
+						$content = str_replace( $img_file, $gcs_file_name, $content );
 
-				//if ( preg_match( '/^'.$local_path.'/i', $attachment->guid ) ) {
-				if (strpos($attachment->guid, $local_path) !== false) {
-
-					$gcs_file_name = str_replace($local_path, $gcs_path, $attachment->guid);
-
-					$random_str = explode('-', basename( $gcs_file_name ));
-					$first_str = $random_str[0];
-
-					if ( 2 !== substr_count( basename( $gcs_file_name ), $first_str ) ) {
-						//$gcs_file_name = $first_str . '-' . $gcs_file_name;
-						$gcs_file_name = str_replace( $first_str , $first_str.'-'.$first_str, $gcs_file_name );
+					} else {
+						$content = str_replace( $img_file, $attachment->guid, $content );
 					}
-
-					wp_update_post(array('ID' => $attachment->ID, 'guid' => $gcs_file_name));
-
-					$content = str_replace( $image_file, $gcs_file_name, $content );
-				}
-				else
-				{
-					$content = str_replace( $image_file, $attachment->guid, $content );
 				}
 			}
 		}
 	}
 
+	if ( $pdf_files ) {
+		foreach ( $pdf_files as $pdf_file ) {
+			$basename = basename( $pdf_file );
+			$basename = rawurldecode( $basename );
+			$basename = str_replace(' ', '-', $basename );      // The guid has the space chars replaced with dash.
 
-	foreach ( $pdf_files as $image_file ) {
-		$basename = basename( $image_file );
+			foreach ( $attachments as $attachment ) {
+				if ( preg_match( '/'.$basename.'$/i', $attachment->guid ) ) {
+					if ( false !== strpos( $attachment->guid, $local_path ) ) {
+						$gcs_file_name = str_replace( $local_path, $gcs_path, $attachment->guid );
+						wp_update_post( [
+							'ID'   => $attachment->ID,
+							'guid' => $gcs_file_name
+						] );
+						$content = str_replace( $pdf_file, $gcs_file_name, $content );
 
-		foreach ( $attachments as $attachment ) {
-
-			if ( preg_match( '/'.$basename.'$/i', $attachment->guid ) ) {
-
-				//if ( preg_match( '/^'.$local_path.'/i', $attachment->guid ) ) {
-				if (strpos($attachment->guid, $local_path) !== false) {
-
-					$gcs_file_name = str_replace($local_path, $gcs_path, $attachment->guid);
-
-					wp_update_post(array('ID' => $attachment->ID, 'guid' => $gcs_file_name));
-
-					$content = str_replace( $image_file, $gcs_file_name, $content );
-				}
-				else
-				{
-					$content = str_replace( $image_file, $attachment->guid, $content );
+					} else {
+						$content = str_replace( $pdf_file, $attachment->guid, $content );
+					}
 				}
 			}
 		}
@@ -214,19 +210,17 @@ function post_saved( $postid ) {
 	wp_update_post( $updated_post );
 }
 
-
-
 add_action('pmxi_attachment_uploaded', 'fix_attachment_uploaded', 10, 3);
 
 function fix_attachment_uploaded($pid, $attid, $filepath){
-  $attachment = get_post($attid);
+	$attachment = get_post($attid);
 
-  $local_path = 'https://release.k8s.p4.greenpeace.org/africa/wp-content/uploads/';
-  $gcs_path   = 'https://storage.googleapis.com/planet4-africa-stateless-release/';
+	$local_path = get_site_url(). '/wp-content/uploads/';
+	$gcs_path   = 'https://storage.googleapis.com/planet4-hungary-stateless/';
 
-  if ( preg_match( '/^'.$local_path.'/i', $attachment->guid ) ) {
+	if ( preg_match( '/^'.$local_path.'/i', $attachment->guid ) ) {
 		wp_update_post(array('ID' => $attid, 'guid' => str_replace($local_path, $gcs_path, $attachment->guid)));
-  }
+	}
 }
 
 ?>

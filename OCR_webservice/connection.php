@@ -7,7 +7,7 @@
 $servername  = "localhost";
 $username    = "root";
 $password    = "";
-$dbname      = "gp_ca_email_img_to_text";
+$dbname      = "email_img_to_text";
 
 // API credentials.
 $api_key     = "2777dc471788957";
