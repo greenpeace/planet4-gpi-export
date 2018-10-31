@@ -125,6 +125,9 @@ function replace_attachment($text, $attachment) {
 	$basename = str_replace("'", "", urldecode($basename));
 	$basename = str_replace('%20', '-', urldecode($basename));
 
+	$basename = str_replace("(", "", urldecode($basename));
+	$basename = str_replace(")", "", urldecode($basename));
+
 	$bodytag = str_replace($attachment, "https://storage.googleapis.com/planet4-italy-stateless-release/2018/10/". $basename , $text);
 	return $bodytag;
 }
