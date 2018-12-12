@@ -90,4 +90,4 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 LOG_STDOUT = True
-LOG_FILE = 'output-gpmx_staging_v1.txt'
+LOG_FILE = 'output-gpmx_staging_v2_NL.txt'
