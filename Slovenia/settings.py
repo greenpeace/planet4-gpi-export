@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for p3_gpfi_export project
+# Scrapy settings for p3_gpsl_export project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -16,7 +16,7 @@ NEWSPIDER_MODULE = 'p3_gpsl_export.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'p3_gpfi_export (+http://www.yourdomain.com)'
+#USER_AGENT = 'p3_gpsl_export (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -47,13 +47,13 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'p3_gpfi_export.middlewares.P3GpfiExportSpiderMiddleware': 543,
+#    'p3_gpsl_export.middlewares.P3GpslExportSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'p3_gpfi_export.middlewares.P3GpfiExportDownloaderMiddleware': 543,
+#    'p3_gpsl_export.middlewares.P3GpslExportDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -65,7 +65,7 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    'p3_gpfi_export.pipelines.P3GpfiExportPipeline': 300,
+#    'p3_gpsl_export.pipelines.P3GpslExportPipeline': 300,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)

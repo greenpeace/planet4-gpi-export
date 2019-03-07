@@ -157,6 +157,7 @@ function post_saved( $postid ) {
 			$attachement_path = $attachement_obj[0]->guid;
 			if (strpos($attachement_path, $local_path) !== false) {
 				$gcs_file_name = str_replace($local_path, $gcs_path, $attachement_path);
+				$gcs_file_name = strtolower($gcs_file_name); // Caps image ext import issue fix.
 				$random_str = explode('-', basename( $gcs_file_name ));
 				$first_str = $random_str[0];
 				if ( 2 !== substr_count( basename( $gcs_file_name ), $first_str ) ) {
@@ -174,6 +175,8 @@ function post_saved( $postid ) {
 	}
 	foreach ( $pdf_files as $image_file ) {
 		$basename = basename( $image_file );
+		$basename = str_replace(' ', '-', $basename);
+		$basename = str_replace('%20', '-', $basename);
 		foreach ( $attachments as $attachment ) {
 			if ( preg_match( '/'.$basename.'$/i', $attachment->guid ) ) {
 				//if ( preg_match( '/^'.$local_path.'/i', $attachment->guid ) ) {
