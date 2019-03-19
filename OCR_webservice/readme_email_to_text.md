@@ -22,18 +22,19 @@ Use below code to filter the all email image links.
                 self.csv_writer(data, "email_images_url_list.csv")
 ```
 
-Please add above snippet in all parse functions [Example](https://github.com/greenpeace/planet4-gpi-export/blob/master/Canada/canada_spider.py#L460)
+Please add above snippet in all parse functions in the migration script [Example](https://github.com/greenpeace/planet4-gpi-export/blob/master/Canada/canada_spider.py#L460)
+This will generate a csv file with a list of all the email image URLs.
 
 
 2) Consume OCR API using PHP script and save response in MySQL table
 
-Please copy the `planet4-gpi-export/Canada/PHP_webservice` folder to local web server.
+Please copy the `planet4-gpi-export/OCR_webservice` folder to local web server.
 
 Create the database on your local system, name as **_gp_ca_email_img_to_text_**(here I use 'gp_ca' prefix but you can use any name.)
 
-Import the tables from [here](https://github.com/greenpeace/planet4-gpi-export/blob/master/Canada/PHP_webservice/gp_ca_email_img_to_text.sql)
+Import the tables from [here](https://github.com/greenpeace/planet4-gpi-export/blob/master/OCR_webservice/email_img_to_text_schema.sql)
 
-As per local MySQL database credentials, please update planet4-gpi-export/Canada/PHP_webservice/connection.php file.
+As per local MySQL database credentials, please update planet4-gpi-export/OCR_webservice/connection.php file.
 
 Now we have the list of links but there are so many of duplicate entries.
 
@@ -46,7 +47,7 @@ Copy the list of images in `email_img_to_text_function.php` file in `$url_list` 
 browse the `review_parsed_email_id.php` file on local. here you can check and fix if you found any issue with parsed data by editing database table raws.
 
 
-4) Add below code in scapper to consume PHP webservice
+4) Add below code in spider script to consume PHP webservice
 
 Please replace/comment the code snippet added in step1 with below one -
 
@@ -69,7 +70,7 @@ Please replace/comment the code snippet added in step1 with below one -
         for image_file in delete_images:
             imagesB_generated.remove(image_file)
 ```
-
+This code will replace the images of each post for its corresponding email text between <a> tags.
 
 ###### Note: 
 - please replace the `api_url` path with your local server path.
