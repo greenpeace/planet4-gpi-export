@@ -26,11 +26,19 @@ function add_blockquote_style( $text, $blockquote1, $blockquote2, $blockquote3 )
  *
  * @return mixed
  */
-function add_image_class( $text, $image ) {
-	if ( strpos( $image, 'float: left;' ) !== false ) {
-		$text = str_replace( '<img', '<img class="alignleft"', $text );
-	} elseif ( strpos( $image, 'float: right;') !== false ) {
-		$text = str_replace( '<img', '<img class="alignright"', $text );
+function align_images( $text, ...$elements  ) {
+	foreach( $elements as $element ) {
+		if ( strpos( $element, 'float: left;' ) !== false ) {
+			$text = str_replace( '<img', '<img class="alignleft"', $text );
+		} elseif ( strpos( $element, 'float: right;' ) !== false ) {
+			$text = str_replace( '<img', '<img class="alignright"', $text );
+		} elseif ( strpos( $element, 'events-box middle-box left' ) !== false ) {
+			$text = str_replace( 'events-box middle-box left', 'events-box middle-box alignleft', $text );
+			$text = str_replace( '<img', '<img class="Thumbnail alignleft"', $text );
+		} elseif ( strpos( $element, 'events-box middle-box right' ) !== false ) {
+			$text = str_replace( 'events-box middle-box right', 'events-box middle-box alignright', $text );
+			$text = str_replace( '<img', '<img class="Thumbnail alignright"', $text );
+		}
 	}
 	return $text;
 }
@@ -111,7 +119,7 @@ function replace_attachment($text, $attachment) {
 	$basename = str_replace('%20', '-', urldecode($basename));
 	$basename = str_replace("(", "", urldecode($basename));
 	$basename = str_replace(")", "", urldecode($basename));
-	$bodytag = str_replace($attachment, "https://storage.googleapis.com/planet4-norway-stateless-release/2019/03/". $basename , $text);
+	$bodytag = str_replace($attachment, "https://storage.googleapis.com/planet4-norway-stateless-release/2019/04/". $basename , $text);
 	return $bodytag;
 }
 add_action('pmxi_saved_post','post_saved',10,1);
