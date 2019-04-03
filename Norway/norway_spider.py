@@ -21,7 +21,7 @@ class AllSpider(scrapy.Spider):
 
     custom_settings = {
         'ROBOTSTXT_OBEY': 0,
-        'FEED_URI': 'gpsno_staging_v1.xml',
+        'FEED_URI': 'gpno_staging_v2.xml',
         'FEED_FORMAT': 'xml',
         'FEED_EXPORT_ENCODING': 'utf-8',
     }
@@ -110,22 +110,22 @@ class AllSpider(scrapy.Spider):
             'Keith Stewart': 'p4_username_keith',
             'Miriam Wilson'
         }
+        '''
 
         # Read in the file
-        with open( 'gpaf_staging_v1.xml', 'r' ) as file :
+        with open( 'gpno_staging_v2.xml', 'r' ) as file :
             filedata = file.read()
-
+        '''
         # Replace with correct usernames.
         for p3_author_username, p4_author_username in author_usernames.iteritems():
             filedata = filedata.replace('<author_username>' + p3_author_username, '<author_username>' + p4_author_username)
-
+        '''
         # Remove dir="ltr" attributes from elements as requested.
         filedata = filedata.replace('dir="ltr"', '')
 
         # Write the file out again
-        with open('gpaf_staging_v1.xml', 'w') as file:
+        with open('gpno_staging_v2.xml', 'w') as file:
             file.write(filedata)
-        '''
 
     # Class = 'news-list'
     # pagetypes = blogs,news
@@ -185,12 +185,11 @@ class AllSpider(scrapy.Spider):
         body_text = response.css('div.news-list div.post-content').extract_first()
         if body_text:
             body_text = body_text.replace('src="//', 'src="https://').replace('src="/', 'src="http://www.greenpeace.org/').replace('href="/', 'href="http://www.greenpeace.org/')
-            body_text = body_text.replace('<span class="btn-open">zoom</span>', '')
-            body_text = re.sub('<p dir="ltr">(.*)<\/p>', "\g<1>", body_text)
+            body_text = body_text.replace('<span class="btn-open">Zoom</span>', '')
 
         body_text = self.filter_post_content(body_text)
 
-        images=response.xpath('//*[@class="post-content"]/div/p/a//img[contains(@style, "float:")]').extract()   #img[@style="margin: 9px; float: left;"]
+        images=response.xpath('//img[contains(@style, "float:")]').extract()   #img[@style="margin: 9px; float: left;"]
         imagesD_generated = list()
         for image in images:
             imagesD_generated.append(image)
@@ -222,13 +221,13 @@ class AllSpider(scrapy.Spider):
         thumbnail = response.xpath('string(head//link[@rel="image_src"]/@href)').extract_first()
 
         unique_map_id = int(time.time() + random.randint(0, 999))
-        '''
+
         # Filter email id image and replace it with email text.
         delete_images = list()
         for image_file in imagesB_generated:
             if ("/emailimages/" in image_file):
                 # PHP webservice script url.
-                api_url = "http://localhost/OCR_webservice/email_img_to_text.php"
+                api_url = "http://127.0.0.1/ocr-api-test/email_img_to_text.php"
                 end_point_url = api_url + "?url=" + image_file
                 emailid = urllib2.urlopen(end_point_url).read(1000)
                 # Search replace the \n, <BR>, spaces from email id.
@@ -254,7 +253,6 @@ class AllSpider(scrapy.Spider):
             if ("/emailimages/" in image_file):
                 data = [image_file]
                 self.csv_writer(data, "email_images_url_list_sl_story.csv")
-        '''
 
         yield {
             'type': response.meta['p4_post_type'],
@@ -332,14 +330,20 @@ class AllSpider(scrapy.Spider):
         body_text = response.xpath('//*[@id="content"]/div[4]/div/div[2]/div[2]').extract()[0]
         if body_text:
             body_text = body_text.replace('src="//', 'src="https://').replace('src="/', 'src="http://www.greenpeace.org/').replace('href="/', 'href="http://www.greenpeace.org/')
-            body_text = body_text.replace('<span class="btn-open">zoom</span>', '')
-            body_text = re.sub('<p dir="ltr">(.*)<\/p>', "\g<1>", body_text)
+            body_text = body_text.replace('class="btn-open"', '')
+            body_text = body_text.replace('Zoom', '')
+            body_text = body_text.replace('dir="ltr"', '')
             if lead_text:
                 body_text = '<div class="leader">' + lead_text + '</div>' + body_text + response.xpath(' //*[@id="content"]/div[4]/div/div[2]/p').extract_first()
 
+        image_divs=response.xpath('//*[contains(@class, "events-box")]').extract()
+        imagesD_generated = list()
+        for image_div in image_divs:
+            imagesD_generated.append(image_div)
+
         subtitle = extract_with_css('div.article h2 span::text')
-        if subtitle:
-            body_text = '<h2>' + subtitle + '</h2><br />' + body_text
+        #if subtitle:
+        #    body_text = '<h2>' + subtitle + '</h2><br />' + body_text
 
         thumbnail = response.xpath('string(head//link[@rel="image_src"]/@href)').extract_first()
 
@@ -360,12 +364,12 @@ class AllSpider(scrapy.Spider):
 
         if date_field:
             date_field = dateutil.parser.parse(date_field)
-        '''
+
         # Filter email id image and replace it with email text.
         delete_images = list()
         for image_file in imagesB_generated:
             if ("/emailimages/" in image_file):
-                api_url = "http://localhost/OCR_webservice/email_img_to_text.php"
+                api_url = "http://127.0.0.1/ocr-api-test/email_img_to_text.php"
                 end_point_url = api_url+"?url="+image_file
                 emailid = urllib2.urlopen(end_point_url).read(1000)
                 # Search replace the \n, <BR>, spaces from email id.
@@ -390,8 +394,7 @@ class AllSpider(scrapy.Spider):
             if ("/emailimages/" in image_file):
                 data = [image_file]
                 self.csv_writer(data, "email_images_url_list_sl.csv")
-        
-        '''
+
 
         # Post data mapping logic start.
         unique_map_id = int(time.time() + random.randint(0, 999))
@@ -457,7 +460,7 @@ class AllSpider(scrapy.Spider):
             'title': extract_with_css('div.article h1 span::text'),
             #'subtitle': '',
             'author': 'Greenpeace Norway',
-            'author_username': 'greenpeace',
+            'author_username': 'Greenpeace Norway',
             #'date': response.css('#content > div.happen-box.article > div > div.text > span').re_first(r' - \s*(.*)'),
             'date': date_field,
             #'lead': extract_with_css('div.news-list div.post-content *:first-child strong::text'),
@@ -470,6 +473,7 @@ class AllSpider(scrapy.Spider):
             #'imagesB': response.xpath('//div[@class="news-list"]//div[@class="post-content"]//img[not(ancestor::a)]/@src').extract(), #don't import image if there's an a tag around it
             'imagesB': imagesB_generated,
             'imagesC': response.xpath('//div[@class="gallery"]//div[@class="img-nav"]//a/@rel').extract(), # Galleries (horrible html)
+            'imagesD': imagesD_generated,
             'pdfFiles': pdf_files_generated,
             'tags1': response.meta['tags1'],
             'tags2': response.meta['tags2'],
