@@ -21,7 +21,7 @@ class AllSpider(scrapy.Spider):
 
     custom_settings = {
         'ROBOTSTXT_OBEY': 0,
-        'FEED_URI': 'gpno_staging_v2.xml',
+        'FEED_URI': 'gpno_production_v1.xml',
         'FEED_FORMAT': 'xml',
         'FEED_EXPORT_ENCODING': 'utf-8',
     }
@@ -32,52 +32,89 @@ class AllSpider(scrapy.Spider):
     def start_requests(self):
         # v1
         start_urls = {
-            'http://www.greenpeace.org/norway/no/kampanjer/tjaresand/Statoil-and-the-tar-sands-in-Canada-/':('Story','Klima','','Energi','Klimaendringer','Olje','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2018/Eier-du-aksjer-i-Statoil-Hjelp-oss-a-stanse-grunnlovsstridig-oljeboring/':('Story','Klima','','Energi','Klimaendringer','Olje','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2016/Trump-kan-bli-en-katastrofe-for-miljoet---men-det-finnes-hap/':('Story','Klima','','Klimaendringer','','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/blogg/topp-10-dummeste-ting-sagt-om-global-oppvarmi/blog/50995/':('Story','Klima','','Klimaendringer','','','news-list','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2017/Ny-rapport---Oljefondet-bor-trekkes-ut-fra-alle-olje--og-gassaksjer/':('Story','Klima','','Olje','','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2018/Okonomer-stotter-stans-i-oljeleting/':('Story','Klima','','Klimasøksmål','','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/press/releases/2016/Norways-oil-fund-starts-divestment-from-coal/':('Story','Klima','','Olje','','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2018/Forspiller-Norge-15-milliarder-kroner-og-sjanse-til-a-gjore-noe-godt-for-regnskogen-/':('Story','Klima','','Natur','Skog','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2018/Oljefondet-inn-i-mer-fornybar-energi/':('Story','Klima','','Olje','Løsninger','Energi','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2017/New-report-The-Oilfund-should-divest-from-oil-and-gas/':('Story','Klima','','Olje','Løsninger','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2018/Greenpeace-avslorer-77-milliarder-pensjonspenger-i-kull/':('Story','Klima','','Olje','Løsninger','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2018/Avviser-direkte-anke-til-Hoyesterett-i-klimasoksmalet/':('Story','Klima','','Klimasøksmål','Olje','Løsninger','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2016/Saksoker-staten-for-klimalovbrudd/':('Story','Klima','','Klimasøksmål','Folkebevegelse','Løsninger','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2017/Oppdatering-om-klimasoksmalet/':('Story','Klima','','Klimasøksmål','Olje','Løsninger','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2018/Anker-klimadommen-til-Hoyesterett/':('Story','Klima','','Klimasøksmål','Olje','Løsninger','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2018/Norge-ma-levere-krisepakke-for-klima/':('Press Release','Klima','','Klimaendringer','Olje','Løsninger','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2016/Vil-stevne-regjeringen-for-grunnlovsbrudd/':('Story','Mennesker','','Klimasøksmål','Olje','Løsninger','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2016/Alternative-julegaver-som-sparer-miljoet-og-sprer-glede/':('Story','Mennesker','','Forbruk','Løsninger','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2017/Hvor-gronn-er-din-smarttelefon-/':('Story','Mennesker','','Forbruk','Forurensning','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/Blogg/10-tips-for-en-giftfri-garderobe/blog/55731/':('Story','Mennesker','','Forbruk','Løsninger','','news-list','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2017/Plastforurensning-av-havet-/':('Press Release','Natur','','Hav','Forurensning','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2013/Tunfisk-En-liten-guide-for-deg-som-vil-spise-barekraftig/':('Story','Natur','','Hav','Løsninger','Forbruk','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2017/Norsk-hvalfangst-er-unodvendig-og-i-strid-med-internasjonale-avtaler/':('Story','Natur','','Hav','','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2016/Moratorium-pa-arktisk-bunntraling/':('Press Release','Natur','','Hav','Løsninger','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2016/Norge-ma-forby-mikroplast/':('Story','Natur','','Hav','Forurensning','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/Blogg/trlfiske-ved-svalbard-delegger-srbar-havbunn-/blog/55698/':('Press Release','Natur','','Hav','Biodiversitet','','news-list','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2017/Mikroplastforurensning-fra-kunstgress---et-kjempeproblem/':('Story','Natur','','Hav','Forurensning','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2018/Aker-fisker-krill-i-pingvinens-matfat-/':('Story','Natur','','Hav','Biodiversitet','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2018/Greenpeace-har-funnet-mikroplast-i-avsides-omrader-av-Antarktis/':('Press Release','Natur','','Hav','Forurensning','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2018/Vil-beskytte-Antarktis/':('Story','Natur','','Hav','','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2016/Vil-verne-Svalbard-mot-farlig-fiske/':('Story','Natur','','Hav','Biodiversitet','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2017/220-000-mennesker-verden-over-ber-Norge-beskytte-havet/':('Story','Natur','','Folkebevegelse','Hav','Biodiversitet','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2018/Gode-nyheter-for-Antarktis/':('Press Release','Natur','','Hav','Biodiversitet','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2016/Syv-myter-om-GMO-og-sannheten-bak-dem/':('Story','Greenpeace','','Forbruk','','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2017/4-tiltak-du-kan-gjore-for-et-renere-hav/':('Story','Greenpeace','','Hav','Løsninger','Forbruk','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2016/Greenpeace-foreslar-losning-for-atomavfall/':('Story','Greenpeace','','Energi','Forurensning','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2017/Vare-krav-til-ny-regjering/':('Story','Greenpeace','','Løsninger','Olje','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2018/Hav-vern-og-verdiskapning-hand-i-hand/':('Story','Natur','','Hav','Biodiversitet','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/Hvordan-DU-kan-hjelpe-verdens-klima/':('Story','Mennesker','','Løsninger','Forbruk','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2018/Norge-odela-for-viktig-marint-vern-i-Antarktis/':('Press Release','Natur','','Hav','','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2018/Til-klimastreikerne---takk/':('Story','Mennesker','','Folkebevegelse','Løsninger','Klimaendringer','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/Klimaendringer-rammer-kvinner-hardest/':('Story','Mennesker','','Klimaendringer','','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2018/Oljefondet-ut-av-olje-og-gass/':('Press Release','Klima','','Olje','Energi','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2018/Oljefondet-trekker-investeringer-fra-plantasjeselskap-etter-Greenpeace-rapport/':('Press Release','Klima','','Olje','Skog','Biodiversitet','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/Derfor-bruker-vi-sivil-ulydighet/':('Story','Greenpeace','','Folkebevegelse','EngasjerDeg','','article','Migrate'),
-            'http://www.greenpeace.org/norway/no/nyheter/2018/Norge-finansierer-fortsatt-fremtidens-klimakatastrofe/':('Press Release','Klima','','Olje','Energi','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/kampanjer/tjaresand/Statoil-and-the-tar-sands-in-Canada-/':('Nyheter','Klima','','Energi','Klimaendringer','Olje','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Eier-du-aksjer-i-Statoil-Hjelp-oss-a-stanse-grunnlovsstridig-oljeboring/':('Nyheter','Klima','','Energi','Klimaendringer','Olje','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2016/Trump-kan-bli-en-katastrofe-for-miljoet---men-det-finnes-hap/':('Nyheter','Klima','','Klimaendringer','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/blogg/topp-10-dummeste-ting-sagt-om-global-oppvarmi/blog/50995/':('Nyheter','Klima','','Klimaendringer','','','news-list','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2017/Ny-rapport---Oljefondet-bor-trekkes-ut-fra-alle-olje--og-gassaksjer/':('Nyheter','Klima','','Olje','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Okonomer-stotter-stans-i-oljeleting/':('Nyheter','Klima','','Klimasøksmål','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/press/releases/2016/Norways-oil-fund-starts-divestment-from-coal/':('Nyheter','Klima','','Olje','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Forspiller-Norge-15-milliarder-kroner-og-sjanse-til-a-gjore-noe-godt-for-regnskogen-/':('Nyheter','Klima','','Natur','Skog','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Oljefondet-inn-i-mer-fornybar-energi/':('Nyheter','Klima','','Olje','Løsninger','Energi','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2017/New-report-The-Oilfund-should-divest-from-oil-and-gas/':('Nyheter','Klima','','Olje','Løsninger','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Greenpeace-avslorer-77-milliarder-pensjonspenger-i-kull/':('Nyheter','Klima','','Olje','Løsninger','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Avviser-direkte-anke-til-Hoyesterett-i-klimasoksmalet/':('Nyheter','Klima','','Klimasøksmål','Olje','Løsninger','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2016/Saksoker-staten-for-klimalovbrudd/':('Nyheter','Klima','','Klimasøksmål','Folkebevegelse','Løsninger','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2017/Oppdatering-om-klimasoksmalet/':('Nyheter','Klima','','Klimasøksmål','Olje','Løsninger','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Anker-klimadommen-til-Hoyesterett/':('Nyheter','Klima','','Klimasøksmål','Olje','Løsninger','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Norge-ma-levere-krisepakke-for-klima/':('Pressemelding','Klima','','Klimaendringer','Olje','Løsninger','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2016/Vil-stevne-regjeringen-for-grunnlovsbrudd/':('Nyheter','Mennesker','','Klimasøksmål','Olje','Løsninger','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2016/Alternative-julegaver-som-sparer-miljoet-og-sprer-glede/':('Nyheter','Mennesker','','Forbruk','Løsninger','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2017/Hvor-gronn-er-din-smarttelefon-/':('Nyheter','Mennesker','','Forbruk','Forurensning','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/Blogg/10-tips-for-en-giftfri-garderobe/blog/55731/':('Nyheter','Mennesker','','Forbruk','Løsninger','','news-list','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2017/Plastforurensning-av-havet-/':('Pressemelding','Natur','','Hav','Forurensning','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2013/Tunfisk-En-liten-guide-for-deg-som-vil-spise-barekraftig/':('Nyheter','Natur','','Hav','Løsninger','Forbruk','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2017/Norsk-hvalfangst-er-unodvendig-og-i-strid-med-internasjonale-avtaler/':('Nyheter','Natur','','Hav','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2016/Moratorium-pa-arktisk-bunntraling/':('Pressemelding','Natur','','Hav','Løsninger','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2016/Norge-ma-forby-mikroplast/':('Nyheter','Natur','','Hav','Forurensning','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/Blogg/trlfiske-ved-svalbard-delegger-srbar-havbunn-/blog/55698/':('Pressemelding','Natur','','Hav','Biodiversitet','','news-list','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2017/Mikroplastforurensning-fra-kunstgress---et-kjempeproblem/':('Nyheter','Natur','','Hav','Forurensning','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Aker-fisker-krill-i-pingvinens-matfat-/':('Nyheter','Natur','','Hav','Biodiversitet','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Greenpeace-har-funnet-mikroplast-i-avsides-omrader-av-Antarktis/':('Pressemelding','Natur','','Hav','Forurensning','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Vil-beskytte-Antarktis/':('Nyheter','Natur','','Hav','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2016/Vil-verne-Svalbard-mot-farlig-fiske/':('Nyheter','Natur','','Hav','Biodiversitet','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2017/220-000-mennesker-verden-over-ber-Norge-beskytte-havet/':('Nyheter','Natur','','Folkebevegelse','Hav','Biodiversitet','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Gode-nyheter-for-Antarktis/':('Pressemelding','Natur','','Hav','Biodiversitet','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2016/Syv-myter-om-GMO-og-sannheten-bak-dem/':('Nyheter','Greenpeace','','Forbruk','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2017/4-tiltak-du-kan-gjore-for-et-renere-hav/':('Nyheter','Greenpeace','','Hav','Løsninger','Forbruk','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2016/Greenpeace-foreslar-losning-for-atomavfall/':('Nyheter','Greenpeace','','Energi','Forurensning','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2017/Vare-krav-til-ny-regjering/':('Nyheter','Greenpeace','','Løsninger','Olje','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Hav-vern-og-verdiskapning-hand-i-hand/':('Nyheter','Natur','','Hav','Biodiversitet','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/Hvordan-DU-kan-hjelpe-verdens-klima/':('Nyheter','Mennesker','','Løsninger','Forbruk','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Norge-odela-for-viktig-marint-vern-i-Antarktis/':('Pressemelding','Natur','','Hav','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Til-klimastreikerne---takk/':('Nyheter','Mennesker','','Folkebevegelse','Løsninger','Klimaendringer','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/Klimaendringer-rammer-kvinner-hardest/':('Nyheter','Mennesker','','Klimaendringer','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Oljefondet-ut-av-olje-og-gass/':('Pressemelding','Klima','','Olje','Energi','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Oljefondet-trekker-investeringer-fra-plantasjeselskap-etter-Greenpeace-rapport/':('Pressemelding','Klima','','Olje','Skog','Biodiversitet','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/Derfor-bruker-vi-sivil-ulydighet/':('Nyheter','Greenpeace','','Folkebevegelse','EngasjerDeg','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Norge-finansierer-fortsatt-fremtidens-klimakatastrofe/':('Pressemelding','Klima','','Olje','Energi','','article','Migrate'),
+
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Mindre-kjott-mer-gront/':('Nyheter','Mennesker','','Forbruk','Klimaendringer','Løsninger','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2016/Appell-om-ulv/':('Pressemelding','Natur','','Biodiversitet','Natur','Folkebevegelse','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2017/Klimasoksmalet/':('Nyheter','Klima','','Olje','Klimasøksmål','Energi','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/press/releases/Greenpeace-er-arrestert/':('Nyheter','Klima','','Olje','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2017/Historisk-klimarettssak-avsluttet/':('Nyheter','Klima','','Olje','Klimasøksmål','Energi','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2017/Ny-rapport-Alvorlige-funn-viser-at-regjeringen-har-jukset-om-arktisk-olje/':('Pressemelding','Klima','','Olje','Klimasøksmål','Energi','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/Norge-er-verdens-syvende-storste-eksportor-av-CO2-utslipp/':('Pressemelding','Klima','','Olje','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2017/Klimarettssaken-en-seier-for-miljoet/':('Nyheter','Klima','','Olje','Klimasøksmål','Energi','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2016/Klimasoksmalet-skal-i-retten/':('Pressemelding','Klima','','Olje','Klimasøksmål','Energi','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2017/-Klimasoksmalet---dag-for-dag/':('Nyheter','Klima','','Klimasøksmål','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Greenpeace-and-Nature-and-Youth-take-the-Norwegian-Government-to-the-Supreme-Court/':('Pressemelding','Klima','','Klimasøksmål','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/blogg/et-klimasksml-som-utfordrer-olja/blog/58240/':('Nyheter','Klima','','Klimasøksmål','','','news-list','Migrate'),
+            'http://www.greenpeace.org/norway/no/press/releases/Ingen-rett-til-a-borde/':('Pressemelding','Klima','','Olje','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2017/Klimarettssak-i-november/':('Pressemelding','Klima','','Klimasøksmål','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2017/Skal-Statoil-virkelig-fa-bore-fritt-i-alkefuglenes-svommetrekk-og-oppsamlingsomrader/':('Nyheter','Klima','','Olje','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2016/Norway-allows-dangerous-oil-exploration-in-fragile-Artic-waters/':('Pressemelding','Klima','','Olje','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2017/Krever-at-Statoil-avlyser-oljeboring/':('Pressemelding','Klima','','Olje','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Historisk-klima-dom-i-Nederland/':('Nyheter','Klima','','Klimasøksmål','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/press/releases/Greenpeace-aktivister-fri-fra-arrest/':('Pressemelding','Klima','','Olje','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2017/Oljeleting-i-Barentshavet-nord-uten-grobunn-i-virkeligheten/':('Pressemelding','Klima','','Olje','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/Tingretten-frifinner-staten/':('Pressemelding','Klima','','Klimasøksmål','Olje','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2017/Program-for-Kulturhuset-under-rettssaken/':('Nyheter','Klima','','Klimasøksmål','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2017/Forste-uke-av-klimarettssaken-oppsummert/':('Nyheter','Klima','','Klimasøksmål','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Ny-oljeleting-i-Barentshavet/':('Pressemelding','Klima','','Olje','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/blogg/Aksjonsblogg-Norsk-oljepolitikk-henger-ikke-pa-greip/':('Nyheter','Klima','','Olje','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2017/Dom-i-klimasoksmal/':('Pressemelding','Klima','','Klimasøksmål','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/reports/Media-Briefing-Lawsuit-2017/':('Nyheter','Klima','','Klimasøksmål','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/blogg/hva-er-iskanten-og-hvorfor-er-den-viktig/blog/51204/':('Nyheter','Klima','','Olje','','','news-list','Migrate'),
+            'http://www.greenpeace.org/norway/no/press/releases/Krever-stans-i-ny-oljeboring/':('Pressemelding','Klima','','Olje','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/reports/Media-Briefing-Oil-Drilling-in-the-Barents-Sea/':('Pressemelding','Klima','','Olje','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/blogg/9-ting-du-ikke-visste-om-bjrnya/blog/49329/':('Nyheter','Klima','','Olje','','','news-list','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2016/Klimasoksmal-mottok-pris/':('Nyheter','Klima','','Klimasøksmål','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Staten-sier-nei-til-hoyesterett-/':('Pressemelding','Klima','','Klimasøksmål','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Oljesvart-utdeling-i-omstridt-TFO-ordning/':('Pressemelding','Klima','','Olje','','','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2017/Gi-regnskogen-i-Kongo-en-sjanse/':('Nyheter','Natur','','Skog','Klimaendringer','Biodiversitet','article','Migrate'),
+            'http://www.greenpeace.org/norway/no/nyheter/2018/Spikeren-i-kista-for-palmeolje-pa-tanken/':('Nyheter','Natur','','Skog','Klimaendringer','Biodiversitet','article','Migrate'),
              }
 
         for url,data in start_urls.iteritems():
@@ -104,27 +141,31 @@ class AllSpider(scrapy.Spider):
             yield request
 
         # Migrating authors/thumbnails
-        '''
         author_usernames = {
-            'greenpeace': 'Greenpeace P4',
-            'Keith Stewart': 'p4_username_keith',
-            'Miriam Wilson'
+            '': 'Greenpeace Norway',
+            'tjacobso': 'tjacobso',
+            'ylvvethe': 'ylvvethe',
+            'tgulowse': 'tgulowse',
+            'etellnes': 'etellnes',
+            'Therese Jacobson': 'tjacobso',
+            'Ylva Vethe': 'ylvvethe',
+            'Truls Gulowsen': 'tgulowse',
+            'Erlend Tellnes': 'etellnes'
         }
-        '''
 
         # Read in the file
-        with open( 'gpno_staging_v2.xml', 'r' ) as file :
+        with open( 'gpno_production_v1.xml', 'r' ) as file :
             filedata = file.read()
-        '''
+
         # Replace with correct usernames.
         for p3_author_username, p4_author_username in author_usernames.iteritems():
-            filedata = filedata.replace('<author_username>' + p3_author_username, '<author_username>' + p4_author_username)
-        '''
+            filedata = filedata.replace('<author_username>' + p3_author_username + '</author_username>', '<author_username>' + p4_author_username + '</author_username>')
+
         # Remove dir="ltr" attributes from elements as requested.
         filedata = filedata.replace('dir="ltr"', '')
 
         # Write the file out again
-        with open('gpno_staging_v2.xml', 'w') as file:
+        with open('gpno_production_v1.xml', 'w') as file:
             file.write(filedata)
 
     # Class = 'news-list'
@@ -171,7 +212,7 @@ class AllSpider(scrapy.Spider):
             date_field = date_field.replace(" kl.", "")
             date_field = date_field.replace(" v", "")
             date_field = date_field.replace(" en ", " ") #spanish
-            date_field = date_field.replace(" på ", " ") #swedish
+            date_field = date_field.replace(" på ", " ") #swedish, norwegian
             date_field = date_field.replace(" di ", " ") #indonesian
             date_field = date_field.replace(" na ", " ") #slovenian
 
@@ -199,23 +240,10 @@ class AllSpider(scrapy.Spider):
         for blockquote in blockquotes:
             blockquotes_generated.append(blockquote)
 
-        author_username = response.xpath('string(//div[@class="news-list"]/ul/li/*/*/span[@class="caption"]/strong/span[@class="green1"]/a/@href)').extract_first()
+        author_username = response.xpath('string(//div[@class="news-list"]/ul/li/*/*/span[@class="caption"]/span[@class="green1"]/strong)').extract_first()
 
         if (author_username != 'None'):
-            Segments  = author_username.strip().split('/')
-            try:                                            #if ( ( len(Segments) == 4 ) and Segments[4] ):
-                if ( Segments[5] ):
-                    author_username = Segments[5]
-            except IndexError:
-                try:  # if ( ( len(Segments) == 4 ) and Segments[4] ):
-                    if (Segments[3]):
-                        author_username = Segments[3]
-                except IndexError:
-                    author_username = ''
-
-        author_name = response.xpath('string(//div[@class="news-list"]/ul/li/*/*/span[@class="caption"]/strong/span[@class="green1"])').extract()[0]
-        if ( author_name ):
-            author_name = author_name.strip()
+            author_username = author_username.strip().replace('av ', '')
 
         # Get the thumbnail of the post as requested.
         thumbnail = response.xpath('string(head//link[@rel="image_src"]/@href)').extract_first()
@@ -259,7 +287,7 @@ class AllSpider(scrapy.Spider):
             'p3_image_gallery': p3_image_gallery,
             'title': extract_with_css('div.news-list h1::text'),
             #'subtitle': '',
-            'author': author_name,
+            'author': author_username,
             'author_username': author_username,
             'date': date_field,
             #'lead': extract_with_css('div.news-list div.post-content *:first-child strong::text'),
@@ -341,7 +369,7 @@ class AllSpider(scrapy.Spider):
         for image_div in image_divs:
             imagesD_generated.append(image_div)
 
-        subtitle = extract_with_css('div.article h2 span::text')
+        #subtitle = extract_with_css('div.article h2 span::text')
         #if subtitle:
         #    body_text = '<h2>' + subtitle + '</h2><br />' + body_text
 
@@ -356,7 +384,7 @@ class AllSpider(scrapy.Spider):
             date_field = date_field.replace(" kl.", "")
             date_field = date_field.replace(" v", "")
             date_field = date_field.replace(" en ", " ") #spanish
-            date_field = date_field.replace(" på ", " ") #swedish
+            date_field = date_field.replace(" på ", " ") #swedish, norwegian
             date_field = date_field.replace(" di ", " ") #indonesian
             date_field = date_field.replace(" na ", " ") #slovenian
         except IndexError:
