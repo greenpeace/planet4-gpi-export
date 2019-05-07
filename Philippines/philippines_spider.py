@@ -32,7 +32,22 @@ class AllSpider(scrapy.Spider):
     def start_requests(self):
         
         start_urls = {
-        
+            'http://www.greenpeace.org/seasia/ph/press/releases/Plastic-invades-centre-of-the-centre-of-global-biodiversity-hotspot/':('Press Release','Sustainability','','Plastic','Oceans','','article','Migrate'),
+            'https://www.greenpeace.org/seasia/ph/press/releases/SWS-Survey-on-Eating-Meat/':('Publication','Sustainability','','Food','','','article','Migrate'),
+            'https://www.greenpeace.org/seasia/ph/News/greenpeace-philippine-blog/ompong-through-a-farmers-eyes/blog/61897/':('Story','Sustainability','','Food','','','news-list','Migrate'),
+            'https://www.greenpeace.org/seasia/ph/press/releases/Voters-want-candidates-who-will-address-plastic-pollution-survey-reveals/':('Press Release','Society','','Plastic','Democracy','','article','Migrate'),
+            'https://www.greenpeace.org/seasia/ph/press/releases/IsyuHindiKandidato-wants-us-to-talk-about-issues-that-matter/':('Press Release','Society','','Activism','Democracy','','article','Migrate'),
+            'https://www.greenpeace.org/seasia/ph/press/releases/Green-groups-to-Nestle-Own-up-pay-up-clean-up-your-act/':('Press Release','Sustainability','','Plastic','','','article','Migrate'),
+            'https://www.greenpeace.org/seasia/ph/press/releases/Greenpeace-Philippines-statement-on-the-dead-whale-in-the-Philippines-with-40kgs-of-plastic-in-its-stomach/':('Press Release','Sustainability','','Plastic','Oceans','','article','Migrate'),
+            'https://www.greenpeace.org/seasia/ph/press/releases/Cebu-breaks-free-from-plastic-onboard-the-Rainbow-Warrior/':('Press Release','Sustainability','','Plastic','Ships','','article','Migrate'),
+            'https://www.greenpeace.org/seasia/ph/press/releases/Greenpeace-statement-on-the-high-ranking-of-Philippine-cities-in-World-Air-Quality-Report/':('Press Release','Sustainability','','Pollution','','','article','Migrate'),
+            'https://www.greenpeace.org/seasia/ph/press/releases/Greenpeace-action-in-Manila-Bay-protests-broken-system-from-plastic-production-leading-to-massive-waste-crisis/':('Press Release','Sustainability','','Plastic','Pollution','','article','Migrate'),
+            'https://www.greenpeace.org/seasia/ph/News/greenpeace-philippine-blog/why-im-joining-the-greenpeace-ships-to-fight-/blog/62138/':('Story','Sustainability','','Ships','Plastic','','news-list','Migrate'),
+            'https://www.greenpeace.org/seasia/ph/News/greenpeace-philippine-blog/we-are-not-a-nation-of-40-million-cowards-but/blog/62131/':('Story','Community','','Bataris','Democracy','','news-list','Migrate'),
+            'https://www.greenpeace.org/seasia/ph/press/reports/From-Sea-to-Can-2018-Southeast-Asia-Canned-Tuna-Ranking/':('Press Release','Sustainability','','Oceans','Food','','article','Migrate'),
+            'https://www.greenpeace.org/seasia/ph/press/reports/Sprouting-from-Disaster/':('Press Release','Sustainability','','Food','','','article','Migrate'),
+            'https://www.greenpeace.org/seasia/ph/press/reports/Time-to-Ban-Single-Use-Plastics-and-Protect-the-Oceans/':('Press Release','Sustainability','','Plastic','Oceans','','article','Migrate'),
+            'https://www.greenpeace.org/seasia/ph/About-us/Greenpeace-Southeast-Asia/Annual-reports/Annual-Report-2015/':('Publication','Community','','AboutUs','','','article','Migrate'),
         }
 
         for url,data in start_urls.iteritems():
