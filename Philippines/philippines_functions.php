@@ -26,11 +26,19 @@ function add_blockquote_style( $text, $blockquote1, $blockquote2, $blockquote3 )
  *
  * @return mixed
  */
-function add_image_class( $text, $image ) {
-	if ( strpos( $image, 'float: left;' ) !== false ) {
-		$text = str_replace( '<img', '<img class="alignleft"', $text );
-	} elseif ( strpos( $image, 'float: right;') !== false ) {
-		$text = str_replace( '<img', '<img class="alignright"', $text );
+function align_images( $text, ...$elements  ) {
+	foreach( $elements as $element ) {
+		if ( strpos( $element, 'float: left;' ) !== false ) {
+			$text = str_replace( '<img', '<img class="alignleft"', $text );
+		} elseif ( strpos( $element, 'float: right;' ) !== false ) {
+			$text = str_replace( '<img', '<img class="alignright"', $text );
+		} elseif ( strpos( $element, 'events-box middle-box left' ) !== false ) {
+			$text = str_replace( 'events-box middle-box left', 'events-box middle-box alignleft', $text );
+			$text = str_replace( '<img', '<img class="Thumbnail alignleft"', $text );
+		} elseif ( strpos( $element, 'events-box middle-box right' ) !== false ) {
+			$text = str_replace( 'events-box middle-box right', 'events-box middle-box alignright', $text );
+			$text = str_replace( '<img', '<img class="Thumbnail alignright"', $text );
+		}
 	}
 	return $text;
 }
@@ -67,7 +75,7 @@ function add_image_class( $text, $image ) {
  * @return mixed
  */
 function replace_all_attachments( $text, $pdf, $images1, $images2, $images3, $images4, $images5, $images6, $images7, $images8, $images9, $images10,
-	$images11, $images12, $images13, $images14, $images15, $images16, $images17, $images18, $images19, $images20, $images21, $images22, $images23, $images24, $images25, $images26 ) {
+	$images11, $images12, $images13, $images14, $images15, $images16, $images17, $images18, $images19, $images20, $images21, $images22, $images23 = '', $images24 = '', $images25 = '', $images26 = '' ) {
 	$text = replace_attachment($text, $pdf);
 	$text = replace_attachment($text, $images1);
 	$text = replace_attachment($text, $images2);
