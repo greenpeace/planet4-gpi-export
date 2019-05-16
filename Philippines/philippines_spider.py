@@ -21,7 +21,7 @@ class AllSpider(scrapy.Spider):
 
     custom_settings = {
         'ROBOTSTXT_OBEY': 0,
-        'FEED_URI': 'gpph_staging_v2.xml',
+        'FEED_URI': 'gpph_staging_v2_B4.xml',
         'FEED_FORMAT': 'xml',
         'FEED_EXPORT_ENCODING': 'utf-8',
     }
@@ -31,7 +31,9 @@ class AllSpider(scrapy.Spider):
 
     def start_requests(self):
         
+        # v2
         start_urls = {
+            # B1
             'http://www.greenpeace.org/seasia/ph/News/greenpeace-philippine-blog/4-findings-from-new-york-hearings-that-give-r/blog/61947/':('Press Release','Sustainability','','Climate','Justice','','news-list','Migrate'),
             'http://www.greenpeace.org/seasia/ph/News/greenpeace-philippine-blog/6-filipinas-who-fight-for-climate-justice/blog/58896/':('Story','Society','','Climate','Justice','','news-list','Migrate'),
             'http://www.greenpeace.org/seasia/ph/News/greenpeace-philippine-blog/an-open-letter-of-solidarity-and-support/blog/47355/':('Story','Society','','Climate','Justice','','news-list','Migrate'),
@@ -77,6 +79,8 @@ class AllSpider(scrapy.Spider):
             'http://www.greenpeace.org/seasia/ph/News/greenpeace-philippine-blog/we-have-the-power-to-change-the-tuna-industry/blog/62045/':('Story','Sustainability','','Oceans','Food','','news-list','Migrate'),
             'http://www.greenpeace.org/seasia/ph/News/greenpeace-philippine-blog/why-bianca-king-went-plant-based-with-her-die/blog/61740/':('Story','Sustainability','','Food','','','news-list','Migrate'),
             'http://www.greenpeace.org/seasia/ph/News/greenpeace-philippine-blog/why-im-joining-the-greenpeace-ships-to-fight-/blog/62138/':('Story','Sustainability','','Ships','Plastic','','news-list','Migrate'),
+
+            # B2
             'http://www.greenpeace.org/seasia/ph/News/greenpeace-philippine-blog/world-water-day-breaking-the-wasteful-habit/blog/44446/':('Story','Sustainability','','Pollution','','','news-list','Migrate'),
             'http://www.greenpeace.org/seasia/ph/News/news-stories/a-climate-of-tragedy-in-the-ph/':('Story','Sustainability','','Climate','Justice','','article','Migrate'),
             'http://www.greenpeace.org/seasia/ph/News/news-stories/a-hero-for-the-environment/':('Story','Community','','AboutUs','Activism','','article','Migrate'),
@@ -122,6 +126,8 @@ class AllSpider(scrapy.Spider):
             'http://www.greenpeace.org/seasia/ph/press/releases/Fisherfolk-count-gains-one-year-after-Amended-Fisheries-Code/':('Press Release','Sustainability','','Oceans','Food','','article','Migrate'),
             'http://www.greenpeace.org/seasia/ph/press/releases/Fisherfolk-groups-to-President-Aquino--Save-Philippine-fisheries-adopt-Roadmap-to-Recovery/':('Press Release','Sustainability','','Oceans','','','article','Migrate'),
             'http://www.greenpeace.org/seasia/ph/press/releases/Fisheries-stakeholders-on-the-effective-implementation-of-RA-10654/':('Press Release','Sustainability','','Oceans','Justice','','article','Migrate'),
+
+            # B3
             'http://www.greenpeace.org/seasia/ph/press/releases/For-the-first-time-fossil-fuel-companies-face-national-human-rights-complaint-on-climate-change/':('Press Release','Society','','Climate','Justice','','article','Migrate'),
             'http://www.greenpeace.org/seasia/ph/press/releases/Garbage-engulfing-Manila-Philippines-after-severe-storm-highlights-plastic-and-climate-crises/':('Press Release','Sustainability','','Plastic','Climate','','article','Migrate'),
             'http://www.greenpeace.org/seasia/ph/press/releases/Global-survey-reveals-FMCG-companies-contribution-to-plastic-pollution-crisis/':('Press Release','Sustainability','','Plastic','','','article','Migrate'),
@@ -167,6 +173,8 @@ class AllSpider(scrapy.Spider):
             'http://www.greenpeace.org/seasia/ph/press/releases/New-Greenpeace-report-estimates-coal-plant-emissions-could-kill-2400-Filipinos-per-year/':('Press Release','Sustainability','','Energy','Justice','','article','Migrate'),
             'http://www.greenpeace.org/seasia/ph/press/releases/Over-90-of-sampled-salt-brands-globally-found-to-contain-microplastics/':('Press Release','Sustainability','','Plastic','Food','','article','Migrate'),
             'http://www.greenpeace.org/seasia/ph/press/releases/People-and-planet-not-profit---Greenpeace-activists-demand-Shell--show-up-at-climate-change-and-human-rights-inquiry/':('Press Release','Sustainability','','Climate','Justice','','article','Migrate'),
+
+            # B4
             'http://www.greenpeace.org/seasia/ph/press/releases/Petitioners-consolidated-reply-to-the-respondent-Carbon-Majors-in-the-National-Public-Inquiry-being-conducted-by-Commission-on-Human-Rights-of-the-Philippines/':('Press Release','Society','','Democracy','Climate','','article','Migrate'),
             'http://www.greenpeace.org/seasia/ph/press/releases/Philippine-canneries-fall-short-on-sustainability-and-social-responsibility-issues--Greenpeace/':('Press Release','Sustainability','','Food','Oceans','','article','Migrate'),
             'http://www.greenpeace.org/seasia/ph/press/releases/philippine-fishing-companies-i/':('Press Release','Sustainability','','Oceans','','','article','Migrate'),
@@ -341,7 +349,7 @@ class AllSpider(scrapy.Spider):
         for blockquote in blockquotes:
             blockquotes_generated.append(blockquote)
 
-        author_username = response.xpath('string(//div[@class="news-list"]/ul/li/*/*/span[@class="caption"]/strong/span[@class="green1"]/a/@href)').extract_first()
+        author_username = response.xpath('string(//div[@class="news-list"]/ul/li/*/*/span[@class="caption"]/span[@class="green1"]/strong/a/@href)').extract_first()
 
         if (author_username != 'None'):
             Segments  = author_username.strip().split('/')
@@ -355,7 +363,7 @@ class AllSpider(scrapy.Spider):
                 except IndexError:
                     author_username = ''
 
-        author_name = response.xpath('string(//div[@class="news-list"]/ul/li/*/*/span[@class="caption"]/strong/span[@class="green1"])').extract()[0]
+        author_name = response.xpath('string(//div[@class="news-list"]/ul/li/*/*/span[@class="caption"]/span[@class="green1"]/strong)').extract()[0]
         if ( author_name ):
             author_name = author_name.strip()
 
@@ -363,7 +371,7 @@ class AllSpider(scrapy.Spider):
         thumbnail = response.xpath('string(head//link[@rel="image_src"]/@href)').extract_first()
 
         unique_map_id = int(time.time() + random.randint(0, 999))
-        '''
+
         # Filter email id image and replace it with email text.
         delete_images = list()
         for image_file in imagesB_generated:
@@ -387,13 +395,16 @@ class AllSpider(scrapy.Spider):
         for image_file in delete_images:
             imagesB_generated.remove(image_file)
 
-        '''       
+        """
         #list images urls
         for image_file in imagesB_generated:
             if ("/emailimages/" in image_file):
                 data = [image_file]
                 self.csv_writer(data, "email_images_url_list.csv")
-        
+        """
+        # List authors
+        data = [author_name,author_username]
+        self.csv_writer(data, "author_list.csv")
 
         yield {
             'type': response.meta['p4_post_type'],
@@ -499,7 +510,7 @@ class AllSpider(scrapy.Spider):
 
         if date_field:
             date_field = dateutil.parser.parse(date_field)
-        '''
+
         # Filter email id image and replace it with email text.
         delete_images = list()
         for image_file in imagesB_generated:
@@ -522,14 +533,14 @@ class AllSpider(scrapy.Spider):
         for image_file in delete_images:
             imagesB_generated.remove(image_file)
 
-        '''
+        """
         #list images urls
         for image_file in imagesB_generated:
             if ("/emailimages/" in image_file):
                 data = [image_file]
                 self.csv_writer(data, "email_images_url_list.csv")
         
-
+        """
 
         # Post data mapping logic start.
         unique_map_id = int(time.time() + random.randint(0, 999))
