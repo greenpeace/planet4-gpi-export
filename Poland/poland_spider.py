@@ -21,7 +21,7 @@ class AllSpider(scrapy.Spider):
 
     custom_settings = {
         'ROBOTSTXT_OBEY': 0,
-        'FEED_URI': 'gppo_staging_v1.xml',
+        'FEED_URI': 'gppl_staging_v1_new.xml',
         'FEED_FORMAT': 'xml',
         'FEED_EXPORT_ENCODING': 'utf-8',
     }
@@ -30,9 +30,43 @@ class AllSpider(scrapy.Spider):
     __connector_csv_log_file = "connector_csv_log_v1"
 
     def start_requests(self):
-        
+
+        start_urls ={
+            'http://www.greenpeace.org/poland/pl/press-centre/dokumenty-i-raporty/Apel-do-ministra-Ardanowskiego-o-cofniecie-decyzji-zezwalajacej-na-stosowanie-zapraw-neonikotynoidowych-w-uprawie-rzepaku/':('News','Przyroda','','Pszczoły','Rolnictwo','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/press-centre/dokumenty-i-raporty/Apel-Greenpeace-i-lekarzy/':('News','Klimat i Energia','','Smog','Węgiel','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/press-centre/dokumenty-i-raporty/apel-w-sprawie-ochrony-puszczy/':('News','Przyroda','','Lasy','PuszczaBiałowieska','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/wydarzenia/polska/Akcja-Greenpeace-w-Sejmie---Posowie-pod-obserwacj/':('News','Przyroda','','OchronaPrzyrody','Aktywizm','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/wydarzenia/polska/Akcja-w-czasie-przemowienia-Obamy-Niezaleno---prawdziwi-liderzy-wybieraj-OZE/':('News','Klimat i Energia','','CzystaEnergia','Aktywizm','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/wydarzenia/polska/Aktywisci-Greenpeace-apeluja-z-ministerstwa-srodowiska-CALA-PUSZCZA-PARKIEM-NARODOWYM/':('News','Przyroda','','PuszczaBiałowieska','Aktywizm','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/wydarzenia/polska/Energetyka-obywatelska--czas-na-dobre-zmiany/':('News','Klimat i Energia','','CzystaEnergia','','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/wydarzenia/polska/Energia-odnawialna-czy-ponad-podziaami-partyjnymi/':('News','Klimat i Energia','','CzystaEnergia','','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/wydarzenia/polska/energia-odnawialna/':('News','Klimat i Energia','','CzystaEnergia','','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/wydarzenia/polska/v/':('News','Przyroda','','OchronaPrzyrody','','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/wydarzenia/polska/via-baltica-nie-przez-dolin-r/':('News','Przyroda','','OchronaPrzyrody','','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/wydarzenia/polska/via-baltica-nie-t-dy-droga/':('News','Przyroda','','OchronaPrzyrody','','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/press-centre/dokumenty-i-raporty/ustawy-MS-koniec-ochrony-przyrody/':('Article','Przyroda','','OchronaPrzyrody','','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/wydarzenia/polska/Poegnanie-Janusza-Korbela-1946-2015/':('Article','Ludzie','','PuszczaBiałowieska','','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/press-centre/dokumenty-i-raporty/odpowied-greenpeace-na-zarzut/':('Comment','Przyroda','','SubstancjeToksyczne','','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/press-centre/dokumenty-i-raporty/opinia-prop/':('Comment','Przyroda','','OchronaPrzyrody','','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/wydarzenia/polska/Komentarz-Marka-Jozefiaka-z-Greenpeace-Polska-odnosnie-opublikowanego-dzis-raportu-Najwyzszej-Izby-Kontroli/':('Comment','Klimat i Energia','','Smog','','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/wydarzenia/polska/Komentarz-Roberta-Cyglickiego-w-zwizku-z-wystpieniem-papiea-Franciszka-przed-Zgromadzeniem-Ogolnym-ONZ/':('Comment','Klimat i Energia','','OchronaPrzyrody','Klimat','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/press-centre/dokumenty-i-raporty/Analiza-Unijne-cele-w-zakresie-efektywnoci-energetycznej-a-bezpieczestwo-energetyczne-Polski-do-2030-roku/':('Report','Klimat i Energia','','Klimat','','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/press-centre/dokumenty-i-raporty/Awaryjny-zrzut-sciekow-do-Motlawy/':('Report','Przyroda','','OchronaPrzyrody','SubstancjeToksyczne','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/press-centre/dokumenty-i-raporty/Ekspertyza-IEO-Rzad-nie-wspiera-prosumentow/':('Report','Klimat i Energia','','CzystaEnergia','','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/press-centre/dokumenty-i-raporty/eletrownie-jadrowe-w-polsce-i-ich-alternatywa/':('Report','Klimat i Energia','','PaliwaKopalne','','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/press-centre/dokumenty-i-raporty/Raport-Polskie-przedszkola-w-smogu/':('Report','Klimat i Energia','','Smog','Węgiel','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/press-centre/dokumenty-i-raporty/Raport-Przyszo-pszczo-wiat-bez-pestycydow---w-stron-rolnictwa-ekologicznego/':('Report','Przyroda','','Pszczoły','OchronaPrzyrody','','article','Migrate'),
+        }
+
         start_urls = {
-        
+            'http://www.greenpeace.org/poland/pl/wydarzenia/polska/Greenpeace-na-siedzibach-PiS-i-PO-z-przeslaniem-Polska-bez-wegla-2030/':('News','Klimat i Energia','','Węgiel','Aktywizm','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/Aktywisci-pod-specjalnym-nadzorem---komentarz-dyrektora-Greenpeace/':('Comment','Greenpeace','','ONas','','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/wydarzenia/polska/Minister-rolnictwa-konsekwentnie-szkodzi-pszczoom/':('News','Przyroda','','Pszczoły','Rolnictwo','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/wydarzenia/polska/Dorota-Wellman-zachca-do-ochrony-pszczo/':('News','Przyroda','','Pszczoły','','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/wydarzenia/polska/znani-decyduja/':('News','Klimat i Energia','','Klimat','','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/press-centre/dokumenty-i-raporty/Pozary-skladowisk-co-mozesz-zrobic/':('Report','Przyroda','','OchronaPrzyrody','SubstancjeToksyczne','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/wydarzenia/polska/Dziaania-Szyszki-pod-lup-ekspertow-UNESCO/':('News','Przyroda','','PuszczaBiałowieska','','','article','Migrate'),
+            'http://www.greenpeace.org/poland/pl/wydarzenia/swiat/600-nagich-aktywistow-na-lodowcu/':('News','Klimat i Energia','','Klimat','Aktywizm','','article','Migrate'),
         }
 
         for url,data in start_urls.iteritems():
@@ -129,7 +163,7 @@ class AllSpider(scrapy.Spider):
             date_field = date_field.replace(" på ", " ") #swedish
             date_field = date_field.replace(" di ", " ") #indonesian
             date_field = date_field.replace(" na ", " ") #slovenian
-            date_field = date_field.replace(" o ", " ") #polish
+            date_field = date_field.replace(" o ", " ")  # polish
 
             date_field = dateutil.parser.parse(date_field)
 
@@ -156,7 +190,7 @@ class AllSpider(scrapy.Spider):
         for blockquote in blockquotes:
             blockquotes_generated.append(blockquote)
 
-        author_username = response.xpath('string(//div[@class="news-list"]/ul/li/*/*/span[@class="caption"]/strong/span[@class="green1"]/a/@href)').extract_first()
+        author_username = response.xpath('string(//div[@class="news-list"]/ul/li/*/*/span[@class="caption"]/span[@class="green1"]/strong/a/@href)').extract_first()
 
         if (author_username != 'None'):
             Segments  = author_username.strip().split('/')
@@ -170,7 +204,7 @@ class AllSpider(scrapy.Spider):
                 except IndexError:
                     author_username = ''
 
-        author_name = response.xpath('string(//div[@class="news-list"]/ul/li/*/*/span[@class="caption"]/strong/span[@class="green1"])').extract()[0]
+        author_name = response.xpath('string(//div[@class="news-list"]/ul/li/*/*/span[@class="caption"]/span[@class="green1"]/strong)').extract()[0]
         if ( author_name ):
             author_name = author_name.strip()
 
@@ -178,7 +212,7 @@ class AllSpider(scrapy.Spider):
         thumbnail = response.xpath('string(head//link[@rel="image_src"]/@href)').extract_first()
 
         unique_map_id = int(time.time() + random.randint(0, 999))
-        '''
+
         # Filter email id image and replace it with email text.
         delete_images = list()
         for image_file in imagesB_generated:
@@ -202,13 +236,16 @@ class AllSpider(scrapy.Spider):
         for image_file in delete_images:
             imagesB_generated.remove(image_file)
 
-                
+        """
         #list images urls
         for image_file in imagesB_generated:
             if ("/emailimages/" in image_file):
                 data = [image_file]
-                self.csv_writer(data, "email_images_url_list_fr_story.csv")
-        '''
+                self.csv_writer(data, "email_images_url_list.csv")
+        """
+        # List authors
+        #data = [author_name,author_username]
+        #self.csv_writer(data, "author_list.csv")
 
         yield {
             'type': response.meta['p4_post_type'],
@@ -309,13 +346,13 @@ class AllSpider(scrapy.Spider):
             date_field = date_field.replace(" på ", " ") #swedish
             date_field = date_field.replace(" di ", " ") #indonesian
             date_field = date_field.replace(" na ", " ") #slovenian
-            date_field = date_field.replace(" o ", " ") #polish
+            date_field = date_field.replace(" o ", " ")  # polish
         except IndexError:
             date_field = ""
 
         if date_field:
             date_field = dateutil.parser.parse(date_field)
-        '''
+
         # Filter email id image and replace it with email text.
         delete_images = list()
         for image_file in imagesB_generated:
@@ -338,14 +375,14 @@ class AllSpider(scrapy.Spider):
         for image_file in delete_images:
             imagesB_generated.remove(image_file)
 
-        
+        """
         #list images urls
         for image_file in imagesB_generated:
             if ("/emailimages/" in image_file):
                 data = [image_file]
-                self.csv_writer(data, "email_images_url_list_fr.csv")
-        '''
-
+                self.csv_writer(data, "email_images_url_list.csv")
+        
+        """
 
         # Post data mapping logic start.
         unique_map_id = int(time.time() + random.randint(0, 999))
@@ -441,26 +478,33 @@ class AllSpider(scrapy.Spider):
 
         return post_data
 
+# Filter month name function is not needed for english speaking sites
+
     def filter_month_name(self, month_name):
 
-        month_po_en = {
+        month_pl_en = {
             'stycznia': 'January',
-            'lutego': 'February',
+            'luty': 'February',
             'marca': 'March',
             'kwietnia': 'April',
             'maja': 'May',
             'czerwca': 'June',
             'lipca': 'July',
-            'sierpnia': 'August',
-            'wrzesień': 'September',
+            'sierpień': 'August',
+            'września': 'September',
+            'sierpnia': 'September',
             'października': 'October',
+            'Novembera': 'November',
             'listopada': 'November',
+            'grudzień': 'December',
             'grudnia': 'December',
+            'lutego': 'February',
+            'wrzesień': 'September',
         }
 
-        # Replace the Polish month name with english month name.
-        for po_month, en_month in month_po_en.iteritems():
-            month_name = month_name.replace(po_month, en_month)
+        # Replace the polish month name with english month name.
+        for pl_month, en_month in month_pl_en.iteritems():
+            month_name = month_name.replace(pl_month, en_month)
 
         return month_name;
 
