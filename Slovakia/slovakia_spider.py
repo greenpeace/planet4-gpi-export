@@ -449,7 +449,7 @@ class AllSpider(scrapy.Spider):
             'p3_image_gallery': p3_image_gallery,
             'title': extract_with_css('div.article h1 span::text'),
             #'subtitle': '',
-            'author': 'Greenpeace Romania',
+            'author': 'Greenpeace Slovensko',
             'author_username': 'greenpeace',
             #'date': response.css('#content > div.happen-box.article > div > div.text > span').re_first(r' - \s*(.*)'),
             'date': date_field,
