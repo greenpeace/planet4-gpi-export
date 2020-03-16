@@ -16,34 +16,23 @@ import urllib2
 
 locale.setlocale(locale.LC_ALL, '')
 
-class DataSpider(scrapy.Spider):
-    name = 'data'
+class CountSpider(scrapy.Spider):
+    name = 'count'
 
     # P3 base url.
     base_urls = 'http://p3-raw.greenpeace.org/'
 
-    # P3 NRO name mostly the same from p3/p4 url part - "http://p3-raw.greenpeace.org/international/en/"
-    nro_name = 'international'
-    p3_language = 'en'
-    extrainfo = '-news-'
+    # P3 posts counts list csv file.
+    csv_post_counts_per_nro = 'gp-post_count_all_final.csv'
 
-    # P3 post links csv file.
-    #csv_file_path = nro_name + '-post_list-news_all.csv'
-    csv_file_path = 'international-post_list-news_all_cleaned.csv'
-
-    # Scrape CSV data from line num(csv_start) and number of lines(csv_num_raw) to scrape from csv_start.
-    csv_start = 1
-    csv_num_raw = 5255
-    csv_end = csv_start + csv_num_raw
-
-    file_batch = '_start_'+str(csv_start)
+    source_csv_path = 'nro_search_list.csv'
 
     # Log file path.
-    scrapper_error_log = nro_name + file_batch + extrainfo + '-scrapper_error_log-test.txt'
+    scrapper_error_log = 'count-post_scrapper_error_log.txt'
 
     custom_settings = {
         'ROBOTSTXT_OBEY': 0,
-        'FEED_URI': 'gp-' + nro_name + file_batch + extrainfo + '-_test_media_data.xml',
+        'FEED_URI': 'gp-post_count_data_per_nro_test_new.xml',
         'FEED_FORMAT': 'xml',
         'FEED_EXPORT_ENCODING': 'utf-8',
     }
@@ -53,29 +42,43 @@ class DataSpider(scrapy.Spider):
         post_links = {}
 
         # Check number of lines in csv file.
-        # num_lines = sum(1 for line in open(self.csv_file_path))
-        # print num_lines
+        #num_lines = sum(1 for line in open(self.source_csv_path))
+        #print num_lines
 
         line_num = 0
-        with open(self.csv_file_path, 'r') as csv_file:  # Opens the file in read mode
+        with open(self.source_csv_path, 'r') as csv_file:  # Opens the file in read mode
             csv_reader = csv.reader(csv_file)  # Making use of reader method for reading the file
 
             for line in csv_reader:  # Iterate through the loop to read line by line
                 line_num += 1
+                #print line[0]
                 # Extract selected number of post links from CSV file.
-                if (line_num >= self.csv_start and line_num < self.csv_end):
-                    post_links.update({line_num: line[0]})
-
-        post_links = {
-            1: 'http://p3-raw.greenpeace.org/africa/en/News/Multimedia/Video1/Rainbow-Warrior-Indian-Ocean-Tour-2012/'
-        }
+                post_links.update({line_num: line[0]})
 
         # print post_links
-        for page_num,post_link in post_links.iteritems():
+        for page_num, post_link in post_links.iteritems():
             # print post_link
             request = scrapy.Request(post_link, callback=self.parse_all_post, dont_filter='true')
-            request.meta['language'] = self.p3_language
             yield request
+
+
+        # post_links = {
+        #     1:'http://p3-raw.greenpeace.org/international/en/System-templates/Search-results/?tab=0&ps=10&all=+',
+        #     2:'http://p3-raw.greenpeace.org/africa/en/Search-results/?all=+',
+        #     3:'http://p3-raw.greenpeace.org/africa/fr/Search-results/?all=+',
+        #     4:'http://p3-raw.greenpeace.org/argentina/es/System-templates/footer-links/Busca-en-esta-pagina/?all=+',
+        #     5:'http://p3-raw.greenpeace.org/australia/en/System-templates/Site-Settings-Pages/Search/?all=+',
+        #     6:'http://p3-raw.greenpeace.org/belgium/fr/system-templates/recherche/?all=+',
+        #     7:'http://p3-raw.greenpeace.org/belgium/nl/system-templates/zoek/?all=+',
+        # }
+        #
+        # # print post_links
+        # for page_num,post_link in post_links.iteritems():
+        #     # print post_link
+        #     request = scrapy.Request(post_link, callback=self.parse_all_post, dont_filter='true')
+        #     yield request
+
+
 
     # handle all types of post/pages content type.
     def parse_all_post(self, response):
@@ -83,72 +86,81 @@ class DataSpider(scrapy.Spider):
         def extract_with_css(query):
             return response.css(query).extract_first()
 
-        article_post_title = extract_with_css('div.article h1 span::text')
-        news_list_post_title = extract_with_css('div.news-list h1::text')
-        media_title = extract_with_css('div.general-form h1')
+        check_count_div = extract_with_css('div.basicsearch ul li a')
+        imagesA_generated = list()
 
-        if media_title:
-            media_title = re.sub('<[^<]+?>', '', media_title).strip()
+        if check_count_div is None:
+            data = [response.url,'"basicsearch" div not found...' ]
+            self.csv_writer(data, self.scrapper_error_log)
+        else:
+            #print 'i am here...'
+            # taxonomy = response.css('div.basicsearch ul li a').extract()
+            # print taxonomy
+            # taxonomy.insert(0, response.url)
+            # self.csv_writer(taxonomy, self.csv_post_counts_per_nro)
 
-        print media_title
-        print "media title"
+            imagesA = response.xpath('//div[@class="basicsearch"]//a').extract()
+            for image_file in imagesA:
 
-        p3_data = [None,None,None,None]
-        post_title = 'empty_post_title'
+                page_link = re.search('(?<=<a href=")[^"]+', image_file).group(0)
+                page_title = re.search('(?<= title=")[^"]+', image_file).group(0)
+                page_count = re.search('\(([\d]+)\)', image_file).group(0)
 
-        func_name = 'default'
+                page_link = page_link.replace('/', self.base_urls, 1)
+                page_count = page_count.replace('(','',1)
+                page_count = page_count.replace(')', '', 1)
 
-        if article_post_title is not None:
-            p3_data = self.parse_article_list(response)
-            post_title = article_post_title
-            func_name = 'parse_article_list'
-        elif news_list_post_title is not None:
-            p3_data = self.parse_news_list(response)
-            post_title = news_list_post_title
-            func_name = 'parse_news_list'
-        elif media_title is not None:
-            p3_data = self.parse_media_data(response)
-            post_title = media_title
-            func_name = 'parse_media_data'
+                # print page_link
+                # print page_title
+                # print page_count
 
+                imagesA_generated.append(image_file)
 
-        # body_text, date_field, taxonomy, author_name = p3_data
-        body_text, date_field, p3_breadcrumbs, category_data, tag_data, author_name = p3_data
+                data = [response.url, page_link, page_title, page_count]
+                self.csv_writer(data, self.csv_post_counts_per_nro)
+
+                break
+                # match = re.search(r'href=[\'"]?([^\'" >]+)', image_file)
+                # if match:
+                #     print match.group(0)
+                # match = re.search(r'n\>([\D]+)\<\/s', image_file)
+                # if match:
+                #     print match.group(0)
+                # match = re.search(r'\(([\d]+)\)', image_file)
+                # if match:
+                #     print match.group(0)
+
+                # print re.sub('<a.*>(.*)<\/a>', "\g<1>", image_file)
+                # if (image_file.startswith('/')):
+                #     image_file = image_file.replace('/', 'http://www.greenpeace.org/', 1)
+                # imagesA_generated.append(image_file)
 
 
         # log errors...
-        log_data = list()
-        if post_title is None:
-            log_data.append('title blank')
-            # data = [response.url,'title blank' ]
-            # self.csv_writer(data, self.scrapper_error_log)
-
-        if body_text is None:
-            log_data.append('body_text blank')
-            # data = [response.url,'body_text blank' ]
-            # self.csv_writer(data, self.scrapper_error_log)
-
-        if date_field is None:
-            log_data.append('date_field blank')
-            # data = [response.url,'date_field blank' ]
-            # self.csv_writer(data, self.scrapper_error_log)
-
-        if len(log_data):
-            log_data.insert(0, response.url)
-            log_data.append('func ' + func_name)
-            self.csv_writer(log_data, self.scrapper_error_log)
+        # log_data = list()
+        # if post_title is None:
+        #     log_data.append('title blank')
+        #     # data = [response.url,'title blank' ]
+        #     # self.csv_writer(data, self.scrapper_error_log)
+        #
+        # if body_text is None:
+        #     log_data.append('body_text blank')
+        #     # data = [response.url,'body_text blank' ]
+        #     # self.csv_writer(data, self.scrapper_error_log)
+        #
+        # if date_field is None:
+        #     log_data.append('date_field blank')
+        #     # data = [response.url,'date_field blank' ]
+        #     # self.csv_writer(data, self.scrapper_error_log)
+        #
+        # if len(log_data):
+        #     log_data.insert(0, response.url)
+        #     log_data.append('func ' + func_name)
+        #     self.csv_writer(log_data, self.scrapper_error_log)
 
         yield {
-            'title': post_title,
-            'text': body_text,
-            'date': date_field,
-            'author_name': author_name,
-            # 'taxonomy': taxonomy,
-            'tag': tag_data,
-            'category': category_data,
-            'breadcrumb': p3_breadcrumbs,
+            'count': imagesA_generated,
             'url': response.url,
-            'language': response.meta['language'],
         }
 
     # class = 'happen-box article'
@@ -189,6 +201,10 @@ class DataSpider(scrapy.Spider):
         date_field = response.css('div.article div.text span.author::text').re_first(r' - \s*(.*)')
         date_field = self.filter_date_content(date_field)
 
+        #post_title = extract_with_css('div.article h1 span::text')
+
+        taxonomy = response.css('div.tags ul li a::text').extract()
+
         # yield {
         #     'title': post_title,
         #     'text': body_text,
@@ -198,18 +214,7 @@ class DataSpider(scrapy.Spider):
         #     'language': response.meta['language'],
         # }
 
-        category_data = response.xpath('(//div[@class="tags"])[1]//li//a/@title').extract()
-        tag_data = response.xpath('(//div[@class="tags"])[2]//li//a/@title').extract()
-        raw_p3_breadcrumbs = response.xpath('//ul[@class="breadcrumbs"]//li').extract()
-
-        p3_breadcrumbs = list()
-        for b_link in raw_p3_breadcrumbs:
-            b_data = re.sub('<[^<]+?>', '', b_link)
-            p3_breadcrumbs.append(b_data)
-
-        # return [body_text, date_field, taxonomy, '']
-
-        return [body_text, date_field, p3_breadcrumbs, category_data, tag_data, '']
+        return [body_text, date_field, taxonomy, '']
 
 
     # Class = 'news-list'
@@ -247,51 +252,9 @@ class DataSpider(scrapy.Spider):
         if ( author_name ):
             author_name = author_name.strip()
 
-        # yield {
-        #     'title': post_title,
-        #     'author': author_name,
-        #     'date': date_field,
-        #     #'lead': extract_with_css('div.news-list div.post-content *:first-child strong::text'),
-        #     'lead': response.xpath('string(//div[@class="news-list"]/ul/li/div[@class="post-content"]/div//*[self::p or self::h3 or self::h2][1])').extract()[0],
-        #     'text':  body_text,
-        #     'blockquote': blockquotes_generated,
-        #     'url': response.url,
-        # }
+        # post_title = extract_with_css('div.news-list h1::text')
 
-        category_data = response.xpath('(//div[@class="tags"])[1]//li//a/@title').extract()
-        tag_data = response.xpath('(//div[@class="tags"])[2]//li//a/@title').extract()
-        raw_p3_breadcrumbs = response.xpath('//ul[@class="breadcrumbs"]//li').extract()
-
-        p3_breadcrumbs = list()
-        for b_link in raw_p3_breadcrumbs:
-            b_data = re.sub('<[^<]+?>', '', b_link)
-            p3_breadcrumbs.append(b_data)
-
-        # return [body_text, date_field, taxonomy, author_name]
-        return [body_text, date_field, p3_breadcrumbs, category_data, tag_data, author_name]
-
-    # Class = 'news-list'
-    # pagetypes = blogs,news
-    def parse_media_data(self, response):
-
-        def extract_with_css(query):
-            return response.css(query).extract_first()
-
-        date_field = response.css('div.general-form .sub-title::text').extract()[0]
-        # date_field = self.filter_date_content(date_field)
-
-        body_text = response.css('div.general-form').extract()[0]
-
-        category_data = response.xpath('(//div[@class="tags"])[1]//li//a/@title').extract()
-
-        tag_data = response.xpath('(//div[@class="tags"])[2]//li//a/@title').extract()
-
-        raw_p3_breadcrumbs = response.xpath('//ul[@class="breadcrumbs"]//li').extract()
-
-        p3_breadcrumbs = list()
-        for b_link in raw_p3_breadcrumbs:
-            b_data = re.sub('<[^<]+?>', '', b_link)
-            p3_breadcrumbs.append(b_data)
+        taxonomy = response.css('div.tags ul li a::text').extract()
 
         # yield {
         #     'title': post_title,
@@ -304,7 +267,7 @@ class DataSpider(scrapy.Spider):
         #     'url': response.url,
         # }
 
-        return [body_text, date_field, p3_breadcrumbs, category_data, tag_data, '']
+        return [body_text, date_field, taxonomy, author_name]
 
 
     # class = 'happen-box article'

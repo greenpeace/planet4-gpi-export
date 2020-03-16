@@ -21,7 +21,7 @@ class LinkSpider(scrapy.Spider):
 
     custom_settings = {
         'ROBOTSTXT_OBEY': 0,
-        'FEED_URI': 'gp-international-news.xml',
+        'FEED_URI': 'gp-international-all_new.xml',
         'FEED_FORMAT': 'xml',
         'FEED_EXPORT_ENCODING': 'utf-8',
     }
@@ -30,10 +30,14 @@ class LinkSpider(scrapy.Spider):
     __connector_csv_log_file = "connector_csv_log_v2"
 
     base_urls = 'http://p3-raw.greenpeace.org/'
-    total_pages = 758
+    total_pages = 1825
     nro_url = base_urls + 'international/en/'
 
-    search_page = nro_url + 'System-templates/Search-results/?tab=1&ps=10&all=+&page='
+    output_filename = 'international-post_list-all-new.csv'
+
+    #search_page = nro_url + 'System-templates/Search-results/?tab=1&ps=10&all=+&page='
+
+    search_page = 'http://p3-raw.greenpeace.org/international/en/System-templates/Search-results/?tab=0&all=+&page='
 
     def start_requests(self):
 
@@ -46,7 +50,7 @@ class LinkSpider(scrapy.Spider):
             pagination_links.update({page_num: self.search_page + str(page_num)})
 
         for page_num,list_page_link in pagination_links.iteritems():
-            print list_page_link
+            #print list_page_link
             request = scrapy.Request(list_page_link, callback=self.extract_post_links, dont_filter='true')
 
             yield request
@@ -63,7 +67,7 @@ class LinkSpider(scrapy.Spider):
                 post_links.append(post_link)
                 # List p3 posts link
                 data = [post_link]
-                self.csv_writer(data, "international-post_list-news.csv")
+                self.csv_writer(data, self.output_filename)
 
         # print "post link list =<<<<<<<<<<<<<"
         # print pdf_files_generated
