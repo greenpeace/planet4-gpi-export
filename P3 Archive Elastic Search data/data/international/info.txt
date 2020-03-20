@@ -1,0 +1,3 @@
+total_post-count,13111
+total_xml_files,2
+post_not_scrap_count,75
